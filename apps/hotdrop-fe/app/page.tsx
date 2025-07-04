@@ -1,3 +1,96 @@
+"use client";
+import { useEffect, useState } from "react";
+
 export default function Home() {
-  return <h1>hi there</h1>;
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("hotdrop_user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 flex flex-col items-center justify-start pt-2 p-6">
+      {/* Navbar */}
+      <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6">
+        <div className="flex items-center gap-2 p-4">
+          <img
+            src="/logo.png" // Put the image in /public
+            alt="Logo"
+            className="w-10 h-10 rounded "
+          />
+          <div className="text-3xl font-extrabold text-gray-800">HotDrop</div>
+        </div>
+        <div className="space-x-4 text-lg text-gray-700 hidden md:flex">
+          <a href="#" className="relative font-semibold transition-all duration-300 hover:text-black hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-black after:scale-x-0 after:origin-left after:transition-transform after:duration-300">How it works</a>
+          {user ? (
+            <a href="#" className="relative font-semibold transition-all duration-300 hover:text-black hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-black after:scale-x-0 after:origin-left after:transition-transform after:duration-300">Partner with us</a>
+          ) : (
+            <a href="/signin" className="relative font-semibold transition-all duration-300 hover:text-black hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-black after:scale-x-0 after:origin-left after:transition-transform after:duration-300">Log in</a>
+          )}
+        </div>
+        {user ? (
+          <div className="relative">
+            <img
+              src="/profile.svg"
+              alt="Profile"
+              className="w-10 h-10 rounded-full cursor-pointer"
+              onClick={() => setShowDropdown((prev) => !prev)}
+            />
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                <button
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    localStorage.removeItem("hotdrop_user");
+                    setUser(null);
+                    setShowDropdown(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80" onClick={() => window.location.href = '/signup'}>Get Started</button>
+        )}
+      </nav>
+
+      {/* Hero Content */}
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-6xl w-full md:mt-4">
+        {/* Left Content */}
+        <div className="md:w-1/2 text-center md:text-left">
+          <h1 className="text-10xl md:text-6xl font-extrabold text-gray-900">
+            Walk In <span className="text-orange-500">Walk Out</span><br />
+            Order Ahead!
+          </h1>
+          <p className="text-gray-600 mt-4 text-lg">
+            Skip The line, Grab On Time!!
+          </p>
+          <div className="flex flex-col sm:flex-row items-center mt-6 gap-3">
+            {user ? (
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold">
+                Order Now
+              </button>
+            ) : (
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold" onClick={() => window.location.href = '/signup'}>
+                Get Started
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Right Image */}
+        <div className="md:w-1/2 flex justify-center mb-10 md:mb-0">
+          <img
+            src="/girl2.png" // Put the image in /public
+            alt="Ordering girl illustration"
+            className="w-80 md:w-96"
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
