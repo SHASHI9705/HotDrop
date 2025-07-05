@@ -5,6 +5,12 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [editSuccess, setEditSuccess] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -53,16 +59,40 @@ export default function Home() {
         </div>
         {user ? (
           <div className="relative">
-            <img
-              src="/profile.svg"
-              alt="Profile"
-              className="w-10 h-10 rounded-full cursor-pointer"
+            <button
+              className="w-10 h-10 rounded-full bg-orange-500 text-white font-bold text-xl flex items-center justify-center cursor-pointer focus:outline-none"
               onClick={() => setShowDropdown((prev) => !prev)}
-            />
+              title={user.name}
+            >
+              {user.name?.charAt(0).toUpperCase()}
+            </button>
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
                 <button
                   className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    setShowEditProfile(true);
+                    setShowDropdown(false);
+                    setEditName(user.name || "");
+                    setEditEmail(user.email || "");
+                  }}
+                >
+                  Edit Profile
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => {/* TODO: Implement orders navigation */}}
+                >
+                  Orders
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                  onClick={() => {/* TODO: Implement delete account logic */}}
+                >
+                  Delete Account
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 border-t"
                   onClick={() => {
                     localStorage.removeItem("hotdrop_user");
                     setUser(null);
@@ -92,7 +122,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center mt-6 gap-3">
             {user ? (
-              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold">
+              <button onClick={() => window.location.href = '/orders'} className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold">
                 Order Now
               </button>
             ) : (
@@ -110,6 +140,101 @@ export default function Home() {
             alt="Ordering girl illustration"
             className="w-56 md:w-72"
           />
+        </div>
+      </div>
+
+      {showEditProfile && (
+        <EditProfileModal
+          name={editName}
+          email={editEmail}
+          setName={setEditName}
+          setEmail={setEditEmail}
+          onClose={() => {
+            setShowEditProfile(false);
+            setEditSuccess("");
+            setEditError("");
+          }}
+          onSave={async () => {
+            setEditLoading(true);
+            setEditError("");
+            setEditSuccess("");
+            try {
+              const res = await fetch("http://localhost:3001/user/update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: editName, email: editEmail, oldEmail: user?.email }),
+              });
+              let data;
+              const contentType = res.headers.get("content-type");
+              if (contentType && contentType.includes("application/json")) {
+                data = await res.json();
+              } else {
+                const text = await res.text();
+                throw new Error("Server error: " + text.slice(0, 100));
+              }
+              if (!res.ok) throw new Error(data.error || "Update failed");
+              setUser({ name: data.user.name, email: data.user.email });
+              localStorage.setItem("hotdrop_user", JSON.stringify({ name: data.user.name, email: data.user.email }));
+              setEditSuccess("Profile updated successfully!");
+              setTimeout(() => {
+                setShowEditProfile(false);
+                setEditSuccess("");
+              }, 1200);
+            } catch (err: any) {
+              setEditError(err.message);
+            } finally {
+              setEditLoading(false);
+            }
+          }}
+          loading={editLoading}
+          error={editError}
+          success={editSuccess}
+        />
+      )}
+    </div>
+  );
+}
+
+function EditProfileModal({ name, email, setName, setEmail, onClose, onSave, loading, error, success }: {
+  name: string;
+  email: string;
+  setName: (v: string) => void;
+  setEmail: (v: string) => void;
+  onClose: () => void;
+  onSave: () => void;
+  loading: boolean;
+  error: string;
+  success?: string;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div className="bg-white p-8 rounded shadow-lg w-full max-w-md flex flex-col items-center relative">
+        <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl" onClick={onClose}>&times;</button>
+        <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
+        <div className="w-full flex flex-col gap-4">
+          <label className="text-sm font-semibold text-gray-700">Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+          <label className="text-sm font-semibold text-gray-700">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {success && <div className="text-green-600 text-sm">{success}</div>}
+          <button
+            className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-600 font-semibold mt-4"
+            onClick={onSave}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save Changes"}
+          </button>
         </div>
       </div>
     </div>

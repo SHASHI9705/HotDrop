@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "../../../packages/db/images")));
 
 app.get("/", (req, res) => {
     res.send("hello");
@@ -109,6 +111,110 @@ app.post("/partner/signin", async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: "Internal server error" });
     }
+});
+
+// PUT /user/update - update user name and email
+//@ts-ignore
+app.put("/user/update", async (req, res) => {
+  const { name, email, oldEmail } = req.body;
+  if (!name || !email || !oldEmail) {
+    return res.status(400).json({ error: "Name, email, and oldEmail are required" });
+  }
+  try {
+    // If email is changed, check for uniqueness
+    if (email !== oldEmail) {
+      const existing = await prismaClient.signup.findUnique({ where: { email } });
+      if (existing) {
+        return res.status(409).json({ error: "Email already exists" });
+      }
+    }
+    // Update user name and email using oldEmail as identifier
+    const updated = await prismaClient.signup.update({
+      where: { email: oldEmail },
+      data: { name, email },
+    });
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({ user: updated });
+  } catch (e) {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).json({ error: "Failed to update user" });
+  }
+});
+
+// GET /partner/items?partnerId=... - get all items for a partner
+//@ts-ignore
+app.get("/partner/items", async (req, res) => {
+  const { partnerId } = req.query;
+  if (!partnerId || typeof partnerId !== "string") {
+    return res.status(400).json({ error: "partnerId is required" });
+  }
+  try {
+    const items = await prismaClient.item.findMany({ where: { partnerId } });
+    res.status(200).json({ items });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch items" });
+  }
+});
+
+// GET /partners-with-items - get all partners with their items
+
+app.get("/partners-with-items", async (req, res) => {
+  try {
+    const partners = await prismaClient.partner.findMany({
+      include: {
+        items: true,
+      },
+    });
+    // Map to frontend format
+    const result = partners.map((partner) => ({
+      name: partner.shopname,
+      image: "/logo.png", // You can update this if you have a real image field
+      rating: 4.5, // Placeholder, update if you have ratings
+      ratingsCount: partner.items.length, // Example: number of items as ratings
+      items: partner.items.map((item) => ({ name: item.name })),
+    }));
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch partners with items" });
+  }
+});
+
+// GET /partner/burger-items?shopname=... - get all burger items for a partner
+//@ts-ignore
+app.get("/partner/burger-items", async (req, res) => {
+  const { shopname } = req.query;
+  if (!shopname || typeof shopname !== "string") {
+    return res.status(400).json({ error: "shopname is required" });
+  }
+  try {
+    const partner = await prismaClient.partner.findUnique({
+      where: { shopname },
+      include: { items: true },
+    });
+    if (!partner) {
+      return res.status(404).json({ error: "Partner not found" });
+    }
+    // Filter items containing 'burger' (case-insensitive)
+    const burgerItems = partner.items.filter((item) =>
+      item.name.toLowerCase().includes("burger")
+    ).map((item) => ({
+      name: item.name,
+      price: item.price,
+      image: item.image, // Only the filename, not the path
+      available: item.available,
+    }));
+    res.json({
+      shop: {
+        name: partner.shopname,
+        image: "/logo.png", // Update if you have a real image field
+        rating: 4.5, // Placeholder
+        ratingsCount: partner.items.length,
+      },
+      items: burgerItems,
+    });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch burger items" });
+  }
 });
 
 app.listen(3001);

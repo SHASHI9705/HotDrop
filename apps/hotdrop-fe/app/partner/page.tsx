@@ -81,7 +81,13 @@ export default function PartnerHome() {
 
   return (
     <>
-      <div className={showModal ? "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm" : "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50"}>
+      <div className={
+        (showModal ?
+          "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm"
+          :
+          "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50"
+        )
+      }>
         {/* Navbar */}
         <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
           <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
@@ -94,7 +100,9 @@ export default function PartnerHome() {
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
             <ShopNameSubheading />
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto">
+            <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto"
+              onClick={() => router.push("/partner/dashboard")}
+            >
               Dashboard
             </button>
           </div>

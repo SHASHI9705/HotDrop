@@ -33,22 +33,22 @@ export default function PartnerSignup() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-white via-red-200 to-blue-50">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-6">Partner Sign Up</h2>
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-white via-orange-100 to-orange-300">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md flex flex-col items-center border border-orange-200">
+        <h2 className="text-3xl font-extrabold mb-6 text-orange-500 tracking-tight">Partner Sign Up</h2>
+        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
           <input
             type="text"
             placeholder="Shop Name"
             value={shopname}
             onChange={e => setShopname(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border-2 border-orange-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 p-3 rounded-full w-full text-lg transition"
             required
           />
           <select
             value={shopcategory}
             onChange={e => setShopcategory(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border-2 border-orange-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 p-3 rounded-full w-full text-lg transition"
             required
           >
             <option value="" disabled>Select Shop Category</option>
@@ -61,12 +61,12 @@ export default function PartnerSignup() {
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border-2 border-orange-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 p-3 rounded-full w-full text-lg transition"
             required
           />
           <button
             type="submit"
-            className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80"
+            className="bg-gradient-to-r from-orange-500 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md hover:from-orange-600 hover:to-orange-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
             disabled={loading}
           >
             {loading ? "Signing up..." : "Sign Up"}
@@ -77,7 +77,7 @@ export default function PartnerSignup() {
           Already have an account?{" "}
           <a
             href="/partner/signin"
-            className="text-blue-600 hover:underline"
+            className="text-orange-600 hover:underline font-semibold"
           >
             Login here
           </a>

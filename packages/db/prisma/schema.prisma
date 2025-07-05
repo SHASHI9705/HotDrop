@@ -19,6 +19,7 @@ model Partner {
   shopname String @unique
   shopcategory String
   password String
+  items Item[] // relation to items
 }
 
 model Item {
@@ -27,5 +28,7 @@ model Item {
   price Float
   image String
   available Boolean @default(true)
+  partnerId String // foreign key
+  partner Partner @relation(fields: [partnerId], references: [id])
 }
 
