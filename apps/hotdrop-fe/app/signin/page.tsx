@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, provider } from "../firebase";
-import { signInWithPopup } from "firebase/auth";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -35,26 +33,6 @@ export default function Signin() {
     }
   };
 
-  const handleGoogleSignin = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (!user.displayName || !user.email)
-        throw new Error("Google account missing name or email");
-      localStorage.setItem(
-        "hotdrop_user",
-        JSON.stringify({ name: user.displayName, email: user.email })
-      );
-      router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Google sign-in failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-white via-red-200 to-blue-50">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md flex flex-col items-center">
@@ -82,15 +60,6 @@ export default function Signin() {
             disabled={loading}
           >
             {loading ? "Signing in..." : "Sign In"}
-          </button>
-          <button
-            type="button"
-            className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-100 flex items-center justify-center gap-2 mt-2"
-            onClick={handleGoogleSignin}
-            disabled={loading}
-          >
-            <img src="/google.svg" alt="Google" className="w-5 h-5" />
-            Sign in with Google
           </button>
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </form>

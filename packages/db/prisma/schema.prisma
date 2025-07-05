@@ -19,7 +19,6 @@ model Partner {
   shopname String @unique
   shopcategory String
   password String
-  items Item[]
 }
 
 model Item {
@@ -28,7 +27,5 @@ model Item {
   price Float
   image String
   available Boolean @default(true)
-  partnerId String
-  partner Partner @relation(fields: [partnerId], references: [id])
 }
 
