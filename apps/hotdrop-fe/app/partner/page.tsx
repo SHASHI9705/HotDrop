@@ -40,17 +40,19 @@ export default function PartnerHome() {
       i === idx ? { ...it, available: !it.available } : it
     );
     setItems(updated);
-    // Send update to backend
+    // Send update to backend (PATCH to match backend route)
     try {
-      const res = await fetch(`http://localhost:3001/partner/items/${item.id}/availability`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ available: !item.available }),
+      const res = await fetch(`http://localhost:3001/partner/item/${item.id}/availability`, {
+        method: "PATCH",
       });
       if (!res.ok) {
         // Revert UI if backend fails
         setItems(items);
         alert("Failed to update availability");
+      } else {
+        // Optionally update with backend response
+        const data = await res.json();
+        setItems((prev) => prev.map((it, i) => i === idx ? { ...it, available: data.item.available } : it));
       }
     } catch {
       setItems(items);
@@ -65,7 +67,7 @@ export default function PartnerHome() {
     const updated = items.filter((_, i) => i !== idx);
     setItems(updated);
     try {
-      const res = await fetch(`http://localhost:3001/partner/items/${item.id}`, {
+      const res = await fetch(`http://localhost:3001/partner/item/${item.id}`, {
         method: "DELETE",
       });
       if (!res.ok) {

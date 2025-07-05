@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import FoodSection, { foodSectionId } from "./food";
+import ReviewsSection from "./reviews";
+import Footer from "./footer";
 
 export default function Home() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
@@ -58,7 +61,14 @@ export default function Home() {
           )}
         </div>
         {user ? (
-          <div className="relative">
+          <div className="relative flex items-center gap-3">
+            <button
+              className="w-10 h-10 rounded-full bg-white border border-orange-200 text-orange-500 flex items-center justify-center text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
+              title="View Cart"
+              onClick={() => {/* TODO: Implement cart modal or navigation */}}
+            >
+              <span role="img" aria-label="cart">🛒</span>
+            </button>
             <button
               className="w-10 h-10 rounded-full bg-orange-500 text-white font-bold text-xl flex items-center justify-center cursor-pointer focus:outline-none"
               onClick={() => setShowDropdown((prev) => !prev)}
@@ -122,9 +132,19 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center mt-6 gap-3">
             {user ? (
-              <button onClick={() => window.location.href = '/orders'} className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold">
-                Order Now
-              </button>
+              <>
+                <button onClick={() => {
+                  const section = document.getElementById(foodSectionId);
+                  if (section) section.scrollIntoView({ behavior: "smooth" });
+                }} className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold flex items-center gap-2">
+                  <span role="img" aria-label="rocket" className="text-xl">🚀</span>
+                  Quick Order
+                </button>
+                <button className="bg-white text-orange-500 border border-orange-300 px-6 py-2 rounded-full hover:bg-orange-100 transition-colors duration-300 text-lg font-semibold flex items-center gap-2 ml-0 sm:ml-2 mt-3 sm:mt-0 shadow-sm" onClick={() => {/* TODO: Implement view cart logic */}}>
+                  <span role="img" aria-label="cart" className="text-xl">🛒</span>
+                  View Cart
+                </button>
+              </>
             ) : (
               <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold" onClick={() => window.location.href = '/signup'}>
                 Get Started
@@ -143,6 +163,11 @@ export default function Home() {
         </div>
       </div>
 
+      <main className="w-full max-w-6xl mx-auto flex flex-col items-center">
+        <FoodSection />
+        <ReviewsSection />
+      </main>
+      <Footer />
       {showEditProfile && (
         <EditProfileModal
           name={editName}

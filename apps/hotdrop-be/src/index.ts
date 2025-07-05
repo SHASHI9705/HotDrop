@@ -217,5 +217,43 @@ app.get("/partner/burger-items", async (req, res) => {
   }
 });
 
+// PATCH /partner/item/:itemId/availability - toggle item availability
+//@ts-ignore
+app.patch("/partner/item/:itemId/availability", async (req, res) => {
+  const { itemId } = req.params;
+  if (!itemId) {
+    return res.status(400).json({ error: "itemId is required" });
+  }
+  try {
+    // Find current availability
+    const item = await prismaClient.item.findUnique({ where: { id: itemId } });
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    const updated = await prismaClient.item.update({
+      where: { id: itemId },
+      data: { available: !item.available },
+    });
+    res.status(200).json({ item: updated });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to toggle availability" });
+  }
+});
+
+// DELETE /partner/item/:itemId - delete an item
+//@ts-ignore
+app.delete("/partner/item/:itemId", async (req, res) => {
+  const { itemId } = req.params;
+  if (!itemId) {
+    return res.status(400).json({ error: "itemId is required" });
+  }
+  try {
+    const deleted = await prismaClient.item.delete({ where: { id: itemId } });
+    res.status(200).json({ success: true, deleted });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to delete item", details: String(e) });
+  }
+});
+
 app.listen(3001);
 

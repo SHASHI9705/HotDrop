@@ -116,6 +116,7 @@ export default function PartnerDashboardNavbar() {
           </div>
         </div>
       </div>
+
       {/* Reviews Section */}
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
         <div className="font-bold text-lg text-gray-700 mb-4">Recent Reviews</div>
