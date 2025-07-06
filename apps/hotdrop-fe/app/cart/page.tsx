@@ -119,20 +119,9 @@ export default function CartPage() {
               onClick={async () => {
                 // Get user and partner info from localStorage
                 const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
-                // Use selected shop info instead of hotdrop_partner
                 let partner = JSON.parse(localStorage.getItem("hotdrop_selected_shop") || "null");
-                // Fallback: if not found, try hotdrop_partner (legacy)
                 if (!partner || !partner.id) {
                   partner = JSON.parse(localStorage.getItem("hotdrop_partner") || "null");
-                }
-                // Debug: log what is found
-                if (!partner) {
-                  console.error("No partner/shop found in localStorage", {
-                    hotdrop_selected_shop: localStorage.getItem("hotdrop_selected_shop"),
-                    hotdrop_partner: localStorage.getItem("hotdrop_partner")
-                  });
-                } else {
-                  console.log("Using partner/shop for order:", partner);
                 }
                 if (!user || !user.id) {
                   alert("User ID missing. Please log in again to place an order.");
@@ -144,28 +133,60 @@ export default function CartPage() {
                 }
                 // Prepare order data
                 const orderData = {
-                  userId: user.id, // Only send user.id, never email
+                  userId: user.id,
                   partnerId: partner.id,
                   items: cart.map(item => `${item.name} x${item.quantity}`).join(", "),
                   shopName: partner.name || partner.shopname || "",
                   price: total
                 };
-                
-                const res = await fetch("http://localhost:3001/order", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(orderData)
-                });
-                
-                if (res.ok) {
-                  localStorage.removeItem("hotdrop_cart");
-                  setCart([]);
-                  alert("Order placed successfully!");
-                  router.push("/myorders");
-                } else {
-                  const data = await res.json();
-                  alert(data.error || "Failed to place order");
-                }
+                // Razorpay integration
+                const loadRazorpay = () => {
+                  return new Promise((resolve) => {
+                    //@ts-ignore
+                    if (window.Razorpay) {
+                      resolve(true);
+                      return;
+                    }
+                    const script = document.createElement("script");
+                    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+                    script.onload = () => resolve(true);
+                    document.body.appendChild(script);
+                  });
+                };
+                await loadRazorpay();
+                const options = {
+                  key: "rzp_test_4oMEcsOGUVoepI",
+                  amount: total * 100, // in paise
+                  currency: "INR",
+                  name: "HotDrop",
+                  description: "Order Payment",
+                  image: "/logo.png",
+                  handler: async function (response: any) {
+                    // On payment success, place order
+                    const res = await fetch("http://localhost:3001/order", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(orderData)
+                    });
+                    if (res.ok) {
+                      localStorage.removeItem("hotdrop_cart");
+                      setCart([]);
+                      alert("Order placed successfully!");
+                      router.push("/myorders");
+                    } else {
+                      const data = await res.json();
+                      alert(data.error || "Failed to place order");
+                    }
+                  },
+                  prefill: {
+                    name: user.name || "",
+                    email: user.email || "",
+                  },
+                  theme: { color: "#fb923c" },
+                };
+                // @ts-ignore
+                const rzp = new window.Razorpay(options);
+                rzp.open();
               }}
             >
               <span role="img" aria-label="rocket">🚀</span> Checkout

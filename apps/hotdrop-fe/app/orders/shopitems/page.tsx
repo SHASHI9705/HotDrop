@@ -126,9 +126,9 @@ export default function ShopItemsPage() {
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
       <header className="w-full flex flex-row items-center justify-between py-8 pl-12 pr-12">
         <div className="flex flex-row items-center">
-          <Image src={shop?.image || "/logo.png"} alt="Shop Logo" width={70} height={70} className="mr-5 rounded-xl border border-orange-200" />
+          <Image src="/logo.png" alt="HotDrop Logo" width={50} height={50} className="mr-4 rounded-xl" />
           <div>
-            <h1 className="text-3xl font-extrabold text-black mb-1">{shop?.name || "Shop"}</h1>
+            <h1 className="text-3xl font-extrabold text-black mb-1 flex items-center">{shop?.name || "Shop"}</h1>
             <div className="flex items-center mb-1">
               <span className="text-yellow-400 text-xl mr-2">★</span>
               <span className="text-lg font-semibold text-gray-800">{shop?.rating || "4.5"}</span>

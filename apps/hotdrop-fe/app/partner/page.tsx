@@ -87,6 +87,22 @@ export default function PartnerHome() {
   }, []);
 
   useEffect(() => {
+    // Fetch notification count (pending orders) for badge
+    const partner = localStorage.getItem("hotdrop_partner");
+    if (!partner) {
+      setNotificationCount(0);
+      return;
+    }
+    const { id, shopname } = JSON.parse(partner);
+    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+      .then(res => res.json())
+      .then(data => {
+        const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
+        setNotificationCount(pending.length);
+      });
+  }, []);
+
+  useEffect(() => {
     // Fetch shop name from backend
     const fetchShopName = async () => {
       try {
@@ -227,7 +243,7 @@ export default function PartnerHome() {
             >
               <span role="img" aria-label="bell">🔔</span>
               {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white animate-pulse">{notificationCount}</span>
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white notification-glow">{notificationCount}</span>
               )}
             </button>
           </div>
@@ -272,6 +288,29 @@ export default function PartnerHome() {
         )}
       </div>
       {showModal && <AddItemModal onClose={() => setShowModal(false)} onAdd={handleAddItem} />}
+      {/* Add glowing effect for notification badge */}
+      <style jsx global>{`
+        .glow-badge {
+          box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+          animation: glow-badge-anim 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes glow-badge-anim {
+          0% { box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66; }
+          100% { box-shadow: 0 0 16px 6px #fb923c, 0 0 32px 12px #fb923c44; }
+        }
+        .notification-glow {
+          box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+          animation: notification-glow-pulse 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes notification-glow-pulse {
+          0% {
+            box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+          }
+          100% {
+            box-shadow: 0 0 16px 6px #fb923c, 0 0 32px 12px #fb923c44;
+          }
+        }
+      `}</style>
     </>
   );
 }

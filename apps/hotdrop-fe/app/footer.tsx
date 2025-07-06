@@ -12,33 +12,31 @@ export default function Footer() {
         </div>
         {/* Footer columns */}
         <div className="flex-[2] grid grid-cols-2 md:grid-cols-4 gap-8">
-          {/* Explore with us */}
+          {/* Legal */}
           <div>
-            <div className="font-semibold text-orange-500 mb-3">Explore with us</div>
+            <div className="font-semibold text-orange-500 mb-3">Legal</div>
             <ul className="space-y-2 text-gray-700 text-sm">
-              <li><a href="/orders" className="hover:text-orange-600 transition">Orders</a></li>
-              <li><a href="/food" className="hover:text-orange-600 transition">Menu</a></li>
-              <li><a href="/partner" className="hover:text-orange-600 transition">Partner</a></li>
-              <li><a href="/" className="hover:text-orange-600 transition">Home</a></li>
+              <li><a href="/orders" className="hover:text-orange-600 transition">Terms & Conditions</a></li>
+              <li><a href="/food" className="hover:text-orange-600 transition">Cookies Policy</a></li>
+              <li><a href="/partner" className="hover:text-orange-600 transition">Privacy Policy</a></li>
             </ul>
           </div>
           {/* Contact Us */}
           <div>
             <div className="font-semibold text-orange-500 mb-3">Contact Us</div>
             <ul className="space-y-2 text-gray-700 text-sm">
-              <li><a href="mailto:support@hotdrop.com" className="hover:text-orange-600 transition">support@hotdrop.com</a></li>
-              <li><a href="tel:+1234567890" className="hover:text-orange-600 transition">+1 234 567 890</a></li>
-              <li><a href="#" className="hover:text-orange-600 transition">Help Center</a></li>
+              <li><a href="#" className="hover:text-orange-600 transition">Help & suppport</a></li>
+              <li><a href="#" className="hover:text-orange-600 transition">Partner with us</a></li>
               <li><a href="#" className="hover:text-orange-600 transition">Feedback</a></li>
             </ul>
           </div>
-          {/* More from us */}
+          {/* Company */}
           <div>
-            <div className="font-semibold text-orange-500 mb-3">More from us</div>
+            <div className="font-semibold text-orange-500 mb-3">Company</div>
             <ul className="space-y-2 text-gray-700 text-sm">
-              <li><a href="#" className="hover:text-orange-600 transition">Info</a></li>
-              <li><a href="#" className="hover:text-orange-600 transition">Terms & Policy</a></li>
-              <li><a href="#" className="hover:text-orange-600 transition">Cookies</a></li>
+              <li><a href="#" className="hover:text-orange-600 transition">About Us</a></li>
+              <li><a href="#" className="hover:text-orange-600 transition">Team</a></li>
+              <li><a href="#" className="hover:text-orange-600 transition">HotDrop Corporate</a></li>
               <li><a href="#" className="hover:text-orange-600 transition">Careers</a></li>
             </ul>
           </div>

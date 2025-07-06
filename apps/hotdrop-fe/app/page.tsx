@@ -248,11 +248,11 @@ export default function Home() {
         {/* Left Content */}
         <div className="md:w-1/2 text-center md:text-left">
           <h1 className="text-10xl md:text-6xl font-extrabold text-gray-900">
-            Walk In <span className="text-orange-500">Walk Out</span><br />
-            Order Ahead!
+            Skip The <span className="text-orange-500">Line</span><br />
+            Grab On <span className="text-orange-500">Time!</span>
           </h1>
           <p className="text-gray-600 mt-4 text-lg">
-            Skip The line, Grab On Time!!
+            Order Ahead, Walk in Wlak out!
           </p>
           <div className="flex flex-col sm:flex-row items-center mt-6 gap-3">
             {user ? (

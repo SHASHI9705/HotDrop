@@ -58,6 +58,23 @@ export default function PartnerDashboardNavbar() {
   const [saving, setSaving] = useState(false);
   const [shopImage, setShopImage] = useState<string>("/profile.svg");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  // Fetch notification count (pending orders) for badge
+  useEffect(() => {
+    const partner = localStorage.getItem("hotdrop_partner");
+    if (!partner) {
+      setNotificationCount(0);
+      return;
+    }
+    const { id, shopname } = JSON.parse(partner);
+    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+      .then(res => res.json())
+      .then(data => {
+        const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
+        setNotificationCount(pending.length);
+      });
+  }, []);
 
   useEffect(() => {
     const partner = localStorage.getItem("hotdrop_partner");
@@ -78,7 +95,11 @@ export default function PartnerDashboardNavbar() {
             setShopCategory("food");
           }
           if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
-            setShopImage(data.partner.shopimage.url);
+            let url = data.partner.shopimage.url;
+            if (url && !url.startsWith('http')) {
+              url = `http://localhost:3001${url}`;
+            }
+            setShopImage(url);
           } else {
             setShopImage("/profile.svg");
           }
@@ -183,9 +204,11 @@ export default function PartnerDashboardNavbar() {
             }}
           >
             Notification
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 border border-white">
-              1
-            </span>
+            {notificationCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 border border-white">
+                {notificationCount}
+              </span>
+            )}
           </button>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0 justify-end">

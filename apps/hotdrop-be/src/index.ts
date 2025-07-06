@@ -176,13 +176,14 @@ app.get("/partners-with-items", async (req, res) => {
     const partners = await prismaClient.partner.findMany({
       include: {
         items: true,
+        shopimage: true, // include shopimage relation
       },
     });
     // Map to frontend format
     const result = partners.map((partner) => ({
-      id: partner.id, // <-- add this line!
+      id: partner.id,
       name: partner.shopname,
-      image: "/logo.png", // You can update this if you have a real image field
+      image: partner.shopimage && partner.shopimage.url ? partner.shopimage.url : "/logo.png", // use real shop image if exists
       rating: 4.5, // Placeholder, update if you have ratings
       ratingsCount: partner.items.length, // Example: number of items as ratings
       items: partner.items.map((item) => ({

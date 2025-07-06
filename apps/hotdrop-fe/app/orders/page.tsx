@@ -66,24 +66,25 @@ export default function OrdersPage() {
                 <a
                   key={idx}
                   href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}&food=${encodeURIComponent(itemName)}`}
-                  className="w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col items-center justify-center border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none"
+                  className="w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden"
                   style={{ textDecoration: 'none' }}
                 >
                   <img
-                    src={partner.image && partner.image !== '/logo.png' ? `/images/${partner.image}` : '/logo.png'}
+                    src={partner.image && partner.image !== '/logo.png' ? partner.image.startsWith('http') ? partner.image : `http://localhost:3001${partner.image}` : '/logo.png'}
                     alt="Shop Logo"
-                    width={90}
-                    height={90}
-                    className="rounded-xl mb-4 border border-orange-100 object-cover"
-                    style={{ width: '90px', height: '90px' }}
+                    className="w-full"
+                    style={{ height: '65%', objectFit: 'cover' }}
                   />
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{partner.name}</h3>
-                  <div className="flex items-center mb-2">
-                    <span className="text-yellow-400 text-xl mr-2">★</span>
-                    <span className="text-lg font-semibold text-gray-800">{partner.rating || "4.5"}</span>
-                    <span className="text-gray-500 text-sm ml-2">({partner.ratingsCount || "0"} ratings)</span>
+                  <div className="flex flex-col justify-between h-[35%] w-full p-3">
+                    <div className="flex items-center justify-between w-full mb-1">
+                      <h3 className="text-lg font-bold text-gray-900 truncate">{partner.name}</h3>
+                      <div className="flex items-center">
+                        <span className="text-yellow-400 text-lg mr-1">★</span>
+                        <span className="text-base font-semibold text-gray-800">{partner.rating || "4.5"}</span>
+                      </div>
+                    </div>
+                    <span className="text-orange-500 font-medium text-sm">Special: {specialItem?.name}</span>
                   </div>
-                  <span className="text-orange-500 font-medium">Special: {specialItem?.name}</span>
                 </a>
               );
             })}
