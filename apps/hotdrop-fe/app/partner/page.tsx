@@ -1,11 +1,51 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+
+function CircularLoader({ percent = 100 }: { percent?: number }) {
+  const radius = 32;
+  const stroke = 6;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <svg height={radius * 2} width={radius * 2} className="rotate-[-90deg]">
+        <circle
+          stroke="#e5e7eb"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+        <motion.circle
+          stroke="#fb923c"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: 0 }}
+          transition={{ duration: 1.2, repeat: Infinity, repeatType: "loop", ease: "linear" }}
+        />
+      </svg>
+    </div>
+  );
+}
 
 export default function PartnerHome() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState<Array<{ id: string; name: string; image: string; price: string; available?: boolean }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [shopName, setShopName] = useState("");
+  const [profile, setProfile] = useState<{ shopname: string } | null>(null);
 
   useEffect(() => {
     // Check for partner auth in localStorage
@@ -24,9 +64,61 @@ export default function PartnerHome() {
           setItems(data.items);
         }
       } catch {}
+      setLoading(false);
     };
     fetchItems();
   }, [router]);
+
+  useEffect(() => {
+    // Fetch notification count from dashboard API
+    const fetchNotifications = async () => {
+      try {
+        const partner = localStorage.getItem("hotdrop_partner");
+        if (!partner) return;
+        const { id: partnerId } = JSON.parse(partner);
+        const res = await fetch(`http://localhost:3001/partner/notifications/count?partnerId=${partnerId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setNotificationCount(data.count || 0);
+        }
+      } catch {}
+    };
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
+    // Fetch shop name from backend
+    const fetchShopName = async () => {
+      try {
+        const partner = localStorage.getItem("hotdrop_partner");
+        if (!partner) return;
+        const { id: partnerId } = JSON.parse(partner);
+        const res = await fetch(`http://localhost:3001/partner/profile?partnerId=${partnerId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setShopName(data.shopname || "");
+        }
+      } catch {}
+    };
+    fetchShopName();
+  }, []);
+
+  useEffect(() => {
+    // Fetch profile/shopname from backend
+    const fetchProfile = async () => {
+      try {
+        const partner = localStorage.getItem("hotdrop_partner");
+        if (!partner) return;
+        const { id: partnerId } = JSON.parse(partner);
+        const res = await fetch(`http://localhost:3001/partner/profile?partnerId=${partnerId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProfile({ shopname: data.shopname });
+        }
+      } catch {}
+    };
+    fetchProfile();
+  }, []);
 
   const handleAddItem = (item: { id: string; name: string; image: string; price: string }) => {
     setItems(prev => [...prev, { ...item, available: true }]);
@@ -93,12 +185,22 @@ export default function PartnerHome() {
         {/* Navbar */}
         <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
           <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-            <img
+            <motion.img
               src="/logo.png"
               alt="Logo"
               className="w-10 h-10 rounded"
+              initial={{ y: -60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
             />
-            <div className="text-3xl font-extrabold text-gray-800">HotDrop</div>
+            <motion.div
+              className="text-3xl font-extrabold text-gray-800"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
+            >
+              HotDrop
+            </motion.div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
             <ShopNameSubheading />
@@ -113,43 +215,61 @@ export default function PartnerHome() {
           Welcome Partner!{" "}
           <span className="text-orange-500">Now sell the best of yours</span>
         </h1>
-        <div className="w-full flex flex-col items-center justify-center mb-8">
+        <div className="w-full flex flex-col items-center justify-center mb-8 md:flex-row md:justify-center md:items-center md:gap-4">
           <button className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-black/80 transition-colors duration-300 w-full max-w-xs" onClick={() => setShowModal(true)}>
             + Add Item
           </button>
+          <div className="relative flex items-center justify-center mt-4 md:mt-0 md:ml-4">
+            <button
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-orange-200 text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
+              title="Notifications"
+              onClick={() => router.push('/partner/dashboard#latest-notification')}
+            >
+              <span role="img" aria-label="bell">🔔</span>
+              {notificationCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white animate-pulse">{notificationCount}</span>
+              )}
+            </button>
+          </div>
         </div>
         {/* Item cards */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
-          {items.map((item, idx) => (
-            <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
-              <img src={item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
-              <div className="flex flex-col justify-between h-1/3 w-full p-4">
-                <div className="flex items-center justify-between w-full">
-                  <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
-                  <button
-                    className={
-                      (item.available ? "bg-green-500" : "bg-gray-400") +
-                      " text-white px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
-                    }
-                    onClick={() => toggleAvailability(idx)}
-                  >
-                    {item.available ? "Available" : "Not Available"}
-                  </button>
-                </div>
-                <div className="flex items-center justify-between w-full mt-2">
-                  <div className="text-orange-500 font-semibold text-xl">₹{item.price}</div>
-                  <button
-                    className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold border border-red-500 rounded px-3 py-1 transition-colors duration-200"
-                    title="Delete"
-                    onClick={() => handleDeleteItem(idx)}
-                  >
-                    Delete
-                  </button>
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[300px] w-full">
+            <CircularLoader />
+          </div>
+        ) : (
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
+            {items.map((item, idx) => (
+              <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
+                <img src={item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
+                <div className="flex flex-col justify-between h-1/3 w-full p-4">
+                  <div className="flex items-center justify-between w-full">
+                    <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
+                    <button
+                      className={
+                        (item.available ? "bg-green-500" : "bg-gray-400") +
+                        " text-white px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
+                      }
+                      onClick={() => toggleAvailability(idx)}
+                    >
+                      {item.available ? "Available" : "Not Available"}
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between w-full mt-2">
+                    <div className="text-orange-500 font-semibold text-xl">₹{item.price}</div>
+                    <button
+                      className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold border border-red-500 rounded px-3 py-1 transition-colors duration-200"
+                      title="Delete"
+                      onClick={() => handleDeleteItem(idx)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
       {showModal && <AddItemModal onClose={() => setShowModal(false)} onAdd={handleAddItem} />}
     </>
@@ -173,7 +293,10 @@ function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!itemName || !itemImage || !itemPrice) return;
+    if (!itemName || !itemImage || !itemPrice) {
+      setError("All fields are required");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -189,18 +312,24 @@ function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: {
         method: "POST",
         body: formData,
       });
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "Failed to add item");
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        setError("Server error: Invalid response");
         setLoading(false);
         return;
       }
-      const data = await res.json();
+      if (!res.ok || !data.item) {
+        setError(data?.error || "Failed to add item");
+        setLoading(false);
+        return;
+      }
       onAdd({ id: data.item.id, name: data.item.name, image: data.item.image, price: data.item.price });
       setLoading(false);
       onClose();
-    } catch (err) {
-      setError("Failed to add item");
+    } catch (err: any) {
+      setError(err.message || "Failed to add item");
       setLoading(false);
     }
   };

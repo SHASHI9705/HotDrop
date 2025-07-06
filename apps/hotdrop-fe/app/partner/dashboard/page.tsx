@@ -1,6 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PartnerDetails from "./details";
+import NotificationSection from "./notification";
+import OrderListSection from "./orderlist";
+import ShopReviewsSection from "./shopreviews";
+import EarningSection from "./earning";
 
 function ShopNameSubheading() {
   const [shopname, setShopname] = useState("");
@@ -47,6 +52,117 @@ function ShopNameSubheading() {
 
 export default function PartnerDashboardNavbar() {
   const router = useRouter();
+  const [shopName, setShopName] = useState("");
+  const [shopCategory, setShopCategory] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [shopImage, setShopImage] = useState<string>("/profile.svg");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    const partner = localStorage.getItem("hotdrop_partner");
+    if (partner) {
+      const { id } = JSON.parse(partner);
+      fetch(`http://localhost:3001/partner?id=${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          // Defensive: check for data.partner and shopname
+          if (data && data.partner && data.partner.shopname) {
+            setShopName(data.partner.shopname);
+          } else {
+            setShopName("");
+          }
+          if (data && data.partner && data.partner.shopcategory) {
+            setShopCategory(data.partner.shopcategory);
+          } else {
+            setShopCategory("food");
+          }
+          if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
+            setShopImage(data.partner.shopimage.url);
+          } else {
+            setShopImage("/profile.svg");
+          }
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleProfileSave = async () => {
+    setSaving(true);
+    const partner = localStorage.getItem("hotdrop_partner");
+    if (!partner) return;
+    const { id } = JSON.parse(partner);
+    try {
+      let imageUrl = shopImage;
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        formData.append("partnerId", id);
+        const resImg = await fetch("http://localhost:3001/partner/shopimage", {
+          method: "POST",
+          body: formData
+        });
+        const dataImg = await resImg.json();
+        if (resImg.ok && dataImg.url) {
+          imageUrl = dataImg.url;
+          setShopImage(imageUrl);
+        } else {
+          alert(dataImg.error || "Failed to upload image");
+        }
+      }
+      const res = await fetch("http://localhost:3001/partner/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, shopname: shopName, shopcategory: shopCategory })
+      });
+      const data = await res.json();
+      if (res.ok && data.partner) {
+        // Optionally update localStorage
+        localStorage.setItem("hotdrop_partner", JSON.stringify({ ...JSON.parse(partner), shopname: data.partner.shopname, shopcategory: data.partner.shopcategory }));
+        alert("Profile updated successfully!");
+      } else {
+        alert(data.error || "Failed to update profile");
+      }
+    } catch (e) {
+      alert("Failed to update profile");
+    }
+    setSaving(false);
+  };
+
+  const handleShopImageSave = async () => {
+    if (!imageFile) return alert('Please select an image');
+    setSaving(true);
+    const partner = localStorage.getItem("hotdrop_partner");
+    if (!partner) return;
+    const { id } = JSON.parse(partner);
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("partnerId", id);
+    const resImg = await fetch("http://localhost:3001/partner/shopimage", {
+      method: "POST",
+      body: formData
+    });
+    const dataImg = await resImg.json();
+    if (resImg.ok && dataImg.url) {
+      // Fetch the latest partner data to get the correct image URL
+      const res = await fetch(`http://localhost:3001/partner?id=${id}`);
+      const data = await res.json();
+      if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
+        let url = data.partner.shopimage.url;
+        if (url && !url.startsWith('http')) {
+          url = `http://localhost:3001${url}`;
+        }
+        setShopImage(url);
+      }
+      alert("Shop image updated!");
+    } else {
+      alert(dataImg.error || "Failed to upload image");
+    }
+    setSaving(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50">
       <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
@@ -82,97 +198,31 @@ export default function PartnerDashboardNavbar() {
           </button>
         </div>
       </nav>
-      {/* Profile Update Section */}
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 flex flex-col md:flex-row items-center justify-between border border-gray-200">
-        <div className="flex flex-col gap-2 w-full md:w-1/2">
-          <div className="font-bold text-lg text-gray-700 mb-2">Profile Update</div>
-          <input className="border rounded p-2 mb-2" placeholder="Name" defaultValue="Partner Name" />
-          <input className="border rounded p-2 mb-2" placeholder="Email" defaultValue="partner@email.com" />
-          <button className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-600 font-semibold w-fit">Save Changes</button>
-        </div>
-        <div className="flex flex-col items-center mt-4 md:mt-0">
-          <img src="/profile.svg" alt="Profile" className="w-20 h-20 rounded-full border-2 border-orange-400" />
-        </div>
-      </div>
+      {/* Profile Update + Shop Image Section (side by side, separate cards) */}
+      <PartnerDetails
+        shopName={shopName}
+        setShopName={setShopName}
+        shopCategory={shopCategory}
+        setShopCategory={setShopCategory}
+        shopImage={shopImage}
+        setShopImage={setShopImage}
+        imageFile={imageFile}
+        setImageFile={setImageFile}
+        loading={loading}
+        saving={saving}
+        handleProfileSave={handleProfileSave}
+        handleShopImageSave={handleShopImageSave}
+      />
       {/* Earning Summary Section */}
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 flex flex-col items-center justify-between border border-gray-200">
-        <div className="font-bold text-lg text-gray-700 mb-4 self-start">Earning Summary</div>
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 w-full justify-between mt-2">
-          <div className="flex flex-col items-center flex-1">
-            <div className="text-2xl font-bold text-green-600">₹12,500</div>
-            <div className="text-gray-500 text-sm">Total Earned</div>
-          </div>
-          <div className="flex flex-col items-center flex-1">
-            <div className="text-2xl font-bold text-blue-500">₹1,200</div>
-            <div className="text-gray-500 text-sm">Earned Today</div>
-          </div>
-          <div className="flex flex-col items-center flex-1">
-            <div className="text-2xl font-bold text-orange-500">120</div>
-            <div className="text-gray-500 text-sm">Total Orders</div>
-          </div>
-          <div className="flex flex-col items-center flex-1">
-            <div className="text-2xl font-bold text-purple-500">4.7★</div>
-            <div className="text-gray-500 text-sm">Avg. Rating</div>
-          </div>
-        </div>
-      </div>
+      <EarningSection />
 
       {/* Reviews Section */}
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-        <div className="font-bold text-lg text-gray-700 mb-4">Recent Reviews</div>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row items-start gap-4">
-            <img src="/profile.svg" className="w-10 h-10 rounded-full" alt="User" />
-            <div>
-              <div className="font-semibold text-gray-800 flex items-center gap-2">Amit Sharma <span className="text-xs text-gray-400">2 hours ago</span></div>
-              <div className="text-yellow-500">★★★★★</div>
-              <div className="text-gray-600 text-sm mb-1">Great food and fast delivery!</div>
-              <div className="text-xs text-gray-400">Ordered: Masala Dosa, Idli</div>
-            </div>
-          </div>
-          <div className="flex flex-row items-start gap-4">
-            <img src="/profile.svg" className="w-10 h-10 rounded-full" alt="User" />
-            <div>
-              <div className="font-semibold text-gray-800 flex items-center gap-2">Priya Singh <span className="text-xs text-gray-400">Yesterday</span></div>
-              <div className="text-yellow-500">★★★★☆</div>
-              <div className="text-gray-600 text-sm mb-1">Loved the pizza, will order again.</div>
-              <div className="text-xs text-gray-400">Ordered: Pizza, Coke</div>
-            </div>
-          </div>
-          <div className="flex flex-row items-start gap-4">
-            <img src="/profile.svg" className="w-10 h-10 rounded-full" alt="User" />
-            <div>
-              <div className="font-semibold text-gray-800 flex items-center gap-2">Rohit Mehra <span className="text-xs text-gray-400">2 days ago</span></div>
-              <div className="text-yellow-500">★★★★★</div>
-              <div className="text-gray-600 text-sm mb-1">Excellent service and tasty food.</div>
-              <div className="text-xs text-gray-400">Ordered: Burger, Fries</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ShopReviewsSection />
       {/* Notification Section */}
-      <div id="notification-section" className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-        <div className="font-bold text-lg text-gray-700 mb-4">Latest Order Notification</div>
-        <div className="flex flex-row items-center gap-4">
-          <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold">New Order</div>
-          <div className="text-gray-700">Order #1011 placed by <span className="font-bold">Rahul Verma</span> for <span className="font-bold">₹599</span> - <span className="text-green-600">Payment Received</span></div>
-        </div>
-      </div>
+      <NotificationSection />
       {/* Order List Section */}
       <h1 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mt-8 mb-8">Order list</h1>
-      <div className="w-full max-w-4xl flex flex-col gap-6">
-        {[1,2,3,4,5,6,7,8,9,10].map((n) => (
-          <div key={n} className="bg-white rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between px-8 py-6 border border-gray-200">
-            <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
-              <div className="font-bold text-lg text-gray-700">Order #{1000+n}</div>
-              <div className="text-gray-500 text-base">Items: Samosa, Pizza, Coke</div>
-              <div className="text-green-600 font-semibold text-base">Payment: ₹{(n*250)+99}</div>
-              <div className="text-blue-500 text-base">Status: Delivered</div>
-              <div className="text-gray-400 text-xs">Placed: 2025-07-0{(n%10)+1} 12:3{n%10} PM</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <OrderListSection />
       <div className="w-full flex justify-center mt-12 mb-8">
         <button
           className="bg-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-red-600 transition-colors duration-300"

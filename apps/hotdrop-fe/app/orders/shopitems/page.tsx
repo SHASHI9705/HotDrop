@@ -8,27 +8,119 @@ interface Item {
   name: string;
   price: number;
   image: string;
-  available: boolean;
+  available: boolean | string;
+}
+
+function getHeading(foodName: string | null) {
+  if (!foodName || typeof foodName !== 'string' || !foodName.trim()) return 'Menu';
+  const decoded = decodeURIComponent(foodName).trim();
+  return decoded.charAt(0).toUpperCase() + decoded.slice(1);
+}
+
+function isAvailable(item: Item) {
+  return item.available === true || item.available === "true";
 }
 
 export default function ShopItemsPage() {
   const searchParams = useSearchParams();
   const shopname = searchParams.get("shop");
-  const [shop, setShop] = useState<{ name: string; image?: string; rating?: number; ratingsCount?: number } | null>(null);
+  const foodName = searchParams.get("food");
+  const [shop, setShop] = useState<{ id?: string; name: string; image?: string; rating?: number; ratingsCount?: number } | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     if (!shopname) return;
-    fetch(`http://localhost:3001/partner/burger-items?shopname=${encodeURIComponent(shopname)}`)
+    // Save selected partner to localStorage for checkout
+    fetch(`http://localhost:3001/partners-with-items`)
       .then((res) => res.json())
       .then((data) => {
-        setShop(data.shop);
-        setItems(data.items);
+        // Find the partner/shop
+        const partner = data.find((p: any) => p.name === shopname);
+        if (partner) {
+          setShop({
+            id: partner.id, // <-- add id to shop state
+            name: partner.name,
+            image: partner.image,
+            rating: partner.rating,
+            ratingsCount: partner.ratingsCount,
+          });
+          // Save selected shop info for checkout compatibility (ensure id is present)
+          localStorage.setItem("hotdrop_selected_shop", JSON.stringify({
+            id: partner.id, // <-- ensure id is present
+            name: partner.name,
+            shopname: partner.name, // for cart page compatibility
+            image: partner.image,
+            rating: partner.rating,
+            ratingsCount: partner.ratingsCount,
+            // add any other fields needed
+          }));
+          let filtered = partner.items;
+          if (foodName) {
+            // Normalize for plural/singular and whitespace
+            const foodKey = foodName.toLowerCase().replace(/s$/, '').trim();
+            filtered = partner.items.filter((item: any) => {
+              if (!item.name) return false;
+              const itemKey = item.name.toLowerCase();
+              return itemKey.includes(foodKey);
+            });
+          }
+          setItems(filtered); // <-- Fix: set filtered items to state
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  }, [shopname, foodName]);
+
+  useEffect(() => {
+    // Load cart from localStorage
+    const stored = localStorage.getItem("hotdrop_cart");
+    if (stored) {
+      try {
+        const arr = JSON.parse(stored);
+        const obj: Record<string, number> = {};
+        arr.forEach((item: any) => { obj[item.name] = item.quantity; });
+        setCart(obj);
+      } catch {}
+    }
   }, [shopname]);
+
+  const updateCart = (item: Item, delta: number) => {
+    setCart((prev) => {
+      const newQty = Math.max(0, (prev[item.name] || 0) + delta);
+      const updated = { ...prev, [item.name]: newQty };
+      // Remove from object if qty is 0
+      if (newQty === 0) delete updated[item.name];
+      // Save to localStorage as array
+      const stored = localStorage.getItem("hotdrop_cart");
+      let arr = [];
+      if (stored) {
+        try { arr = JSON.parse(stored); } catch {}
+      }
+      // Remove this item if exists
+      arr = arr.filter((i: any) => i.name !== item.name);
+      if (newQty > 0) {
+        // Always use current shop info for cart item
+        arr.push({
+          id: item.name,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: newQty,
+          shopId: shop?.id,
+          shopName: shop?.name,
+          shopImage: shop?.image
+        });
+      }
+      // Always update hotdrop_selected_shop if shop is available
+      if (shop && shop.id) {
+        localStorage.setItem("hotdrop_selected_shop", JSON.stringify(shop));
+      }
+      localStorage.setItem("hotdrop_cart", JSON.stringify(arr));
+      return updated;
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
@@ -44,30 +136,58 @@ export default function ShopItemsPage() {
             </div>
           </div>
         </div>
-        <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg">Back</a>
+        <div className="flex flex-row items-center gap-4">
+          <div className="relative">
+            <a href="/cart" className="w-12 h-12 flex items-center justify-center rounded-full bg-white hover:bg-orange-100 shadow text-2xl transition-colors duration-200 border border-orange-300">
+              🛒
+            </a>
+            {Object.values(cart).reduce((sum, qty) => sum + qty, 0) > 0 && (
+              <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white">
+                {Object.values(cart).reduce((sum, qty) => sum + qty, 0)}
+              </span>
+            )}
+          </div>
+          <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg">Back</a>
+        </div>
       </header>
       <div className="pl-12 pr-12">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6 mt-2">Menu</h2>
+        <h2 className="text-2xl font-bold text-orange-500 mb-6 mt-2">{getHeading(foodName)}</h2>
         {loading ? (
           <p>Loading...</p>
+        ) : items.length === 0 ? (
+          <div className="text-center text-gray-500 py-12 text-lg">No items found for this menu.</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {items.map((item, idx) => (
               <div
                 key={idx}
-                className={`w-64 h-64 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center border border-orange-100 ${!item.available ? 'opacity-50' : ''}`}
+                className={`w-64 h-80 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-100 overflow-hidden ${!item.available ? 'opacity-50' : ''}`}
               >
-                <img
-                  src={item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image}
-                  alt={item.name}
-                  width={90}
-                  height={90}
-                  className="mb-4 rounded-lg border border-orange-200 object-cover"
-                  style={{ width: '90px', height: '90px' }}
-                />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-lg text-orange-500 font-semibold mb-2">₹{item.price}</p>
-                <span className={`text-sm font-medium ${item.available ? 'text-green-600' : 'text-red-400'}`}>{item.available ? 'Available' : 'Out of Stock'}</span>
+                <div className="w-full" style={{ height: '65%' }}>
+                  <img
+                    src={item.image && typeof item.image === 'string' && item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image || "/logo.png"}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex flex-row w-full flex-1 p-4 items-start justify-between gap-2" style={{ height: '35%' }}>
+                  <div className="flex flex-col flex-1">
+                    <div className="flex flex-row items-center justify-between">
+                      <h3 className="text-lg font-bold text-gray-900 mb-1 truncate">{item.name}</h3>
+                      <span className="text-lg text-orange-500 font-semibold ml-2">₹{item.price}</span>
+                    </div>
+                    <div className="flex flex-row items-center mt-1">
+                      <span className={`text-sm font-medium ${isAvailable(item) ? 'text-green-600' : 'text-red-400'}`}>{isAvailable(item) ? 'Available' : 'Out of Stock'}</span>
+                      {isAvailable(item) && (
+                        <div className="flex items-center gap-2 ml-auto">
+                          <button className="bg-orange-200 text-orange-700 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold hover:bg-orange-300" onClick={() => updateCart(item, -1)}>-</button>
+                          <span className="font-semibold text-base text-gray-700 min-w-[20px] text-center">{cart[item.name] || 0}</span>
+                          <button className="bg-orange-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold hover:bg-orange-600" onClick={() => updateCart(item, 1)}>+</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

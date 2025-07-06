@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 // Define types for partner and item
 interface Item {
@@ -16,7 +17,8 @@ interface Partner {
 }
 
 export default function OrdersPage() {
-  const itemName = "Burgers";
+  const searchParams = useSearchParams();
+  const itemName = searchParams.get("food") || "Burgers";
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,9 +32,9 @@ export default function OrdersPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  // Filter partners with at least one item containing 'burger' (case-insensitive)
-  const burgerPartners = partners.filter((partner) =>
-    partner.items && partner.items.some((item) => item.name.toLowerCase().includes("burger"))
+  // Filter partners with at least one item containing the selected food (case-insensitive)
+  const foodPartners = partners.filter((partner) =>
+    partner.items && partner.items.some((item) => item.name.toLowerCase().includes(itemName.toLowerCase()))
   );
 
   return (
@@ -53,17 +55,17 @@ export default function OrdersPage() {
       </header>
       <div className="pl-12">
         <h2 className="text-3xl font-extrabold text-orange-500 mb-2 drop-shadow-sm">{itemName}</h2>
-        <p className="text-lg text-gray-700 mb-8">Taste the delicious burgers today</p>
+        <p className="text-lg text-gray-700 mb-8">Taste the delicious {itemName.toLowerCase()} today</p>
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div className="flex flex-row gap-6 mb-10 overflow-x-auto pr-12">
-            {burgerPartners.map((partner, idx) => {
-              const burgerItem = partner.items.find((item) => item.name.toLowerCase().includes("burger"));
+            {foodPartners.map((partner, idx) => {
+              const specialItem = partner.items.find((item) => item.name.toLowerCase().includes(itemName.toLowerCase()));
               return (
                 <a
                   key={idx}
-                  href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}`}
+                  href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}&food=${encodeURIComponent(itemName)}`}
                   className="w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col items-center justify-center border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none"
                   style={{ textDecoration: 'none' }}
                 >
@@ -81,7 +83,7 @@ export default function OrdersPage() {
                     <span className="text-lg font-semibold text-gray-800">{partner.rating || "4.5"}</span>
                     <span className="text-gray-500 text-sm ml-2">({partner.ratingsCount || "0"} ratings)</span>
                   </div>
-                  <span className="text-orange-500 font-medium">Special: {burgerItem?.name}</span>
+                  <span className="text-orange-500 font-medium">Special: {specialItem?.name}</span>
                 </a>
               );
             })}

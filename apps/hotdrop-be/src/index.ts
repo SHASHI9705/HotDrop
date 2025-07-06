@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import cors from "cors";
 import path from "path";
+import multer from "multer";
 
 dotenv.config();
 
@@ -13,6 +14,18 @@ const app = express();
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "../../../packages/db/images")));
+
+// Multer config for image upload
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../../packages/db/images"));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname.replace(/\s+/g, ''));
+  }
+});
+const upload = multer({ storage });
 
 app.get("/", (req, res) => {
     res.send("hello");
@@ -167,11 +180,17 @@ app.get("/partners-with-items", async (req, res) => {
     });
     // Map to frontend format
     const result = partners.map((partner) => ({
+      id: partner.id, // <-- add this line!
       name: partner.shopname,
       image: "/logo.png", // You can update this if you have a real image field
       rating: 4.5, // Placeholder, update if you have ratings
       ratingsCount: partner.items.length, // Example: number of items as ratings
-      items: partner.items.map((item) => ({ name: item.name })),
+      items: partner.items.map((item) => ({
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        available: item.available
+      })),
     }));
     res.json(result);
   } catch (err) {
@@ -252,6 +271,201 @@ app.delete("/partner/item/:itemId", async (req, res) => {
     res.status(200).json({ success: true, deleted });
   } catch (e) {
     res.status(500).json({ error: "Failed to delete item", details: String(e) });
+  }
+});
+
+// POST /partner/items - add a new item for a partner (with image upload)
+//@ts-ignore
+app.post("/partner/items", upload.single("image"), async (req, res) => {
+  const { name, price, partnerId } = req.body;
+  if (!name || !price || !partnerId || !req.file) {
+    return res.status(400).json({ error: "Name, price, partnerId, and image are required" });
+  }
+  try {
+    const item = await prismaClient.item.create({
+      data: {
+        name,
+        price: parseFloat(price),
+        image: `/images/${req.file.filename}`,
+        partnerId,
+        available: true,
+      },
+    });
+    res.status(201).json({ item });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to add item", details: String(e) });
+  }
+});
+
+// PUT /partner/update - update shop name and category for a partner
+//@ts-ignore
+app.put("/partner/update", async (req, res) => {
+  const { id, shopname, shopcategory } = req.body;
+  if (!id || !shopname || !shopcategory) {
+    return res.status(400).json({ error: "id, shopname, and shopcategory are required" });
+  }
+  try {
+    // Check if shopname is being changed and is unique
+    const existing = await prismaClient.partner.findFirst({
+      where: { shopname, NOT: { id } }
+    });
+    if (existing) {
+      return res.status(409).json({ error: "Shop name already exists" });
+    }
+    const updated = await prismaClient.partner.update({
+      where: { id },
+      data: { shopname, shopcategory },
+    });
+    res.status(200).json({ partner: updated });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update partner", details: String(e) });
+  }
+});
+
+// POST /partner/shopimage - upload or update shop image for a partner
+//@ts-ignore
+app.post("/partner/shopimage", upload.single("image"), async (req, res) => {
+  const { partnerId } = req.body;
+  if (!partnerId || !req.file) {
+    return res.status(400).json({ error: "partnerId and image are required" });
+  }
+  try {
+    // Check if shopimage already exists for this partner
+    const existing = await prismaClient.shopimage.findUnique({ where: { partnerId } });
+    let shopimage;
+    const url = `/images/${req.file.filename}`;
+    if (existing) {
+      shopimage = await prismaClient.shopimage.update({
+        where: { partnerId },
+        data: { url }
+      });
+    } else {
+      shopimage = await prismaClient.shopimage.create({
+        data: { url, partner: { connect: { id: partnerId } } }
+      });
+    }
+    res.status(200).json({ url: shopimage.url });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to upload shop image", details: String(e) });
+  }
+});
+
+// GET /partner?id=... - get a single partner by id
+//@ts-ignore
+app.get("/partner", async (req, res) => {
+  const { id } = req.query;
+  if (!id || typeof id !== "string") {
+    return res.status(400).json({ error: "id is required" });
+  }
+  try {
+    const partner = await prismaClient.partner.findUnique({
+      where: { id },
+      include: { shopimage: true }
+    });
+    if (!partner) {
+      return res.status(404).json({ error: "Partner not found" });
+    }
+    res.status(200).json({ partner });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch partner", details: String(e) });
+  }
+});
+
+// POST /order - create a new order when user checks out
+//@ts-ignore
+app.post("/order", async (req, res) => {
+  console.log("[POST /order] Raw req.body:", req.body);
+  const { userId, partnerId, items, shopName, price } = req.body;
+  console.log("[POST /order] Incoming data:", { userId, partnerId, items, shopName, price });
+  if (!userId || !partnerId || !items || !shopName || !price) {
+    console.error("[POST /order] Missing required fields", { userId, partnerId, items, shopName, price });
+    return res.status(400).json({ error: "Missing required fields", rawBody: req.body });
+  }
+  try {
+    // Check if user exists
+    const user = await prismaClient.signup.findUnique({ where: { id: userId } });
+    if (!user) {
+      console.error(`[POST /order] User not found: ${userId}`);
+      return res.status(404).json({ error: "User not found" });
+    }
+    // Check if partner exists
+    const partner = await prismaClient.partner.findUnique({ where: { id: partnerId } });
+    if (!partner) {
+      console.error(`[POST /order] Partner not found: ${partnerId}`);
+      return res.status(404).json({ error: "Partner not found" });
+    }
+    const order = await prismaClient.order.create({
+      data: {
+        userId,
+        partnerId,
+        items: typeof items === "string" ? items : JSON.stringify(items),
+        shopName,
+        price: parseFloat(price),
+        dateTime: new Date(),
+        status: false // order not yet taken by default
+      }
+    });
+    console.log("[POST /order] Order created successfully", order);
+    res.status(201).json({ order });
+  } catch (e) {
+    console.error("[POST /order] Failed to create order", e);
+    res.status(500).json({ error: "Failed to create order", details: String(e) });
+  }
+});
+
+// PATCH /order/:orderId/delivered - mark order as delivered
+//@ts-ignore
+app.patch("/order/:orderId/delivered", async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    const updated = await prismaClient.order.update({
+      where: { id: orderId },
+      data: { status: true },
+    });
+    res.status(200).json({ order: updated });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update order status", details: String(e) });
+  }
+});
+
+// GET /orders?userId=...&partnerId=... - get all orders for a user or partner
+//@ts-ignore
+app.get("/orders", async (req, res) => {
+  const { userId, partnerId } = req.query;
+  if (!userId && !partnerId) {
+    return res.status(400).json({ error: "userId or partnerId is required" });
+  }
+  try {
+    let where = {};
+    if (userId) where = { ...where, userId };
+    if (partnerId) where = { ...where, partnerId };
+    const orders = await prismaClient.order.findMany({
+      where,
+      orderBy: { dateTime: "desc" }
+    });
+    res.status(200).json({ orders });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch orders", details: String(e) });
+  }
+});
+
+// GET /user?email=... - fetch user by email
+//@ts-ignore
+app.get("/user", async (req, res) => {
+  const { email } = req.query;
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+  try {
+    const user = await prismaClient.signup.findUnique({ where: { email: String(email) } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    // Do not return password
+    const { password, ...userWithoutPassword } = user;
+    res.status(200).json({ user: userWithoutPassword });
+  } catch (e) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

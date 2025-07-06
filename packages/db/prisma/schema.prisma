@@ -12,6 +12,7 @@ model Signup {
   name String
   email String @unique
   password String
+  orders Order[] // relation to orders
 }
 
 model Partner {
@@ -20,6 +21,8 @@ model Partner {
   shopcategory String
   password String
   items Item[] // relation to items
+  shopimage Shopimage?
+  orders Order[] // relation to orders
 }
 
 model Item {
@@ -30,5 +33,25 @@ model Item {
   available Boolean @default(true)
   partnerId String // foreign key
   partner Partner @relation(fields: [partnerId], references: [id])
+}
+
+model Shopimage {
+  id String @id @default(uuid())
+  url String
+  partnerId String @unique
+  partner Partner @relation(fields: [partnerId], references: [id])
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  userId     String
+  user       Signup   @relation(fields: [userId], references: [id])
+  partnerId  String
+  partner    Partner  @relation(fields: [partnerId], references: [id])
+  items      String   // Comma-separated or JSON string of items
+  shopName   String
+  price      Float
+  dateTime   DateTime
+  status     Boolean  // true = order taken, false = not taken
 }
 
