@@ -3,18 +3,18 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 const foods = [
-	{ name: "Burger", image: "/images/burger.png" },
-	{ name: "Cake", image: "/images/cake.png" },
-	{ name: "Pizza", image: "/images/pizza.png" },
-	{ name: "Momos", image: "/images/momo.png" },
-	{ name: "Ice Cream", image: "/images/icecream.png" },
-	{ name: "Chinese", image: "/images/chinese.png" },
-	{ name: "Rolls", image: "/images/rolls.png" },
-	{ name: "Sandwich", image: "/images/sandwich.png" },
-	{ name: "Chole Bhature", image: "/images/cholebhaturf.png" },
-	{ name: "Dosa", image: "/images/dosaf.png" },
-	{ name: "Manchurian", image: "/images/manchuriyanf.png" },
-	{ name: "Shake", image: "/images/shakef.png" }
+	{ name: "Burger", image: "/burger.png" },
+	{ name: "Cake", image: "/cake.png" },
+	{ name: "Pizza", image: "/pizza.png" },
+	{ name: "Momos", image: "/momo.png" },
+	{ name: "Ice Cream", image: "/icecream.png" },
+	{ name: "Chinese", image: "/chinese.png" },
+	{ name: "Rolls", image: "/rolls.png" },
+	{ name: "Sandwich", image: "/sandwich.png" },
+	{ name: "Chole Bhature", image: "/cholebhaturf.png" },
+	{ name: "Dosa", image: "/dosaf.png" },
+	{ name: "Manchurian", image: "/manchuriyanf.png" },
+	{ name: "Shake", image: "/shakef.png" }
 ];
 
 export const foodSectionId = "popular-food-section";

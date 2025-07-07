@@ -143,7 +143,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row items-center gap-2 p-4 w-full md:w-auto">
           <div className="flex items-center gap-2">
             <motion.img
-              src="/images/logo.png"
+              src="/logo.png"
               alt="Logo"
               className="w-10 h-10 rounded"
               initial={{ y: -60, opacity: 0 }}
@@ -303,7 +303,7 @@ export default function Home() {
         {/* Right Image */}
         <div className="md:w-1/2 flex justify-center mb-10 md:mb-0">
           <img
-            src="/images/girl2.png"
+            src="/girl2.png"
             alt="Ordering girl illustration"
             className="w-56 md:w-72"
           />
