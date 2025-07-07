@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 interface Item {
@@ -22,6 +22,14 @@ function isAvailable(item: Item) {
 }
 
 export default function ShopItemsPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <ShopItemsContent />
+    </Suspense>
+  );
+}
+
+function ShopItemsContent() {
   const searchParams = useSearchParams();
   const shopname = searchParams.get("shop");
   const foodName = searchParams.get("food");
