@@ -4,63 +4,63 @@ import { motion, useAnimation } from "framer-motion";
 const restaurants = [
   {
     name: "Burger Palace",
-    image: "/burger.png",
+    image: "/images/burger.png",
     cuisine: "American",
     rating: 4.8,
     deliveryTime: "20-30 min"
   },
   {
     name: "Cake Castle",
-    image: "/cake.png",
+    image: "/images/cake.png",
     cuisine: "Bakery",
     rating: 4.7,
     deliveryTime: "25-35 min"
   },
   {
     name: "Pizza Point",
-    image: "/pizza.png",
+    image: "/images/pizza.png",
     cuisine: "Italian",
     rating: 4.9,
     deliveryTime: "15-25 min"
   },
   {
     name: "Momo Magic",
-    image: "/momo.png",
+    image: "/images/momo.png",
     cuisine: "Tibetan",
     rating: 4.6,
     deliveryTime: "18-28 min"
   },
   {
     name: "Ice Cream Hub",
-    image: "/icecream.png",
+    image: "/images/icecream.png",
     cuisine: "Desserts",
     rating: 4.8,
     deliveryTime: "10-20 min"
   },
   {
     name: "Chinese Express",
-    image: "/chinese.png",
+    image: "/images/chinese.png",
     cuisine: "Chinese",
     rating: 4.7,
     deliveryTime: "22-32 min"
   },
   {
     name: "Rolls Republic",
-    image: "/rolls.png",
+    image: "/images/rolls.png",
     cuisine: "Street Food",
     rating: 4.5,
     deliveryTime: "17-27 min"
   },
   {
     name: "Sandwich Stop",
-    image: "/sandwich.png",
+    image: "/images/sandwich.png",
     cuisine: "Cafe",
     rating: 4.6,
     deliveryTime: "12-22 min"
   },
   {
     name: "Dosa Delight",
-    image: "/dosaf.png",
+    image: "/images/dosaf.png",
     cuisine: "South Indian",
     rating: 4.9,
     deliveryTime: "20-30 min"
