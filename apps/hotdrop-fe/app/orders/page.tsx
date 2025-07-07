@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 // Define types for partner and item
@@ -17,6 +17,14 @@ interface Partner {
 }
 
 export default function OrdersPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <OrdersContent />
+    </Suspense>
+  );
+}
+
+function OrdersContent() {
   const searchParams = useSearchParams();
   const itemName = searchParams.get("food") || "Burgers";
   const [partners, setPartners] = useState<Partner[]>([]);
