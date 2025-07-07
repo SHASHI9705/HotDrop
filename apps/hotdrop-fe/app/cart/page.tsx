@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface CartItem {
@@ -11,6 +11,14 @@ interface CartItem {
 }
 
 export default function CartPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-gray-500 py-12">Loading...</div>}>
+      <CartContent />
+    </Suspense>
+  );
+}
+
+function CartContent() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
