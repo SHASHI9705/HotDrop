@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000","https://www.hotdrop.tech/"], credentials: true }));
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "../../../packages/db/images")));
 

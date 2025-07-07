@@ -120,8 +120,25 @@ function CartContent() {
         )}
         {/* Cart Summary */}
         {cart.length > 0 && (
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-6 border-t pt-8">
-            <div className="text-xl font-bold text-gray-800">Total: <span className="text-orange-500">₹{total}</span></div>
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-6 border-t pt-8 w-full">
+            <div className="flex flex-col gap-2 w-full md:w-auto">
+              <div className="flex items-center justify-between w-full md:w-72">
+                <span className="text-gray-700 font-semibold">Subtotal</span>
+                <span className="text-gray-800 font-bold">₹{total}</span>
+              </div>
+              <div className="flex items-center justify-between w-full md:w-72">
+                <span className="text-gray-700 font-semibold">GST (2%)</span>
+                <span className="text-gray-800 font-bold">₹{(total * 0.02).toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between w-full md:w-72">
+                <span className="text-gray-700 font-semibold">Maintenance Fees</span>
+                <span className="text-gray-800 font-bold">₹2.00</span>
+              </div>
+              <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t pt-2">
+                <span className="text-xl font-bold text-gray-800">Total</span>
+                <span className="text-xl font-bold text-orange-500">₹{(total + total * 0.02 + 2).toFixed(2)}</span>
+              </div>
+            </div>
             <button
               className="bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2"
               onClick={async () => {
@@ -145,7 +162,7 @@ function CartContent() {
                   partnerId: partner.id,
                   items: cart.map(item => `${item.name} x${item.quantity}`).join(", "),
                   shopName: partner.name || partner.shopname || "",
-                  price: total
+                  price: (total + total * 0.02 + 2).toFixed(2)
                 };
                 // Razorpay integration
                 const loadRazorpay = () => {
@@ -164,7 +181,7 @@ function CartContent() {
                 await loadRazorpay();
                 const options = {
                   key: "rzp_test_4oMEcsOGUVoepI",
-                  amount: total * 100, // in paise
+                  amount: Math.round((total + total * 0.02 + 2) * 100), // Use total amount (subtotal + GST + maintenance fees) in paise
                   currency: "INR",
                   name: "HotDrop",
                   description: "Order Payment",

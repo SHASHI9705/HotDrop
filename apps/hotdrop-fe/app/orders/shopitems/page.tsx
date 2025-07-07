@@ -145,16 +145,6 @@ function ShopItemsContent() {
           </div>
         </div>
         <div className="flex flex-row items-center gap-4">
-          <div className="relative">
-            <a href="/cart" className="w-12 h-12 flex items-center justify-center rounded-full bg-white hover:bg-orange-100 shadow text-2xl transition-colors duration-200 border border-orange-300">
-              🛒
-            </a>
-            {Object.values(cart).reduce((sum, qty) => sum + qty, 0) > 0 && (
-              <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white">
-                {Object.values(cart).reduce((sum, qty) => sum + qty, 0)}
-              </span>
-            )}
-          </div>
           <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg">Back</a>
         </div>
       </header>
@@ -201,6 +191,22 @@ function ShopItemsContent() {
           </div>
         )}
       </div>
+      {/* Checkout Footer Button */}
+      {Object.values(cart).reduce((sum, qty) => sum + qty, 0) > 0 && (
+        <div className="fixed bottom-0 left-0 w-full z-50">
+          <button
+            className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-base py-3 rounded-none shadow transition-all duration-200 border-t border-orange-300"
+            style={{ boxShadow: '0 -1px 8px rgba(251, 146, 60, 0.10)' }}
+            onClick={() => window.location.href = '/cart'}
+          >
+            <span role="img" aria-label="cart" className="text-xl">🛒</span>
+            Checkout
+            <span className="ml-2 bg-white text-orange-500 rounded-full px-2 py-0.5 text-sm font-bold border border-orange-200 min-w-[24px] text-center">
+              {Object.values(cart).reduce((sum, qty) => sum + qty, 0)}
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
