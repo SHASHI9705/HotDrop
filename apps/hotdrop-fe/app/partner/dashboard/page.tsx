@@ -95,11 +95,7 @@ export default function PartnerDashboardNavbar() {
             setShopCategory("food");
           }
           if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
-            let url = data.partner.shopimage.url;
-            if (url && !url.startsWith('http')) {
-              url = `http://localhost:3001${url}`;
-            }
-            setShopImage(url);
+            setShopImage(data.partner.shopimage.url); // Always use the URL as-is
           } else {
             setShopImage("/profile.svg");
           }
@@ -171,11 +167,7 @@ export default function PartnerDashboardNavbar() {
       const res = await fetch(`http://localhost:3001/partner?id=${id}`);
       const data = await res.json();
       if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
-        let url = data.partner.shopimage.url;
-        if (url && !url.startsWith('http')) {
-          url = `http://localhost:3001${url}`;
-        }
-        setShopImage(url);
+        setShopImage(data.partner.shopimage.url); // Always use the URL as-is
       }
       alert("Shop image updated!");
     } else {

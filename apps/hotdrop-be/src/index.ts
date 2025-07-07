@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import cors from "cors";
 import path from "path";
 import multer from "multer";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 dotenv.config();
 
@@ -15,16 +16,16 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "../../../packages/db/images")));
 
-// Multer config for image upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../../packages/db/images"));
+// S3 setup
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname.replace(/\s+/g, ''));
-  }
 });
+// Multer config for S3 upload
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.get("/", (req, res) => {
@@ -283,11 +284,23 @@ app.post("/partner/items", upload.single("image"), async (req, res) => {
     return res.status(400).json({ error: "Name, price, partnerId, and image are required" });
   }
   try {
+    if (!process.env.AWS_S3_BUCKET) {
+      throw new Error("AWS_S3_BUCKET is not set in environment variables");
+    }
+    const key = `items/${Date.now()}-${req.file.originalname}`;
+    await s3.send(new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET as string,
+      Key: key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype
+      // Removed ACL: "public-read" as bucket policy handles public access
+    }));
+    const imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
     const item = await prismaClient.item.create({
       data: {
         name,
         price: parseFloat(price),
-        image: `/images/${req.file.filename}`,
+        image: imageUrl,
         partnerId,
         available: true,
       },
@@ -331,18 +344,31 @@ app.post("/partner/shopimage", upload.single("image"), async (req, res) => {
     return res.status(400).json({ error: "partnerId and image are required" });
   }
   try {
+    if (!process.env.AWS_S3_BUCKET) {
+      throw new Error("AWS_S3_BUCKET is not set in environment variables");
+    }
+    // Sanitize filename: replace spaces with dashes
+    const sanitizedFilename = req.file.originalname.replace(/\s+/g, '-');
+    const key = `shopimages/${Date.now()}-${sanitizedFilename}`;
+    await s3.send(new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET as string,
+      Key: key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype
+      // No ACL needed, bucket policy handles public access
+    }));
+    const imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
     // Check if shopimage already exists for this partner
     const existing = await prismaClient.shopimage.findUnique({ where: { partnerId } });
     let shopimage;
-    const url = `/images/${req.file.filename}`;
     if (existing) {
       shopimage = await prismaClient.shopimage.update({
         where: { partnerId },
-        data: { url }
+        data: { url: imageUrl }
       });
     } else {
       shopimage = await prismaClient.shopimage.create({
-        data: { url, partner: { connect: { id: partnerId } } }
+        data: { url: imageUrl, partner: { connect: { id: partnerId } } }
       });
     }
     res.status(200).json({ url: shopimage.url });

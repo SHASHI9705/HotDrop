@@ -56,7 +56,7 @@ export default function PartnerDetails({
       <div className="bg-white rounded-xl shadow-lg p-6 flex-1 flex flex-col items-center border border-gray-200 min-h-[320px] justify-between">
         <div className="w-full flex flex-col items-center">
           <div className="font-bold text-lg text-gray-700 mb-2">Shop Image</div>
-          <img src={shopImage} alt="Shop" className="w-32 h-32 rounded-full border-2 border-orange-400 object-cover mb-4" />
+          <img src={encodeURI(shopImage)} alt="Shop" className="w-32 h-32 rounded-full border-2 border-orange-400 object-cover mb-4" />
           <input type="file" accept="image/*" className="border rounded p-2 mb-2 bg-white" onChange={e => setImageFile(e.target.files?.[0] || null)} />
         </div>
         <button className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-600 font-semibold w-fit mb-2" onClick={async () => {
