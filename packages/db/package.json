@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "exports": {
-    "./client": "./src/index.ts"
-
+    "./client": "./dist/index.js"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -b"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
@@ -16,7 +15,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "6.10.1",
     "prisma": "^6.10.1",

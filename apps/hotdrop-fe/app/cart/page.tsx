@@ -99,7 +99,7 @@ function CartContent() {
             {cart.map((item) => (
               <div key={item.id} className="flex flex-col md:flex-row items-center justify-between gap-4 bg-orange-50 rounded-lg p-4 border border-orange-100 shadow-sm">
                 <div className="flex items-center gap-4 w-full md:w-1/2">
-                  <img src={item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-orange-200" />
+                  <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-orange-200" />
                   <div>
                     <div className="font-bold text-lg text-gray-800">{item.name}</div>
                     <div className="text-orange-500 font-semibold text-base">₹{item.price}</div>
@@ -188,7 +188,7 @@ function CartContent() {
                   image: "/logo.png",
                   handler: async function (response: any) {
                     // On payment success, place order
-                    const res = await fetch("http://localhost:3001/order", {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/order`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(orderData)

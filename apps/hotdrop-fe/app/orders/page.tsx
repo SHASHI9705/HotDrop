@@ -31,7 +31,7 @@ function OrdersContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/partners-with-items")
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partners-with-items`)
       .then((res) => res.json())
       .then((data) => {
         setPartners(data);
@@ -78,7 +78,7 @@ function OrdersContent() {
                   style={{ textDecoration: 'none' }}
                 >
                   <img
-                    src={partner.image && partner.image !== '/logo.png' ? partner.image.startsWith('http') ? partner.image : `http://localhost:3001${partner.image}` : '/logo.png'}
+                    src={partner.image && partner.image !== '/logo.png' ? partner.image.startsWith('http') ? partner.image : `${process.env.NEXT_PUBLIC_BACKEND_API}${partner.image}` : '/logo.png'}
                     alt="Shop Logo"
                     className="w-full"
                     style={{ height: '65%', objectFit: 'cover' }}

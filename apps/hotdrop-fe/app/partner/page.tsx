@@ -58,7 +58,7 @@ export default function PartnerHome() {
     const { id: partnerId } = JSON.parse(partner);
     const fetchItems = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/partner/items?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/items?partnerId=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setItems(data.items);
@@ -76,7 +76,7 @@ export default function PartnerHome() {
         const partner = localStorage.getItem("hotdrop_partner");
         if (!partner) return;
         const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`http://localhost:3001/partner/notifications/count?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/notifications/count?partnerId=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setNotificationCount(data.count || 0);
@@ -94,7 +94,7 @@ export default function PartnerHome() {
       return;
     }
     const { id, shopname } = JSON.parse(partner);
-    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
         const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
@@ -109,7 +109,7 @@ export default function PartnerHome() {
         const partner = localStorage.getItem("hotdrop_partner");
         if (!partner) return;
         const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`http://localhost:3001/partner/profile?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/profile?partnerId=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setShopName(data.shopname || "");
@@ -126,7 +126,7 @@ export default function PartnerHome() {
         const partner = localStorage.getItem("hotdrop_partner");
         if (!partner) return;
         const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`http://localhost:3001/partner/profile?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/profile?partnerId=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setProfile({ shopname: data.shopname });
@@ -150,7 +150,7 @@ export default function PartnerHome() {
     setItems(updated);
     // Send update to backend (PATCH to match backend route)
     try {
-      const res = await fetch(`http://localhost:3001/partner/item/${item.id}/availability`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/item/${item.id}/availability`, {
         method: "PATCH",
       });
       if (!res.ok) {
@@ -175,7 +175,7 @@ export default function PartnerHome() {
     const updated = items.filter((_, i) => i !== idx);
     setItems(updated);
     try {
-      const res = await fetch(`http://localhost:3001/partner/item/${item.id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/item/${item.id}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -257,7 +257,7 @@ export default function PartnerHome() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
             {items.map((item, idx) => (
               <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
-                <img src={item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
+                <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
                 <div className="flex flex-col justify-between h-1/3 w-full p-4">
                   <div className="flex items-center justify-between w-full">
                     <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
@@ -347,7 +347,7 @@ function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: {
       formData.append("price", itemPrice);
       formData.append("image", itemImage);
       formData.append("partnerId", partnerId);
-      const res = await fetch("http://localhost:3001/partner/items", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/items`, {
         method: "POST",
         body: formData,
       });

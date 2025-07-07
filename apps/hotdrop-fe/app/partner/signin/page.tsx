@@ -16,7 +16,7 @@ export default function PartnerSignin() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:3001/partner/signin", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ shopname, password }),

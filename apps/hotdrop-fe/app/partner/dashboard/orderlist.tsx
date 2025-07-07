@@ -22,7 +22,7 @@ export default function OrderListSection() {
       return;
     }
     const { id } = JSON.parse(partner);
-    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
       .then((res) => res.json())
       .then((data) => {
         // Only show orders that are not pending (status === true)

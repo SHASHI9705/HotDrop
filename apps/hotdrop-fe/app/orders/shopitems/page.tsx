@@ -41,7 +41,7 @@ function ShopItemsContent() {
   useEffect(() => {
     if (!shopname) return;
     // Save selected partner to localStorage for checkout
-    fetch(`http://localhost:3001/partners-with-items`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partners-with-items`)
       .then((res) => res.json())
       .then((data) => {
         // Find the partner/shop
@@ -163,7 +163,7 @@ function ShopItemsContent() {
               >
                 <div className="w-full" style={{ height: '65%' }}>
                   <img
-                    src={item.image && typeof item.image === 'string' && item.image.startsWith("/images/") ? `http://localhost:3001${item.image}` : item.image || "/logo.png"}
+                    src={item.image && typeof item.image === 'string' && item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image || "/logo.png"}
                     alt={item.name}
                     className="w-full h-full object-cover"
                   />

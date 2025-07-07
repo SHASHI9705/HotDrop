@@ -7,10 +7,14 @@ import cors from "cors";
 import path from "path";
 import multer from "multer";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors({ origin: ["http://localhost:3000","https://www.hotdrop.tech/"], credentials: true }));
 app.use(express.json());
@@ -181,13 +185,13 @@ app.get("/partners-with-items", async (req, res) => {
       },
     });
     // Map to frontend format
-    const result = partners.map((partner) => ({
+    const result = partners.map((partner: any) => ({
       id: partner.id,
       name: partner.shopname,
       image: partner.shopimage && partner.shopimage.url ? partner.shopimage.url : "/logo.png", // use real shop image if exists
       rating: 4.5, // Placeholder, update if you have ratings
       ratingsCount: partner.items.length, // Example: number of items as ratings
-      items: partner.items.map((item) => ({
+      items: partner.items.map((item :any ) => ({
         name: item.name,
         price: item.price,
         image: item.image,
@@ -216,9 +220,9 @@ app.get("/partner/burger-items", async (req, res) => {
       return res.status(404).json({ error: "Partner not found" });
     }
     // Filter items containing 'burger' (case-insensitive)
-    const burgerItems = partner.items.filter((item) =>
+    const burgerItems = partner.items.filter((item :any) =>
       item.name.toLowerCase().includes("burger")
-    ).map((item) => ({
+    ).map((item :any) => ({
       name: item.name,
       price: item.price,
       image: item.image, // Only the filename, not the path
@@ -496,5 +500,5 @@ app.get("/user", async (req, res) => {
   }
 });
 
-app.listen(3001);
+app.listen(3001, "0.0.0.0");
 

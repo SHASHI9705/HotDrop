@@ -26,7 +26,7 @@ export default function Signup() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:3001/signup", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -50,7 +50,7 @@ export default function Signup() {
       const user = result.user;
       if (!user.displayName || !user.email) throw new Error("Google account missing name or email");
       // Try to create user in backend (if not exists)
-      const signupRes = await fetch("http://localhost:3001/signup", {
+      const signupRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,7 +76,7 @@ export default function Signup() {
         };
       } else if (signupData && signupData.error === "Email already exists") {
         // Fetch user by email to get id
-        const userRes = await fetch(`http://localhost:3001/user?email=${encodeURIComponent(user.email)}`);
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/user?email=${encodeURIComponent(user.email)}`);
         const userJson = await userRes.json();
         if (userRes.ok && userJson.user) {
           userObj = {

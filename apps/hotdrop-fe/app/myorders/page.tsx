@@ -23,7 +23,7 @@ export default function MyOrdersPage() {
       return;
     }
     const userId = user.id || user.email;
-    fetch(`http://localhost:3001/orders?userId=${encodeURIComponent(userId)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?userId=${encodeURIComponent(userId)}`)
       .then((res) => res.json())
       .then((data) => {
         setOrders(data.orders || []);

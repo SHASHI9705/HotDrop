@@ -68,7 +68,7 @@ export default function PartnerDashboardNavbar() {
       return;
     }
     const { id, shopname } = JSON.parse(partner);
-    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
         const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
@@ -80,7 +80,7 @@ export default function PartnerDashboardNavbar() {
     const partner = localStorage.getItem("hotdrop_partner");
     if (partner) {
       const { id } = JSON.parse(partner);
-      fetch(`http://localhost:3001/partner?id=${id}`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner?id=${id}`)
         .then((res) => res.json())
         .then((data) => {
           // Defensive: check for data.partner and shopname
@@ -117,7 +117,7 @@ export default function PartnerDashboardNavbar() {
         const formData = new FormData();
         formData.append("image", imageFile);
         formData.append("partnerId", id);
-        const resImg = await fetch("http://localhost:3001/partner/shopimage", {
+        const resImg = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/shopimage`, {
           method: "POST",
           body: formData
         });
@@ -129,7 +129,7 @@ export default function PartnerDashboardNavbar() {
           alert(dataImg.error || "Failed to upload image");
         }
       }
-      const res = await fetch("http://localhost:3001/partner/update", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/update`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, shopname: shopName, shopcategory: shopCategory })
@@ -157,14 +157,14 @@ export default function PartnerDashboardNavbar() {
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("partnerId", id);
-    const resImg = await fetch("http://localhost:3001/partner/shopimage", {
+    const resImg = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/shopimage`, {
       method: "POST",
       body: formData
     });
     const dataImg = await resImg.json();
     if (resImg.ok && dataImg.url) {
       // Fetch the latest partner data to get the correct image URL
-      const res = await fetch(`http://localhost:3001/partner?id=${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner?id=${id}`);
       const data = await res.json();
       if (data && data.partner && data.partner.shopimage && data.partner.shopimage.url) {
         setShopImage(data.partner.shopimage.url); // Always use the URL as-is

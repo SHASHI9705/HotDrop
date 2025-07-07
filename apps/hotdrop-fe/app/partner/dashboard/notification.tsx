@@ -28,7 +28,7 @@ export default function NotificationSection() {
     }
     const { id, shopname } = JSON.parse(partner);
     // Fetch all orders for this partner
-    fetch(`http://localhost:3001/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
         // Only show pending orders for this shop
@@ -40,7 +40,7 @@ export default function NotificationSection() {
 
   const markAsDelivered = async (orderId: string) => {
     setLoading(true);
-    await fetch(`http://localhost:3001/order/${orderId}/delivered`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/order/${orderId}/delivered`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: true })
