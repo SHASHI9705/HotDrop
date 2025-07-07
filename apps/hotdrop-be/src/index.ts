@@ -16,10 +16,9 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(cors({ origin: "https://www.hotdrop.tech", credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000","https://www.hotdrop.tech"], credentials: true }));
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "../../../packages/db/images")));
-
 
 // S3 setup
 const s3 = new S3Client({
