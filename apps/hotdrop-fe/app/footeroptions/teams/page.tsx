@@ -10,31 +10,31 @@ export default function TeamPage() {
       name: "Nikhil Singh",
       role: "Co-Founder & CTO",
       image: "/cto.jpg",
-      bio: "Visionary leader with a passion for revolutionizing food delivery. Expert in business strategy and customer experience.",
-      skills: ["Leadership", "Strategy", "Product Vision", "Full-Stack Development"],
+      bio: "Technical mastermind building scalable solutions for millions of users. Expert in full-stack development and system architecture.",
+      skills: ["DevOps", "Strategy", "System Architecture", "Full-Stack Development"],
       social: { 
         twitter: "https://x.com/chess_bo", 
         linkedin: "https://www.linkedin.com/in/nikhil-kumar-singh-b80a56320/", 
         github: "https://github.com/NikhilSingh1610",
         email: "nikhil@hotdrop.com" 
       },
-      quote: "Great food should be accessible to everyone, everywhere.",
-      experience: "2+ years in tech and devlopment"
+      quote: "Technology should make life simpler, not complicated.",
+      experience: "2+ web devlopment & Devops"
     },
     {
       name: "Shashiranjan Singh",
       role: "Co-Founder & CEO",
       image: "/ceo.png",    
-      bio: "Technical mastermind building scalable solutions for millions of users. Expert in full-stack development and system architecture.",
-      skills: ["Full-Stack Development", "System Architecture", "DevOps", "Innovation"],
+      bio: "Visionary leader with a passion for revolutionizing food delivery. Expert in business strategy and customer experience.",
+      skills: ["Product Vision", "Web Development", "Leadership", "Innovation"],
       social: { 
         twitter: "https://x.com/Shashi964373", 
         linkedin: "https://www.linkedin.com/in/shashiranjan-singh9/", 
         github: "https://github.com/SHASHI9705",
         email: "shashiranjan@hotdrop.com" 
       },
-      quote: "Technology should make life simpler, not complicated.",
-      experience: "2+ years in web development"
+      quote: "Great food should be accessible to everyone, everywhere.",
+      experience: "2+ years in web development and tech"
     }
   ];
 
@@ -51,12 +51,6 @@ export default function TeamPage() {
       icon: "🤝",
       color: "from-green-500 to-teal-500" 
     },
-    // {
-    //   title: "500K+ Orders Delivered",
-    //   description: "Successfully delivered half a million orders",
-    //   icon: "📦",
-    //   color: "from-orange-500 to-red-500"
-    // },
     {
       title: "2+ Cities Coverage",
       description: "Expanded operations to 25 cities nationwide",

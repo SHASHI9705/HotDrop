@@ -10,7 +10,7 @@ export default function AboutPage() {
       name: "Nikhil Singh",
       role: "CTO",
       image: "/cto.jpg",
-      bio: "Passionate about connecting people with Tecnology and Food.",
+      bio: "Tech enthusiast building scalable solutions.",
       social: { twitter: "#", linkedin: "#", email: "alex@hotdrop.com" }
     },
 
@@ -18,7 +18,7 @@ export default function AboutPage() {
       name: "Shashiranjan Singh",
       role: "CEO",
       image: "/ceo.png",
-      bio: "Tech enthusiast building scalable solutions..",
+      bio: "Passionate about connecting people with Tecnology and Food.",
       social: { twitter: "#", linkedin: "#", email: "sarah@hotdrop.com" }
     }
   ];
