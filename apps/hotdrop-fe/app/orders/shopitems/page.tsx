@@ -132,55 +132,55 @@ function ShopItemsContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
-      <header className="w-full flex flex-row items-center justify-between py-8 pl-12 pr-12">
-        <div className="flex flex-row items-center">
-          <Image src="/logo.png" alt="HotDrop Logo" width={50} height={50} className="mr-4 rounded-xl" />
-          <div>
-            <h1 className="text-3xl font-extrabold text-black mb-1 flex items-center">{shop?.name || "Shop"}</h1>
-            <div className="flex items-center mb-1">
-              <span className="text-yellow-400 text-xl mr-2">★</span>
-              <span className="text-lg font-semibold text-gray-800">{shop?.rating || "4.5"}</span>
-              <span className="text-gray-500 text-sm ml-2">({shop?.ratingsCount || "0"} ratings)</span>
+      <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 sm:py-8 px-4 sm:pl-12 sm:pr-12 gap-4 sm:gap-0">
+        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-2 sm:gap-0">
+          <Image src="/logo.png" alt="HotDrop Logo" width={44} height={44} className="mr-0 sm:mr-4 rounded-xl" />
+          <div className="flex flex-col items-center sm:items-start w-full">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-black mb-1 flex items-center text-center sm:text-left">{shop?.name || "Shop"}</h1>
+            <div className="flex items-center mb-1 justify-center sm:justify-start">
+              <span className="text-yellow-400 text-lg sm:text-xl mr-2">★</span>
+              <span className="text-base sm:text-lg font-semibold text-gray-800">{shop?.rating || "4.5"}</span>
+              <span className="text-gray-500 text-xs sm:text-sm ml-2">({shop?.ratingsCount || "0"} ratings)</span>
             </div>
           </div>
         </div>
-        <div className="flex flex-row items-center gap-4">
-          <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg">Back</a>
+        <div className="flex flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end">
+          <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 sm:px-6 py-2 rounded-full shadow transition-colors duration-200 text-base sm:text-lg w-full sm:w-auto text-center">Back</a>
         </div>
       </header>
-      <div className="pl-12 pr-12">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6 mt-2">{getHeading(foodName)}</h2>
+      <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
+        <h2 className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
         {loading ? (
           <p>Loading...</p>
         ) : items.length === 0 ? (
-          <div className="text-center text-gray-500 py-12 text-lg">No items found for this menu.</div>
+          <div className="text-center text-gray-500 py-12 text-base sm:text-lg">No items found for this menu.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 place-items-center">
             {items.map((item, idx) => (
               <div
                 key={idx}
-                className={`w-64 h-80 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-100 overflow-hidden ${!item.available ? 'opacity-50' : ''}`}
+                className={`w-full max-w-xs h-72 sm:w-64 sm:h-80 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-100 overflow-hidden ${!item.available ? 'opacity-50' : ''}`}
               >
-                <div className="w-full" style={{ height: '65%' }}>
+                <div className="w-full" style={{ height: '60%' }}>
                   <img
                     src={item.image && typeof item.image === 'string' && item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image || "/logo.png"}
                     alt={item.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex flex-row w-full flex-1 p-4 items-start justify-between gap-2" style={{ height: '35%' }}>
+                <div className="flex flex-row w-full flex-1 p-3 sm:p-4 items-start justify-between gap-2" style={{ height: '40%' }}>
                   <div className="flex flex-col flex-1">
                     <div className="flex flex-row items-center justify-between">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1 truncate">{item.name}</h3>
-                      <span className="text-lg text-orange-500 font-semibold ml-2">₹{item.price}</span>
+                      <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 truncate">{item.name}</h3>
+                      <span className="text-base sm:text-lg text-orange-500 font-semibold ml-2">₹{item.price}</span>
                     </div>
                     <div className="flex flex-row items-center mt-1">
-                      <span className={`text-sm font-medium ${isAvailable(item) ? 'text-green-600' : 'text-red-400'}`}>{isAvailable(item) ? 'Available' : 'Out of Stock'}</span>
+                      <span className={`text-xs sm:text-sm font-medium ${isAvailable(item) ? 'text-green-600' : 'text-red-400'}`}>{isAvailable(item) ? 'Available' : 'Out of Stock'}</span>
                       {isAvailable(item) && (
-                        <div className="flex items-center gap-2 ml-auto">
-                          <button className="bg-orange-200 text-orange-700 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold hover:bg-orange-300" onClick={() => updateCart(item, -1)}>-</button>
-                          <span className="font-semibold text-base text-gray-700 min-w-[20px] text-center">{cart[item.name] || 0}</span>
-                          <button className="bg-orange-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold hover:bg-orange-600" onClick={() => updateCart(item, 1)}>+</button>
+                        <div className="flex items-center gap-1 sm:gap-2 ml-auto">
+                          <button className="bg-orange-200 text-orange-700 rounded-full w-7 h-7 flex items-center justify-center text-base sm:text-lg font-bold hover:bg-orange-300" onClick={() => updateCart(item, -1)}>-</button>
+                          <span className="font-semibold text-xs sm:text-base text-gray-700 min-w-[20px] text-center">{cart[item.name] || 0}</span>
+                          <button className="bg-orange-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-base sm:text-lg font-bold hover:bg-orange-600" onClick={() => updateCart(item, 1)}>+</button>
                         </div>
                       )}
                     </div>
@@ -195,13 +195,13 @@ function ShopItemsContent() {
       {Object.values(cart).reduce((sum, qty) => sum + qty, 0) > 0 && (
         <div className="fixed bottom-0 left-0 w-full z-50">
           <button
-            className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-base py-3 rounded-none shadow transition-all duration-200 border-t border-orange-300"
+            className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm sm:text-base py-3 rounded-none shadow transition-all duration-200 border-t border-orange-300"
             style={{ boxShadow: '0 -1px 8px rgba(251, 146, 60, 0.10)' }}
             onClick={() => window.location.href = '/cart'}
           >
-            <span role="img" aria-label="cart" className="text-xl">🛒</span>
+            <span role="img" aria-label="cart" className="text-lg sm:text-xl">🛒</span>
             Checkout
-            <span className="ml-2 bg-white text-orange-500 rounded-full px-2 py-0.5 text-sm font-bold border border-orange-200 min-w-[24px] text-center">
+            <span className="ml-2 bg-white text-orange-500 rounded-full px-2 py-0.5 text-xs sm:text-sm font-bold border border-orange-200 min-w-[20px] sm:min-w-[24px] text-center">
               {Object.values(cart).reduce((sum, qty) => sum + qty, 0)}
             </span>
           </button>

@@ -180,7 +180,7 @@ function CartContent() {
                 };
                 await loadRazorpay();
                 const options = {
-                  key: "rzp_test_4oMEcsOGUVoepI",
+                  key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
                   amount: Math.round((total + total * 0.02 + 2) * 100), // Use total amount (subtotal + GST + maintenance fees) in paise
                   currency: "INR",
                   name: "HotDrop",

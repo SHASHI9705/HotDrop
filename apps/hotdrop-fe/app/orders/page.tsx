@@ -47,16 +47,16 @@ function OrdersContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
-      <header className="w-full flex flex-row items-center justify-between py-10 pl-12 pr-12">
-        <div className="flex flex-row items-center">
-          <Image src="/logo.png" alt="HotDrop Logo" width={80} height={80} className="mr-6" />
-          <h1 className="text-4xl font-extrabold tracking-tight">
+      <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 px-4 sm:py-10 sm:pl-12 sm:pr-12">
+        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+          <Image src="/logo.png" alt="HotDrop Logo" width={60} height={60} className="mb-2 sm:mb-0 sm:mr-6" />
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-center sm:text-left">
             <span className="text-black">HotDrop</span> <span className="text-orange-500">Orders</span>
           </h1>
         </div>
         <a
           href="/"
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg"
+          className="mt-4 sm:mt-0 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg"
         >
           Home
         </a>
