@@ -46,7 +46,7 @@ function OrdersContent() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-red-100 to-red-300">
       <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 px-4 sm:py-10 sm:pl-12 sm:pr-12">
         <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
           <Image src="/logo.png" alt="HotDrop Logo" width={60} height={60} className="mb-2 sm:mb-0 sm:mr-6" />

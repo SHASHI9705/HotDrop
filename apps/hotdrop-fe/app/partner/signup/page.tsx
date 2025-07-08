@@ -24,9 +24,9 @@ export default function PartnerSignup() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Sign up failed");
-      // Store partner login in localStorage
-      localStorage.setItem("hotdrop_partner", JSON.stringify({ shopname, shopcategory }));
-      router.push("/partner");
+      // Store partner login in localStorage with id and shopname
+      localStorage.setItem("hotdrop_partner", JSON.stringify({ id: data.partner.id, shopname: data.partner.shopname }));
+      router.push("/partner/verification");
     } catch (err: any) {
       setError(err.message);
     } finally {

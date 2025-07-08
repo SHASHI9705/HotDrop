@@ -69,7 +69,7 @@ export default function HelpSupportPage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
       {/* Header */}
       <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6 px-4">
-        <Link href="/main" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/logo.png"
             alt="HotDrop Logo"

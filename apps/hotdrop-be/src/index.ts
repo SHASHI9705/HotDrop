@@ -500,5 +500,47 @@ app.get("/user", async (req, res) => {
   }
 });
 
+//@ts-ignore
+app.post("/partner/verification", async (req, res) => {
+  const { name, aadhaarNumber, shopAddress, fssaiNumber, partnerId } = req.body;
+  if (!name || !aadhaarNumber || !shopAddress || !fssaiNumber || !partnerId) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  try {
+    const verification = await prismaClient.verification.create({
+      data: {
+        name,
+        aadhaarNumber,
+        shopAddress,
+        fssaiNumber,
+        partner: { connect: { id: partnerId } },
+        verified: false,
+      },
+    });
+    return res.status(201).json({ verification });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to create verification", details: String(error) });
+  }
+});
+
+// GET /partner/verification/status?partnerId=... - get verification status for a partner
+//@ts-ignore
+app.get("/partner/verification/status", async (req, res) => {
+  const { partnerId } = req.query;
+  if (!partnerId || typeof partnerId !== "string") {
+    return res.status(400).json({ verified: false });
+  }
+  try {
+    const verification = await prismaClient.verification.findFirst({
+      where: { partnerId },
+      orderBy: { id: "desc" }, // get latest if multiple
+    });
+    if (!verification) return res.json({ verified: false });
+    return res.json({ verified: verification.verified });
+  } catch (e) {
+    return res.status(500).json({ verified: false });
+  }
+});
+
 app.listen(3001, "0.0.0.0");
 

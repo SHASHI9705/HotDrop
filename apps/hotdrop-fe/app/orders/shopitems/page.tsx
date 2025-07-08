@@ -197,7 +197,14 @@ function ShopItemsContent() {
           <button
             className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm sm:text-base py-3 rounded-none shadow transition-all duration-200 border-t border-orange-300"
             style={{ boxShadow: '0 -1px 8px rgba(251, 146, 60, 0.10)' }}
-            onClick={() => window.location.href = '/cart'}
+            onClick={() => {
+              const user = typeof window !== 'undefined' ? localStorage.getItem('hotdrop_user') : null;
+              if (!user) {
+                window.location.href = '/signin';
+              } else {
+                window.location.href = '/cart';
+              }
+            }}
           >
             <span role="img" aria-label="cart" className="text-lg sm:text-xl">🛒</span>
             Checkout

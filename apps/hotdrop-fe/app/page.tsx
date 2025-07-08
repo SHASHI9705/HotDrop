@@ -247,7 +247,7 @@ export default function Home() {
       <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-6xl w-full md:mt-4">
         {/* Left Content */}
         <div className="md:w-1/2 text-center md:text-left">
-          <h1 className="text-10xl md:text-6xl font-extrabold text-gray-900">
+          <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-6xl font-extrabold text-gray-900 leading-tight">
             Skip The <span className="text-orange-500">Line</span><br />
             Grab On <span className="text-orange-500">Time!</span>
           </h1>

@@ -46,6 +46,7 @@ export default function PartnerHome() {
   const [notificationCount, setNotificationCount] = useState(0);
   const [shopName, setShopName] = useState("");
   const [profile, setProfile] = useState<{ shopname: string } | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<null | boolean>(null);
 
   useEffect(() => {
     // Check for partner auth in localStorage
@@ -54,8 +55,23 @@ export default function PartnerHome() {
       router.replace("/partner/signup");
       return;
     }
-    // Fetch items from backend for this partner
+    // Fetch verification status for this partner
     const { id: partnerId } = JSON.parse(partner);
+    const fetchVerification = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/verification/status?partnerId=${partnerId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setVerificationStatus(data.verified === true);
+        } else {
+          setVerificationStatus(null);
+        }
+      } catch {
+        setVerificationStatus(null);
+      }
+    };
+    fetchVerification();
+    // Fetch items from backend for this partner
     const fetchItems = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/items?partnerId=${partnerId}`);
@@ -191,102 +207,111 @@ export default function PartnerHome() {
 
   return (
     <>
-      <div className={
-        (showModal ?
-          "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm"
-          :
-          "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50"
-        )
-      }>
-        {/* Navbar */}
-        <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
-          <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-            <motion.img
-              src="/logo.png"
-              alt="Logo"
-              className="w-10 h-10 rounded"
-              initial={{ y: -60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
-            />
-            <motion.div
-              className="text-3xl font-extrabold text-gray-800"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
-            >
-              HotDrop
-            </motion.div>
-          </div>
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
-            <ShopNameSubheading />
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto"
-              onClick={() => router.push("/partner/dashboard")}
-            >
-              Dashboard
-            </button>
-          </div>
-        </nav>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mt-12 mb-4">
-          Welcome Partner!{" "}
-          <span className="text-orange-500">Now sell the best of yours</span>
-        </h1>
-        <div className="w-full flex flex-col items-center justify-center mb-8 md:flex-row md:justify-center md:items-center md:gap-4">
-          <button className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-black/80 transition-colors duration-300 w-full max-w-xs" onClick={() => setShowModal(true)}>
-            + Add Item
-          </button>
-          <div className="relative flex items-center justify-center mt-4 md:mt-0 md:ml-4">
-            <button
-              className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-orange-200 text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
-              title="Notifications"
-              onClick={() => router.push('/partner/dashboard#latest-notification')}
-            >
-              <span role="img" aria-label="bell">🔔</span>
-              {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white notification-glow">{notificationCount}</span>
-              )}
-            </button>
+      {verificationStatus === false ? (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
+          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md mt-24">
+            <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">Verification Pending</h2>
+            <p className="text-gray-700 text-center">Your partner profile is under review. Verification will be completed in a few hours. You will be notified once approved.</p>
           </div>
         </div>
-        {/* Item cards */}
-        {loading ? (
-          <div className="flex justify-center items-center min-h-[300px] w-full">
-            <CircularLoader />
+      ) : (
+        <div className={
+          (showModal ?
+            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm"
+            :
+            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50"
+          )
+        }>
+          {/* Navbar */}
+          <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
+            <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
+              <motion.img
+                src="/logo.png"
+                alt="Logo"
+                className="w-10 h-10 rounded"
+                initial={{ y: -60, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
+              />
+              <motion.div
+                className="text-3xl font-extrabold text-gray-800"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
+              >
+                HotDrop
+              </motion.div>
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
+              <ShopNameSubheading />
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto"
+                onClick={() => router.push("/partner/dashboard")}
+              >
+                Dashboard
+              </button>
+            </div>
+          </nav>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mt-12 mb-4">
+            Welcome Partner!{" "}
+            <span className="text-orange-500">Now sell the best of yours</span>
+          </h1>
+          <div className="w-full flex flex-col items-center justify-center mb-8 md:flex-row md:justify-center md:items-center md:gap-4">
+            <button className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-black/80 transition-colors duration-300 w-full max-w-xs" onClick={() => setShowModal(true)}>
+              + Add Item
+            </button>
+            <div className="relative flex items-center justify-center mt-4 md:mt-0 md:ml-4">
+              <button
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-orange-200 text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
+                title="Notifications"
+                onClick={() => router.push('/partner/dashboard#latest-notification')}
+              >
+                <span role="img" aria-label="bell">🔔</span>
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white notification-glow">{notificationCount}</span>
+                )}
+              </button>
+            </div>
           </div>
-        ) : (
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
-            {items.map((item, idx) => (
-              <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
-                <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
-                <div className="flex flex-col justify-between h-1/3 w-full p-4">
-                  <div className="flex items-center justify-between w-full">
-                    <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
-                    <button
-                      className={
-                        (item.available ? "bg-green-500" : "bg-gray-400") +
-                        " text-white px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
-                      }
-                      onClick={() => toggleAvailability(idx)}
-                    >
-                      {item.available ? "Available" : "Not Available"}
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between w-full mt-2">
-                    <div className="text-orange-500 font-semibold text-xl">₹{item.price}</div>
-                    <button
-                      className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold border border-red-500 rounded px-3 py-1 transition-colors duration-200"
-                      title="Delete"
-                      onClick={() => handleDeleteItem(idx)}
-                    >
-                      Delete
-                    </button>
+          {/* Item cards */}
+          {loading ? (
+            <div className="flex justify-center items-center min-h-[300px] w-full">
+              <CircularLoader />
+            </div>
+          ) : (
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
+              {items.map((item, idx) => (
+                <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
+                  <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
+                  <div className="flex flex-col justify-between h-1/3 w-full p-4">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
+                      <button
+                        className={
+                          (item.available ? "bg-green-500" : "bg-gray-400") +
+                          " text-white px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
+                        }
+                        onClick={() => toggleAvailability(idx)}
+                      >
+                        {item.available ? "Available" : "Not Available"}
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between w-full mt-2">
+                      <div className="text-orange-500 font-semibold text-xl">₹{item.price}</div>
+                      <button
+                        className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold border border-red-500 rounded px-3 py-1 transition-colors duration-200"
+                        title="Delete"
+                        onClick={() => handleDeleteItem(idx)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {showModal && <AddItemModal onClose={() => setShowModal(false)} onAdd={handleAddItem} />}
       {/* Add glowing effect for notification badge */}
       <style jsx global>{`

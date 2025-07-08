@@ -8,8 +8,8 @@ export default function TeamPage() {
   const teamMembers = [
     {
       name: "Nikhil Singh",
-      role: "Co-Founder & CEO",
-      image: "/ceo.jpg",
+      role: "Co-Founder & CTO",
+      image: "/cto.jpg",
       bio: "Visionary leader with a passion for revolutionizing food delivery. Expert in business strategy and customer experience.",
       skills: ["Leadership", "Strategy", "Product Vision", "Full-Stack Development"],
       social: { 
@@ -23,8 +23,8 @@ export default function TeamPage() {
     },
     {
       name: "Shashiranjan Singh",
-      role: "Co-Founder & CTO",
-      image: "/Cto.png",    
+      role: "Co-Founder & CEO",
+      image: "/ceo.png",    
       bio: "Technical mastermind building scalable solutions for millions of users. Expert in full-stack development and system architecture.",
       skills: ["Full-Stack Development", "System Architecture", "DevOps", "Innovation"],
       social: { 
@@ -92,7 +92,7 @@ export default function TeamPage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
       {/* Header */}
       <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6 px-4">
-        <Link href="/main" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/logo.png"
             alt="HotDrop Logo"
@@ -168,7 +168,7 @@ export default function TeamPage() {
                     />
                   </motion.div>
                   <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
-                    {index === 0 ? "CEO" : "CTO"}
+                    {index === 0 ? "CTO" : "CEO"}
                   </div>
                 </div>
                 

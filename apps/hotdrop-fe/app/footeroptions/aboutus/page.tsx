@@ -8,16 +8,16 @@ export default function AboutPage() {
   const teamMembers = [
     {
       name: "Nikhil Singh",
-      role: "CEO",
-      image: "/ceo.jpg",
+      role: "CTO",
+      image: "/cto.jpg",
       bio: "Passionate about connecting people with Tecnology and Food.",
       social: { twitter: "#", linkedin: "#", email: "alex@hotdrop.com" }
     },
 
     {
       name: "Shashiranjan Singh",
-      role: "CTO",
-      image: "/Cto.png",
+      role: "CEO",
+      image: "/ceo.png",
       bio: "Tech enthusiast building scalable solutions..",
       social: { twitter: "#", linkedin: "#", email: "sarah@hotdrop.com" }
     }
@@ -61,7 +61,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
       {/* Header */}
       <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6 px-4">
-        <Link href="/main" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/logo.png"
             alt="HotDrop Logo"
@@ -342,7 +342,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/main"
+              href="/"
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold rounded-full hover:from-red-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               🍔 Order Now

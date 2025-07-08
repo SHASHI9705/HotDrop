@@ -23,6 +23,7 @@ model Partner {
   items Item[] // relation to items
   shopimage Shopimage?
   orders Order[] // relation to orders
+  verification Verification? // relation to verification
 }
 
 model Item {
@@ -53,5 +54,16 @@ model Order {
   price      Float
   dateTime   DateTime
   status     Boolean  // true = order taken, false = not taken
+}
+
+model Verification {
+  id            String   @id @default(uuid())
+  partnerId     String   @unique
+  partner       Partner  @relation(fields: [partnerId], references: [id])
+  name          String
+  aadhaarNumber String
+  shopAddress   String
+  fssaiNumber   String   // 14 digit FSSAI license number
+  verified      Boolean  @default(false)
 }
 
