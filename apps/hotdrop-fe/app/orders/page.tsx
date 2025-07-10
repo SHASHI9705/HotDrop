@@ -38,11 +38,13 @@ function OrdersContent() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [itemName]);
 
-  // Filter partners with at least one item containing the selected food (case-insensitive)
+  // More robust filter: ignore case, whitespace, and plural/singular
+  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, '').replace(/s$/, '');
+  const foodKey = normalize(itemName);
   const foodPartners = partners.filter((partner) =>
-    partner.items && partner.items.some((item) => item.name.toLowerCase().includes(itemName.toLowerCase()))
+    partner.items && partner.items.some((item) => normalize(item.name).includes(foodKey))
   );
 
   return (
@@ -69,7 +71,7 @@ function OrdersContent() {
         ) : (
           <div className="flex flex-row gap-6 mb-10 overflow-x-auto pr-12">
             {foodPartners.map((partner, idx) => {
-              const specialItem = partner.items.find((item) => item.name.toLowerCase().includes(itemName.toLowerCase()));
+              const specialItem = partner.items.find((item) => normalize(item.name).includes(foodKey));
               return (
                 <a
                   key={idx}

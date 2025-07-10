@@ -141,17 +141,17 @@ export default function Home() {
       {/* Navbar */}
       <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center py-6">
         <div className="flex flex-col md:flex-row items-center gap-2 p-4 w-full md:w-auto">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <motion.img
               src="/logo.png"
               alt="Logo"
-              className="w-10 h-10 rounded"
+              className="w-14 h-14 rounded" // Increased size
               initial={{ y: -60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
             />
             <motion.div
-              className="text-3xl font-extrabold text-gray-800"
+              className="text-4xl font-extrabold text-gray-800" // Increased size
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
@@ -161,9 +161,8 @@ export default function Home() {
           </div>
           {/* Show Partner/Log in below HotDrop on mobile */}
           <div className="flex md:hidden w-full justify-center mt-2">
-            {user ? (
-              <a href="/partner/signup" className="relative font-semibold transition-all duration-300 hover:text-black hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-black after:scale-x-0 after:origin-left after:transition-transform after:duration-300">Partner with us</a>
-            ) : (
+            {/* Removed 'Partner with us' option for mobile */}
+            {user ? null : (
               <a href="/signin" className="relative font-semibold transition-all duration-300 hover:text-black hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-black after:scale-x-0 after:origin-left after:transition-transform after:duration-300">Log in</a>
             )}
           </div>
@@ -252,7 +251,7 @@ export default function Home() {
             Grab On <span className="text-orange-500">Time!</span>
           </h1>
           <p className="text-gray-600 mt-4 text-lg">
-            Order Ahead, Walk in Wlak out!
+            Order Ahead, Walk in Walk out!
           </p>
           <div className="flex flex-col sm:flex-row items-center mt-6 gap-3">
             {user ? (

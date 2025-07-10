@@ -103,7 +103,7 @@ export default function AboutPage() {
             transition={{ delay: 0.4 }}
           >
             We're on a mission to bring the world's best food to your doorstep. 
-            Founded in 2020, HotDrop has revolutionized food delivery with our 
+            Founded in 2025, HotDrop has revolutionized food delivery with our 
             commitment to quality, speed, and exceptional customer service.
           </motion.p>
         </motion.div>
@@ -288,43 +288,7 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Timeline Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2 }}
-          className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-20"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Our Journey
-          </h2>
-          <div className="space-y-8">
-            {[
-              { year: "2020", title: "The Beginning", desc: "Founded HotDrop with a vision to revolutionize food delivery" },
-              { year: "2021", title: "First Million", desc: "Achieved our first million orders and expanded to 5 cities" },
-              { year: "2022", title: "Going Big", desc: "Launched in 15 cities and partnered with 500+ restaurants" },
-              { year: "2023", title: "Innovation", desc: "Introduced AI-powered delivery optimization and real-time tracking" },
-              { year: "2024", title: "Global Vision", desc: "Expanded to 25 cities with 1000+ restaurant partners" },
-              { year: "2025", title: "The Future", desc: "Continuing to innovate with drone delivery and sustainable packaging" }
-            ].map((milestone, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 2.4 + index * 0.1 }}
-                className="flex items-center space-x-6"
-              >
-                <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {milestone.year}
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{milestone.title}</h3>
-                  <p className="text-gray-600">{milestone.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        
 
         {/* CTA Section */}
         <motion.div
@@ -348,7 +312,7 @@ export default function AboutPage() {
               🍔 Order Now
             </Link>
             <Link
-              href="/help"
+              href="/partner/signup"
               className="inline-flex items-center px-8 py-4 bg-white text-red-500 border-2 border-red-500 font-bold rounded-full hover:bg-red-50 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               🤝 Partner with Us

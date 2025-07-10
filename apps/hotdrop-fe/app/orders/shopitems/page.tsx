@@ -145,7 +145,12 @@ function ShopItemsContent() {
           </div>
         </div>
         <div className="flex flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end">
-          <a href="/orders" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 sm:px-6 py-2 rounded-full shadow transition-colors duration-200 text-base sm:text-lg w-full sm:w-auto text-center">Back</a>
+          <a
+            href={foodName ? `/orders?food=${encodeURIComponent(foodName)}` : "/orders"}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 sm:px-6 py-2 rounded-full shadow transition-colors duration-200 text-base sm:text-lg w-full sm:w-auto text-center"
+          >
+            Back
+          </a>
         </div>
       </header>
       <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
