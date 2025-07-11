@@ -57,13 +57,13 @@ function splitIntoGroups(arr: any[], groups: number) {
 	return result;
 }
 
-const reviewGroups = splitIntoGroups(reviews, 3);
-const speeds = [40, 55, 70]; // seconds for one full loop, different for each line
+const reviewGroups = splitIntoGroups(reviews, 2);
+const speeds = [40, 55]; // seconds for one full loop, different for each line
 
 export default function ReviewsSection() {
 	return (
 		<section className="my-16 w-full max-w-6xl mx-auto">
-			<h2 className="text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2">
+			<h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2">
 				What Our Customers Say
 			</h2>
 			<div className="space-y-8">
@@ -71,7 +71,7 @@ export default function ReviewsSection() {
 					<div key={i} className="overflow-hidden w-full">
 						<motion.div
 							className="flex gap-8"
-							animate={i === 2 ? { x: [ -1000, 0 ] } : { x: [0, -1000] }}
+							animate={i === 1 ? { x: [-1000, 0] } : { x: [0, -1000] }}
 							transition={{
 								repeat: Infinity,
 								repeatType: "loop",
@@ -93,7 +93,7 @@ export default function ReviewsSection() {
 											{Array.from({ length: review.rating }).map((_, i) => (
 												<svg
 													key={i}
-													className="w-5 h-5 text-orange-400"
+													className="w-5 h-5 text-yellow-400"
 													fill="currentColor"
 													viewBox="0 0 20 20"
 												>

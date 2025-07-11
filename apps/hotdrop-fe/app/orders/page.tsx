@@ -47,6 +47,28 @@ function OrdersContent() {
     partner.items && partner.items.some((item) => normalize(item.name).includes(foodKey))
   );
 
+  function getFoodTagline(itemName: string) {
+    const key = itemName.toLowerCase();
+    if (key.includes("cake")) return "Craving for something sweet?";
+    if (key.includes("dosa")) return "Want to taste the best from South?";
+    if (key.includes("pizza")) return "Slice into cheesy goodness!";
+    if (key.includes("burger")) return "Bite into juicy perfection!";
+    if (key.includes("roll")) return "Roll into flavor town!";
+    if (key.includes("momo")) return "Steaming hot momos await!";
+    if (key.includes("icecream")) return "Cool down with a sweet treat!";
+    if (key.includes("sandwich")) return "Stacked with taste, just for you!";
+    if (key.includes("chinese")) return "Savor the best of Indo-Chinese!";
+    if (key.includes("shake")) return "Sip on something special!";
+    if (key.includes("chole")) return "Spice up your day, Punjabi style!";
+    if (key.includes("manchurian")) return "Crispy, saucy, and irresistible!";
+    if (key.includes("cake")) return "Craving for something sweet?";
+    if (key.includes("sandwich")) return "Stacked with taste, just for you!";
+    if (key.includes("roll")) return "Roll into flavor town!";
+    if (key.includes("icecream")) return "Cool down with a sweet treat!";
+    if (key.includes("south")) return "Want to taste the best from South?";
+    return `Taste the delicious ${itemName.toLowerCase()} today`;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-red-100 to-red-300">
       <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 px-4 sm:py-10 sm:pl-12 sm:pr-12">
@@ -65,7 +87,7 @@ function OrdersContent() {
       </header>
       <div className="pl-12">
         <h2 className="text-3xl font-extrabold text-orange-500 mb-2 drop-shadow-sm">{itemName}</h2>
-        <p className="text-lg text-gray-700 mb-8">Taste the delicious {itemName.toLowerCase()} today</p>
+        <p className="text-lg text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
         {loading ? (
           <p>Loading...</p>
         ) : (

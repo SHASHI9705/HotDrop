@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, provider } from "../firebase";
+import { auth, provider } from "../../lib/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { motion } from "framer-motion";
 import Image from "next/image";

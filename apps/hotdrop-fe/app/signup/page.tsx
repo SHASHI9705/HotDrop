@@ -1,5 +1,5 @@
 "use client";
-import { auth, provider } from "../firebase";
+import { auth, provider } from "../../lib/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
