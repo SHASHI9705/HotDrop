@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import {
   getPartnerItems,
   getAllPartnersWithItems,
@@ -9,7 +9,7 @@ import {
 } from "../controllers/itemController.js";
 import { upload } from "../config/multer.js";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.get("/partner/items", getPartnerItems);
 router.get("/partners-with-items", getAllPartnersWithItems);

@@ -26,7 +26,7 @@ export default function Signup() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/signup`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

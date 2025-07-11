@@ -54,3 +54,22 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     res.status(500).json({ error: "Failed to update user", details: String(e) });
   }
 };
+
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400).json({ error: "Email is required" });
+    return;
+  }
+  try {
+    const user = await prismaClient.signup.findUnique({ where: { email } });
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    await prismaClient.signup.delete({ where: { email } });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to delete user", details: String(e) });
+  }
+};

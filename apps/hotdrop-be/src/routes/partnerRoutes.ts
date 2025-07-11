@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import {
   partnerSignup,
   partnerSignin,
@@ -10,7 +10,7 @@ import {
 } from "../controllers/partnerController.js";
 import { upload } from "../config/multer.js";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post("/signup", partnerSignup);
 router.post("/signin", partnerSignin);
