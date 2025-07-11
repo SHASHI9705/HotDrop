@@ -89,11 +89,11 @@ export default function Nav({
               {showDropdown && (
                 <div
                   ref={dropdownRef}
-                  className="mt-20 absolute top-[200%] right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto w-fit min-w-[220px] max-w-xs bg-white border border-gray-200 rounded-xl shadow-2xl z-50 py-2 flex flex-col gap-1 animate-fadeIn overflow-hidden"
+                  className="mt-24 absolute top-[200%] right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto w-fit min-w-[220px] max-w-xs bg-white border border-gray-200 rounded-xl shadow-2xl z-50 py-2 flex flex-col gap-1 animate-fadeIn overflow-hidden"
                   style={{ maxWidth: "90vw" }}
                 >
                   <button
-                    className="mt-20 block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-50 rounded-t-xl transition-colors"
+                    className="mt-24 block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-50 rounded-t-xl transition-colors"
                     onClick={() => {
                       setShowEditProfile(true);
                       setShowDropdown(false);
