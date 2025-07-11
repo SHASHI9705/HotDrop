@@ -34,7 +34,13 @@ function OrdersContent() {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partners-with-items`)
       .then((res) => res.json())
       .then((data) => {
-        setPartners(data);
+        if (Array.isArray(data)) {
+          setPartners(data);
+        } else if (data && Array.isArray(data.partners)) {
+          setPartners(data.partners);
+        } else {
+          setPartners([]);
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));

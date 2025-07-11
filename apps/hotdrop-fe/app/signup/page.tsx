@@ -50,7 +50,7 @@ export default function Signup() {
       const user = result.user;
       if (!user.displayName || !user.email) throw new Error("Google account missing name or email");
       // Try to create user in backend (if not exists)
-      const signupRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/signup`, {
+      const signupRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

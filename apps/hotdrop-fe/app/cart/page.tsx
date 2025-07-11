@@ -145,6 +145,7 @@ function CartContent() {
                 // Get user and partner info from localStorage
                 const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
                 let partner = JSON.parse(localStorage.getItem("hotdrop_selected_shop") || "null");
+                console.log(user)
                 if (!partner || !partner.id) {
                   partner = JSON.parse(localStorage.getItem("hotdrop_partner") || "null");
                 }

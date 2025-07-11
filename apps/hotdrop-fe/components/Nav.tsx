@@ -36,7 +36,7 @@ export default function Nav({
           <motion.img
             src="/logo.png"
             alt="Logo"
-            className="w-10 h-10 md:w-12 md:h-12 rounded"
+            className="w-10 h-10 md:w-12 md:h-12 rounded ml-2"
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{
@@ -60,6 +60,43 @@ export default function Nav({
             HotDrop
           </motion.div>
         </div>
+
+        {/* Center: Desktop Nav Options (hidden on phone) */}
+        <div className="hidden md:flex gap-6 items-center text-lg font-semibold">
+          <a href="/how-it-works" className="nav-underline">How it works</a>
+          <a href="/footeroptions/help" className="nav-underline">Help</a>
+          {user && (
+            <a href="/myorders" className="nav-underline">My Orders</a>
+          )}
+          {/* Show 'Partner with us' only if logged in, 'Login' only if not logged in */}
+          {user ? (
+            <a href="/partner/signup" className="nav-underline">Partner with us</a>
+          ) : (
+            <a href="/signin" className="nav-underline">Login</a>
+          )}
+          <style jsx global>{`
+          .nav-underline {
+            position: relative;
+            color: #000000ff; /* text-gray-700 */
+            text-decoration: none;
+            transition: color 0.2s;
+          }
+          .nav-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0%;
+            height: 2.4px;
+            background: #000000ff; /* orange-400 */
+            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+          .nav-underline:hover::after {
+            width: 100%;
+          }
+          `}</style>
+        </div>
+
         {/* Right: Cart/Profile (always right, but only visible on mobile as flex-row) */}
         <div className="flex items-center gap-3 relative mr-2">
           {user ? (

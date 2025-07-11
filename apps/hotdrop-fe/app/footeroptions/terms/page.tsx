@@ -78,7 +78,7 @@ export default function TermsPage() {
               transition={{ delay: 0.6 }}
             >
               <p className="text-lg opacity-80">
-                Last updated: {new Date().toLocaleDateString()}
+                Last updated: 1/07/2025
               </p>
             </motion.div>
           </div>
@@ -151,7 +151,7 @@ export default function TermsPage() {
                       </div>
                       <div className="bg-green-50 p-4 rounded-lg">
                         <h4 className="font-semibold text-green-600 mb-2">📱 Online Ordering</h4>
-                        <p className="text-gray-600 text-sm">Place orders through our platform or mobile app</p>
+                        <p className="text-gray-600 text-sm">Place orders through our web app</p>
                       </div>
                       {/* <div className="bg-orange-50 p-4 rounded-lg">
                         <h4 className="font-semibold text-orange-600 mb-2">🚚 Delivery Service</h4>
@@ -209,7 +209,7 @@ export default function TermsPage() {
                             <span className="text-green-600 text-xl">1️⃣</span>
                           </div>
                           <p className="font-medium">Browse & Select</p>
-                          <p className="text-gray-600">Choose items from restaurant menus</p>
+                          <p className="text-gray-600">Choose items from the site and Choose the shop</p>
                         </div>
                         <div className="text-center">
                           <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -235,8 +235,8 @@ export default function TermsPage() {
                         including credit cards, debit cards, digital wallets, and other methods as available.
                       </p>
                       <p className="text-gray-700">
-                        All prices are subject to change without notice. Additional fees may apply for delivery, 
-                        service charges, and applicable taxes.
+                        All prices are subject to change without notice. Additional fees may apply for 
+                        service charges and applicable taxes.
                       </p>
                     </div>
                   </div>

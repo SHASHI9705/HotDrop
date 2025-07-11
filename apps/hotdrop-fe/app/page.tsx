@@ -282,7 +282,7 @@ export default function Home() {
           <img
             src="/girl2.png"
             alt="Ordering girl illustration"
-            className="w-56 md:w-72 z-10 relative"
+            className="w-64 md:w-80 z-10 relative"
           />
         </div>
       </div>

@@ -5,7 +5,8 @@ import PartnerDetails from "./details";
 import NotificationSection from "./notification";
 import OrderListSection from "./orderlist";
 import ShopReviewsSection from "./shopreviews";
-import EarningSection from "./earning";
+// Remove static EarningSection import, will define dynamic below
+
 
 function ShopNameSubheading() {
   const [shopname, setShopname] = useState("");
@@ -26,6 +27,7 @@ function ShopNameSubheading() {
     localStorage.removeItem("hotdrop_partner");
     router.push("/");
   };
+
 
   if (!shopname) return null;
   return (
@@ -49,8 +51,34 @@ function ShopNameSubheading() {
     </div>
   );
 }
+// Dynamic EarningSection
+function EarningSection({ orders }: { orders: any[] }) {
+  const today = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  const totalOrders = orders.length;
+  const totalEarnings = orders.reduce((sum, order) => sum + (Number(order.price) || 0), 0);
+  const todayEarnings = orders
+    .filter(order => (order.createdAt || '').slice(0, 10) === today)
+    .reduce((sum, order) => sum + (Number(order.price) || 0), 0);
+  return (
+    <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
+        <div className="text-2xl font-bold text-orange-500">₹{totalEarnings.toFixed(2)}</div>
+        <div className="text-gray-700 mt-2">Total Earnings</div>
+      </div>
+      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
+        <div className="text-2xl font-bold text-green-500">₹{todayEarnings.toFixed(2)}</div>
+        <div className="text-gray-700 mt-2">Today's Earnings</div>
+      </div>
+      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
+        <div className="text-2xl font-bold text-blue-500">{totalOrders}</div>
+        <div className="text-gray-700 mt-2">Total Orders</div>
+      </div>
+    </div>
+  );
+}
 
-export default function PartnerDashboardNavbar() {
+// Main Dashboard Page Component
+export default function DashboardPage() {
   const router = useRouter();
   const [shopName, setShopName] = useState("");
   const [shopCategory, setShopCategory] = useState("");
@@ -59,19 +87,23 @@ export default function PartnerDashboardNavbar() {
   const [shopImage, setShopImage] = useState<string>("/profile.svg");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [orders, setOrders] = useState<any[]>([]);
 
-  // Fetch notification count (pending orders) for badge
+  // Fetch orders for this partner (for notification, earnings, and order list)
   useEffect(() => {
     const partner = localStorage.getItem("hotdrop_partner");
     if (!partner) {
       setNotificationCount(0);
+      setOrders([]);
       return;
     }
     const { id, shopname } = JSON.parse(partner);
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
-        const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
+        const allOrders = (data.orders || []).filter((order: any) => order.shopName === shopname);
+        setOrders(allOrders);
+        const pending = allOrders.filter((order: any) => order.status === false);
         setNotificationCount(pending.length);
       });
   }, []);
@@ -228,8 +260,8 @@ export default function PartnerDashboardNavbar() {
         handleProfileSave={handleProfileSave}
         handleShopImageSave={handleShopImageSave}
       />
-      {/* Earning Summary Section */}
-      <EarningSection />
+      {/* Earning Summary Section (dynamic) */}
+      <EarningSection orders={orders} />
 
       {/* Reviews Section */}
       <ShopReviewsSection />
