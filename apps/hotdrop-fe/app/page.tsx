@@ -286,7 +286,6 @@ export default function Home() {
           />
         </div>
       </div>
-
       <main className="w-full max-w-6xl mx-auto flex flex-col items-center">
         <FoodSection />
         <PopularRestaurantsSection />
