@@ -33,7 +33,7 @@ app.post("/deploy", (req, res) => {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
-  exec("sh /home/ubuntu/HotDrop/deploy.sh", (error, stdout, stderr) => {
+  exec("sh /home/ubuntu/scripts/deploy.sh", (error, stdout, stderr) => {
     if (error) {
       console.error("🚨 Deploy error:", error);
       return res.status(500).send("Deploy failed");
@@ -42,6 +42,7 @@ app.post("/deploy", (req, res) => {
     res.status(200).send("Deployment triggered successfully.");
   });
 });
+
 
 
 
