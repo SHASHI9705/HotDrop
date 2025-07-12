@@ -38,9 +38,7 @@ function CartContent() {
           // If all items have the same shopId, restore it
           if (arr.length > 0 && arr[0].shopId) {
             const shopId = arr[0].shopId;
-            // Try to find shop info from previous partner or fallback
             let shopInfo = null;
-            // Try hotdrop_partner
             const legacy = localStorage.getItem("hotdrop_partner");
             if (legacy) {
               const legacyObj = JSON.parse(legacy);
