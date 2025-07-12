@@ -100,7 +100,7 @@ export default function PopularRestaurantsSection() {
 
 	return (
 		<section className="my-16 w-full max-w-6xl mx-auto">
-			<h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2">
+			<h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2 ml-2">
 				Popular Restaurants
 			</h2>
 			<div className="overflow-hidden w-full max-w-6xl mx-auto" ref={containerRef}>
