@@ -24,6 +24,8 @@ app.get("/", (req, res) => res.send("hello"));
 
 
 
+
+
 // ...after app.use and other middlewares...
 //@ts-ignore
 app.post("/deploy", (req, res) => {
@@ -33,18 +35,18 @@ app.post("/deploy", (req, res) => {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
+  // Respond to GitHub immediately to prevent webhook timeout
+  res.status(200).send("✅ Deployment started.");
+
+  // Run the deploy script in the background
   exec("sh /home/ubuntu/scripts/deploy.sh", (error, stdout, stderr) => {
     if (error) {
       console.error("🚨 Deploy error:", error);
-      return res.status(500).send("Deploy failed");
+    } else {
+      console.log("✅ Deploy output:\n", stdout);
     }
-    console.log("✅ Deploy output:\n", stdout);
-    res.status(200).send("Deployment triggered successfully.");
   });
 });
-
-
-
 
 
 app.use("/auth", authRoutes);
@@ -54,5 +56,6 @@ app.use("/orders", orderRoutes);
 app.use("/user", userRoutes);
 
 
-
 export default app;
+
+
