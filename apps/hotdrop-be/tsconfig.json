@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "types": ["node", "express"]
   }
 }
