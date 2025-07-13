@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -16,6 +17,7 @@
     "framer-motion": "^12.23.0",
     "next": "^15.3.0",
     "next-auth": "^4.24.11",
+    "next-sitemap": "^4.2.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
