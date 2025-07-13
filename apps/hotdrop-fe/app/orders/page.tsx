@@ -1,8 +1,10 @@
 "use client"
 
+
 import Image from "next/image";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 // Define types for partner and item
 interface Item {
@@ -21,6 +23,33 @@ export default function OrdersPage() {
     <Suspense fallback={<p>Loading...</p>}>
       <OrdersContent />
     </Suspense>
+  );
+}
+
+// WaterLoader: animated water fill loader (copied from main page)
+function WaterLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-64">
+      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
+        {/* Water */}
+        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
+        {/* Text */}
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <span className="text-white font-bold text-lg">Loading</span>
+        </div>
+      </div>
+      {/* Keyframes for the wave animation */}
+      <style>{`
+        @keyframes fillWave {
+          0% { transform: translateY(100%); }
+          50% { transform: translateY(50%); }
+          100% { transform: translateY(100%); }
+        }
+        .animate-fillWave {
+          animation: fillWave 2s ease-in-out infinite;
+        }
+      `}</style>
+    </div>
   );
 }
 
@@ -95,7 +124,9 @@ function OrdersContent() {
         <h2 className="text-3xl font-extrabold text-orange-500 mb-2 drop-shadow-sm">{itemName}</h2>
         <p className="text-lg text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
         {loading ? (
-          <p>Loading...</p>
+          <WaterLoader />
+        ) : foodPartners.length === 0 ? (
+          <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 w-full">Coming soon...</div>
         ) : (
           <div className="flex flex-row gap-6 mb-10 overflow-x-auto pr-12">
             {foodPartners.map((partner, idx) => {

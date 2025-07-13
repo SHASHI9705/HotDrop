@@ -3,37 +3,29 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-function CircularLoader({ percent = 100 }: { percent?: number }) {
-  const radius = 32;
-  const stroke = 6;
-  const normalizedRadius = radius - stroke / 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (percent / 100) * circumference;
+// WaterLoader: animated water fill loader like your loader.tsx
+function WaterLoader() {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <svg height={radius * 2} width={radius * 2} className="rotate-[-90deg]">
-        <circle
-          stroke="#e5e7eb"
-          fill="transparent"
-          strokeWidth={stroke}
-          r={normalizedRadius}
-          cx={radius}
-          cy={radius}
-        />
-        <motion.circle
-          stroke="#fb923c"
-          fill="transparent"
-          strokeWidth={stroke}
-          r={normalizedRadius}
-          cx={radius}
-          cy={radius}
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset: 0 }}
-          transition={{ duration: 1.2, repeat: Infinity, repeatType: "loop", ease: "linear" }}
-        />
-      </svg>
+    <div className="flex flex-col items-center justify-center w-full h-screen bg-white">
+      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
+        {/* Water */}
+        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
+        {/* Text */}
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <span className="text-white font-bold text-lg">Loading</span>
+        </div>
+      </div>
+      {/* Keyframes for the wave animation */}
+      <style>{`
+        @keyframes fillWave {
+          0% { transform: translateY(100%); }
+          50% { transform: translateY(50%); }
+          100% { transform: translateY(100%); }
+        }
+        .animate-fillWave {
+          animation: fillWave 2s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
@@ -284,7 +276,7 @@ export default function PartnerHome() {
           {/* Item cards */}
           {loading ? (
             <div className="flex justify-center items-center min-h-[300px] w-full">
-              <CircularLoader />
+              <WaterLoader />
             </div>
           ) : (
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">

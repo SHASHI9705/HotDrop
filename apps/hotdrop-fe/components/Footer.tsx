@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 export default function Footer() {
-  const [showHelp, setShowHelp] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [feedbackSent, setFeedbackSent] = useState(false);
@@ -188,39 +187,6 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      {/* Help & Support Modal */}
-      {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative animate-fadeIn">
-            <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-orange-500 text-2xl font-bold focus:outline-none"
-              onClick={() => setShowHelp(false)}
-              aria-label="Close Help & Support"
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-orange-600">
-              Help & Support
-            </h2>
-            <p className="mb-2 text-gray-700">
-              Need assistance? We're here to help!
-            </p>
-            <ul className="list-disc pl-5 text-gray-600 mb-4">
-              <li>
-                Email:{" "}
-                <a
-                  href="mailto:srsrez@gmail.com"
-                  className="text-orange-500 underline"
-                >
-                  srsrez@gmail.com
-                </a>
-              </li>
-              <li>Phone: +91 8787657600</li>
-              <li>Live chat: Coming soon!</li>
-            </ul>
-          </div>
-        </div>
-      )}
       {/* Feedback Modal */}
       {showFeedback && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">

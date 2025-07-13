@@ -377,7 +377,7 @@ export default function TeamPage() {
               📧 Email Us
             </a>
             <Link
-              href="/help"
+              href="/footeroptions/help"
               className="inline-flex items-center px-8 py-4 bg-white text-red-500 border-2 border-red-500 font-bold rounded-full hover:bg-red-50 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               💬 Get Support

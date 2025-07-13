@@ -9,41 +9,34 @@ import ReviewsSection from "../components/ReviewsSection";
 import Footer from "../components/Footer";
 import PopularRestaurantsSection from "../components/PopularRestaurantsSection";
 
-function CircularLoader({ percent }: { percent: number }) {
-  const radius = 40;
-  const stroke = 6;
-  const normalizedRadius = radius - stroke / 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (percent / 100) * circumference;
+
+// WaterLoader: animated water fill loader like your loader.tsx
+function WaterLoader() {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <svg height={radius * 2} width={radius * 2} className="rotate-[-90deg]">
-        <circle
-          stroke="#e5e7eb"
-          fill="transparent"
-          strokeWidth={stroke}
-          r={normalizedRadius}
-          cx={radius}
-          cy={radius}
-        />
-        <motion.circle
-          stroke="#fb923c"
-          fill="transparent"
-          strokeWidth={stroke}
-          r={normalizedRadius}
-          cx={radius}
-          cy={radius}
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
-          transition={{ duration: 0.3 }}
-        />
-      </svg>
-      <div className="text-xl font-bold text-orange-500 mt-2">{percent}%</div>
+    <div className="flex flex-col items-center justify-center w-full h-screen bg-white">
+      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
+        {/* Water */}
+        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
+        {/* Text */}
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <span className="text-white font-bold text-lg">Loading</span>
+        </div>
+      </div>
+      {/* Keyframes for the wave animation */}
+      <style>{`
+        @keyframes fillWave {
+          0% { transform: translateY(100%); }
+          50% { transform: translateY(50%); }
+          100% { transform: translateY(100%); }
+        }
+        .animate-fillWave {
+          animation: fillWave 2s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
+
 
 export default function Home() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
@@ -113,29 +106,39 @@ export default function Home() {
     }
   }, [showDropdown]);
 
+  // Loader logic: show loader until page is fully loaded
   useEffect(() => {
     if (!showLoader) return;
+    // If already loaded, skip
+    if (document.readyState === "complete") {
+      setLoadingPercent(100);
+      setTimeout(() => setShowLoader(false), 400);
+      return;
+    }
+    // Animate percent to 90% while loading
     let percent = 0;
     const interval = setInterval(() => {
-      percent += Math.floor(Math.random() * 7) + 2; // random speed
-      if (percent >= 100) {
-        percent = 100;
-        setLoadingPercent(percent);
-        setTimeout(() => setShowLoader(false), 400);
-        clearInterval(interval);
-      } else {
+      if (percent < 90) {
+        percent += Math.floor(Math.random() * 7) + 2;
+        if (percent > 90) percent = 90;
         setLoadingPercent(percent);
       }
     }, 30);
-    return () => clearInterval(interval);
+    // Listen for page load
+    const handleLoad = () => {
+      setLoadingPercent(100);
+      setTimeout(() => setShowLoader(false), 400);
+      clearInterval(interval);
+    };
+    window.addEventListener("load", handleLoad);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("load", handleLoad);
+    };
   }, [showLoader]);
 
   if (showLoader) {
-    return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
-        <CircularLoader percent={loadingPercent} />
-      </div>
-    );
+    return <WaterLoader />;
   }
 
   return (

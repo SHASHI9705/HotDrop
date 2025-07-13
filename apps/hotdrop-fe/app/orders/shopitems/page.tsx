@@ -1,8 +1,36 @@
 "use client"
 
+
 import Image from "next/image";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+
+// WaterLoader: animated water fill loader (copied from main page)
+function WaterLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-64">
+      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
+        {/* Water */}
+        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
+        {/* Text */}
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <span className="text-white font-bold text-lg">Loading</span>
+        </div>
+      </div>
+      {/* Keyframes for the wave animation */}
+      <style>{`
+        @keyframes fillWave {
+          0% { transform: translateY(100%); }
+          50% { transform: translateY(50%); }
+          100% { transform: translateY(100%); }
+        }
+        .animate-fillWave {
+          animation: fillWave 2s ease-in-out infinite;
+        }
+      `}</style>
+    </div>
+  );
+}
 
 interface Item {
   name: string;
@@ -156,7 +184,7 @@ function ShopItemsContent() {
       <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
         <h2 className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
         {loading ? (
-          <p>Loading...</p>
+          <WaterLoader />
         ) : items.length === 0 ? (
           <div className="text-center text-gray-500 py-12 text-base sm:text-lg">No items found for this menu.</div>
         ) : (
