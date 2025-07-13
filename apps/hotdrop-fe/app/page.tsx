@@ -13,7 +13,7 @@ export const metadata = {
     siteName: 'HotDrop',
     images: [
       {
-        url: '/preview-image.jpg', // Add this image to your /public folder
+        url: '/Preview-image.png', // Add this image to your /public folder
         width: 1200,
         height: 630,
         alt: 'HotDrop Preview Image',
