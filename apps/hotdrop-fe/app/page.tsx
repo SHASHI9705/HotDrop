@@ -1,4 +1,38 @@
 "use client";
+
+
+export const metadata = {
+  title: 'HotDrop – Skip the Queue, Grab Your Order Instantly',
+  description: 'HotDrop lets you pre-order food and essentials from nearby shops and pick them up without waiting in line. Save time, skip queues!',
+  keywords: ['HotDrop', 'food pickup', 'skip the line', 'pre-order app', 'local stores', 'queue management'],
+  metadataBase: new URL('https://hotdrop.tech'),
+  openGraph: {
+    title: 'HotDrop – Skip the Queue, Grab Your Order Instantly',
+    description: 'Pre-order from nearby shops and pick up your order without waiting. HotDrop is the smart way to save time!',
+    url: 'https://hotdrop.tech',
+    siteName: 'HotDrop',
+    images: [
+      {
+        url: '/preview-image.jpg', // Add this image to your /public folder
+        width: 1200,
+        height: 630,
+        alt: 'HotDrop Preview Image',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HotDrop – Skip the Queue, Grab Your Order Instantly',
+    description: 'Pre-order and pick up from shops near you. Avoid queues with HotDrop!',
+    images: ['/preview-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
