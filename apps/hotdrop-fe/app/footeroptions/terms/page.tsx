@@ -222,8 +222,8 @@ export default function TermsPage() {
                           <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
                             <span className="text-green-600 text-xl">3️⃣</span>
                           </div>
-                          <p className="font-medium">Track & Receive</p>
-                          <p className="text-gray-600">Monitor delivery and enjoy your meal</p>
+                          <p className="font-medium">Receive</p>
+                          <p className="text-gray-600">take order from shop and enjoy your meal</p>
                         </div>
                       </div>
                     </div>
@@ -232,7 +232,7 @@ export default function TermsPage() {
                       <h4 className="font-semibold text-blue-600 mb-3">Payment Terms:</h4>
                       <p className="text-gray-700 mb-3">
                         Payment is required at the time of order placement. We accept various payment methods 
-                        including credit cards, debit cards, digital wallets, and other methods as available.
+                        like upi & card are available.
                       </p>
                       <p className="text-gray-700">
                         All prices are subject to change without notice. Additional fees may apply for 
@@ -252,8 +252,7 @@ export default function TermsPage() {
                     <div className="bg-red-50 p-6 rounded-xl">
                       <h4 className="font-semibold text-red-600 mb-3">Cancellation Policy:</h4>
                       <ul className="space-y-2 text-gray-700">
-                        <li>• Orders may be cancelled within 2 minutes of placement</li>
-                        <li>• Once preparation begins, cancellation may not be possible</li>
+                        <li>• Orders can't be cancelled once they are placed</li>
                         <li>• Restaurant policies may affect cancellation eligibility</li>
                         <li>• Customer support can assist with special circumstances</li>
                       </ul>
@@ -262,9 +261,7 @@ export default function TermsPage() {
                     <div className="bg-green-50 p-6 rounded-xl">
                       <h4 className="font-semibold text-green-600 mb-3">Refund Process:</h4>
                       <p className="text-gray-700">
-                        Refunds are processed according to our refund policy and typically take 3-7 business 
-                        days to appear in your account. Refund eligibility depends on various factors including 
-                        order status, restaurant policies, and specific circumstances.
+                        Please note that refunds are not provided once an order is placed. All payments are final. In exceptional cases, refund requests may be reviewed based on order status, restaurant policies, and specific circumstances, but approval is not guaranteed.
                       </p>
                     </div>
                   </div>
@@ -317,7 +314,7 @@ export default function TermsPage() {
                     <div className="flex items-center justify-between bg-white p-4 rounded-lg">
                       <span className="text-gray-700">Read our complete Privacy Policy</span>
                       <Link 
-                        href="/privacy" 
+                        href="/footeroptions/privacy" 
                         className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition text-sm"
                       >
                         View Policy
@@ -349,21 +346,16 @@ export default function TermsPage() {
                   </div>
                   <div className="bg-gradient-to-r from-red-500 to-orange-500 p-6 rounded-xl text-white">
                     <h4 className="font-semibold mb-4">Have questions about these Terms?</h4>
-                    <div className="grid md:grid-cols-3 gap-4 text-sm">
+                    <div className="grid md:grid-cols-2 gap-4 text-sm">
                       <div className="text-center">
                         <div className="text-2xl mb-2">📧</div>
                         <p className="font-medium">Email Us</p>
-                        <p className="opacity-90">legal@hotdrop.com</p>
+                        <p className="opacity-90">hotdrop.tech@gmail.com</p>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl mb-2">📞</div>
                         <p className="font-medium">Call Us</p>
                         <p className="opacity-90">+91 9322902827</p>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl mb-2">💬</div>
-                        <p className="font-medium">Live Chat</p>
-                        <p className="opacity-90">Available 24/7</p>
                       </div>
                     </div>
                   </div>
@@ -393,7 +385,7 @@ export default function TermsPage() {
                   Back to Home
                 </Link>
                 <Link
-                  href="/help"
+                  href="/footeroptions/help"
                   className="inline-flex items-center px-8 py-3 bg-white text-red-500 border-2 border-red-500 font-medium rounded-full hover:bg-red-50 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   💬 Need Help?

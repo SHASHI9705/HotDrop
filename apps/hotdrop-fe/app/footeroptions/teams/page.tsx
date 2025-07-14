@@ -11,7 +11,7 @@ export default function TeamPage() {
       role: "Co-Founder & CTO",
       image: "/cto.jpg",
       bio: "Technical mastermind building scalable solutions for millions of users. Expert in full-stack development and system architecture.",
-      skills: ["DevOps", "Strategy", "System Architecture", "Full-Stack Development"],
+      skills: ["DevOps", "Strategy", "System Design ", "FullStack Development"],
       social: { 
         twitter: "https://x.com/chess_bo", 
         linkedin: "https://www.linkedin.com/in/nikhil-kumar-singh-b80a56320/", 
@@ -19,7 +19,7 @@ export default function TeamPage() {
         email: "nikhil@hotdrop.com" 
       },
       quote: "Technology should make life simpler, not complicated.",
-      experience: "2+ web devlopment & Devops"
+      experience: "2+ years in web devlopment & Website management"
     },
     {
       name: "Shashiranjan Singh",
@@ -34,7 +34,7 @@ export default function TeamPage() {
         email: "shashiranjan@hotdrop.com" 
       },
       quote: "Great food should be accessible to everyone, everywhere.",
-      experience: "2+ years in web development and tech"
+      experience: "2+ years in tech & Product & Business Strategy "
     }
   ];
 
@@ -238,16 +238,14 @@ export default function TeamPage() {
                 <p className="text-gray-700">
                   Nikhil and Shashiranjan are more of brothers than friends, bonding over their shared love 
                   for great food and innovative technology. They realized that food delivery could be 
-                  so much better.
+                  so much better than ever.
                 </p>
               </div>
               
               <div className="bg-orange-50 p-6 rounded-xl">
-                <h3 className="text-xl font-bold text-orange-600 mb-3">💡 The Idea</h3>
+                <h3 className="text-xl font-bold text-orange-600 mb-3">💡 The Spark</h3>
                 <p className="text-gray-700">
-                  After countless late-night coding sessions and cold pizza deliveries, they decided 
-                  to create a platform that would ensure hot, fresh food reaches customers exactly 
-                  when they want it.
+                 Countless late-night coding marathons (fueled by cold pizza!) led to a simple realization — food should arrive fresh, on time, and hassle-free. That spark gave birth to the idea of a smarter, faster, and more reliable pre-ordering system.
                 </p>
               </div>
               
@@ -371,7 +369,7 @@ export default function TeamPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:team@hotdrop.com"
+              href="mailto:hotdrop.tech@gmail.com"
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold rounded-full hover:from-red-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               📧 Email Us

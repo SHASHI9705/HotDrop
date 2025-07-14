@@ -33,19 +33,19 @@ export default function AboutPage() {
   const values = [
     {
       title: "Quality First",
-      description: "We partner only with the best restaurants and ensure every meal meets our high standards.",
+      description: "We collaborate with top local restaurants and ensure every order is freshly prepared and meets our quality promise — because great taste matters.",
       icon: "⭐",
       color: "from-yellow-400 to-orange-500"
     },
     {
       title: "Lightning Fast",
-      description: "Your hunger can't wait. We deliver hot, fresh food in 30 minutes or less.",
+      description: "We prep your order while you're on the way. Skip the wait — your food is ready when you arrive.",
       icon: "⚡",
       color: "from-blue-400 to-purple-500"
     },
     {
       title: "Customer Love",
-      description: "Every customer is family. We go above and beyond to make you smile.",
+      description: "You’re not just a customer — you’re part of the HotDrop family. We’re here to make every pickup smooth and satisfying.",
       icon: "❤️",
       color: "from-red-400 to-pink-500"
     },
@@ -102,9 +102,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            We're on a mission to bring the world's best food to your doorstep. 
-            Founded in 2025, HotDrop has revolutionized food delivery with our 
-            commitment to quality, speed, and exceptional customer service.
+           At HotDrop, we're on a mission to make great food more accessible and hassle-free. Founded in 2025, we’ve revolutionized the way you order by letting you pre-book your favorite meals and pick them up fresh from the shop—no waiting, no delays. With a strong focus on quality, speed, and customer satisfaction, HotDrop is redefining convenience in local food ordering.
           </motion.p>
         </motion.div>
 
@@ -113,7 +111,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20"
+          className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-20"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -142,21 +140,15 @@ export default function AboutPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
                 Our Story
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
+              <div className="space-y-4 text-gray-600 leading-relaxed text-xl">
                 <p>
-                  It all started with a simple idea: great food shouldn't be complicated. 
-                  Our founders, tired of long wait times and cold deliveries, decided to 
-                  create something better.
+                  It all began with a simple thought: getting your favorite food should be fast and effortless. Frustrated with long queues and slow service, we set out to build something better.
                 </p>
                 <p>
-                  What began as a small startup in a garage has grown into a platform 
-                  that connects millions of hungry customers with their favorite restaurants. 
-                  We've built more than just a delivery service – we've created a community.
+                  What started as just an idea soon turned into a full-fledged platform — HotDrop. Designed to save time and eliminate wait, we connect customers with nearby shops so they can pre-order and pick up without the hassle.
                 </p>
                 <p>
-                  Today, HotDrop is proud to serve over 5000 customers across 2+ cities, 
-                  partnering with more than 100 restaurants to bring you the best culinary 
-                  experiences right to your door.
+                  Today, HotDrop proudly serves over 5,000 customers across 2+ cities, collaborating with 100+ restaurants to make your favorite meals ready when you are — no delivery, just quick pickup.
                 </p>
               </div>
             </div>
@@ -224,10 +216,7 @@ export default function AboutPage() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
           <p className="text-xl leading-relaxed max-w-3xl mx-auto">
-            To make great food accessible to everyone, everywhere. We believe that a 
-            delicious meal has the power to bring people together, create moments of joy, 
-            and make any day better. That's why we're committed to delivering not just food, 
-            but happiness – one order at a time.
+            To make great food easily accessible to everyone, right around the corner. We believe a delicious meal can spark joy, bring people together, and brighten any day. That’s why we’re here — to make ordering simple, pickups faster, and every bite memorable.
           </p>
         </motion.div>
 
@@ -241,7 +230,7 @@ export default function AboutPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             Meet Our Team
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}

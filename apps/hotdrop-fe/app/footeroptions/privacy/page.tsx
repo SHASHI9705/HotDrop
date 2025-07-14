@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
               transition={{ delay: 0.6 }}
             >
               <p className="text-lg opacity-80">
-                Last updated: {new Date().toLocaleDateString()}
+                Last updated: 1/07/2025
               </p>
             </motion.div>
           </div>
@@ -247,22 +247,14 @@ export default function PrivacyPolicyPage() {
                     
                     <div className="bg-blue-50 p-6 rounded-xl">
                       <h4 className="font-semibold text-blue-600 mb-3">Authorized Sharing Partners:</h4>
-                      <div className="grid md:grid-cols-3 gap-4 text-sm">
+                      <div className="grid md:grid-cols-2 gap-4 text-sm">
                         <div>
                           <h6 className="font-medium mb-2">🍽️ Restaurant Partners</h6>
                           <p className="text-gray-600">Order details necessary for food preparation and delivery</p>
                         </div>
                         <div>
-                          <h6 className="font-medium mb-2">🚚 Delivery Partners</h6>
-                          <p className="text-gray-600">Contact and location information for order delivery</p>
-                        </div>
-                        <div>
                           <h6 className="font-medium mb-2">💳 Payment Processors</h6>
                           <p className="text-gray-600">Secure payment processing (we don't store card details)</p>
-                        </div>
-                        <div>
-                          <h6 className="font-medium mb-2">📊 Analytics Services</h6>
-                          <p className="text-gray-600">Anonymized data for platform improvement</p>
                         </div>
                         <div>
                           <h6 className="font-medium mb-2">☁️ Cloud Services</h6>
@@ -290,7 +282,6 @@ export default function PrivacyPolicyPage() {
                         <h6 className="font-semibold text-gray-800 mb-2">Technical Safeguards:</h6>
                         <ul className="text-sm text-gray-700 space-y-1">
                           <li>• SSL/TLS encryption for data transmission</li>
-                          <li>• AES-256 encryption for stored data</li>
                           <li>• Regular security audits and updates</li>
                           <li>• Multi-factor authentication</li>
                           <li>• Secure cloud infrastructure</li>
@@ -301,7 +292,6 @@ export default function PrivacyPolicyPage() {
                         <ul className="text-sm text-gray-700 space-y-1">
                           <li>• Limited access to personal data</li>
                           <li>• Employee privacy training</li>
-                          <li>• Data breach response procedures</li>
                           <li>• Regular backup and recovery testing</li>
                           <li>• Third-party security assessments</li>
                         </ul>
@@ -335,29 +325,7 @@ export default function PrivacyPolicyPage() {
                           <h6 className="font-semibold text-gray-800 mb-2">📊 Analytics Cookies</h6>
                           <p className="text-gray-600">Help us understand how you use our platform</p>
                         </div>
-                        <div className="bg-white p-4 rounded-lg">
-                          <h6 className="font-semibold text-gray-800 mb-2">🎯 Preference Cookies</h6>
-                          <p className="text-gray-600">Remember your settings and preferences</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-lg">
-                          <h6 className="font-semibold text-gray-800 mb-2">📢 Marketing Cookies</h6>
-                          <p className="text-gray-600">Deliver relevant ads and measure campaign effectiveness</p>
-                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="bg-blue-50 p-6 rounded-xl">
-                      <h4 className="font-semibold text-blue-600 mb-3">Cookie Management:</h4>
-                      <p className="text-gray-700 mb-3">
-                        You can control cookies through your browser settings. However, disabling certain 
-                        cookies may limit functionality.
-                      </p>
-                      <Link 
-                        href="/cookies" 
-                        className="inline-flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm"
-                      >
-                        🔧 Manage Cookie Preferences
-                      </Link>
                     </div>
                   </div>
                 </section>
@@ -402,7 +370,7 @@ export default function PrivacyPolicyPage() {
                     </div>
                     <div className="mt-4 text-center">
                       <a
-                        href="mailto:privacy@hotdrop.com"
+                        href="mailto:hotdrop.tech@gmail.com"
                         className="inline-flex items-center bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition"
                       >
                         📧 Exercise Your Rights
@@ -422,7 +390,7 @@ export default function PrivacyPolicyPage() {
                     <div className="grid md:grid-cols-3 gap-4 text-sm">
                       <div className="bg-white p-4 rounded-lg">
                         <h6 className="font-medium text-gray-800 mb-2">👤 Account Information</h6>
-                        <p className="text-gray-600">Retained while your account is active, plus 2 years after closure</p>
+                        <p className="text-gray-600">Retained while your account is active, not after closure</p>
                       </div>
                       <div className="bg-white p-4 rounded-lg">
                         <h6 className="font-medium text-gray-800 mb-2">🛒 Order History</h6>
@@ -491,17 +459,17 @@ export default function PrivacyPolicyPage() {
                       <div className="text-center">
                         <div className="text-2xl mb-2">📧</div>
                         <p className="font-medium">Privacy Team</p>
-                        <p className="opacity-90">privacy@hotdrop.com</p>
+                        <p className="opacity-90">hotdrop.tech@gmail.com</p>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl mb-2">📞</div>
                         <p className="font-medium">Support Line</p>
-                        <p className="opacity-90">+1 (555) 123-4567</p>
+                        <p className="opacity-90">+91 8237997056</p>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl mb-2">📍</div>
                         <p className="font-medium">Address</p>
-                        <p className="opacity-90">Privacy Officer, HotDrop Inc.</p>
+                        <p className="opacity-90">LPU</p>
                       </div>
                     </div>
                   </div>
@@ -531,7 +499,7 @@ export default function PrivacyPolicyPage() {
                   Back to Home
                 </Link>
                 <Link
-                  href="/footeroption/help"
+                  href="/footeroptions/help"
                   className="inline-flex items-center px-8 py-3 bg-white text-red-500 border-2 border-red-500 font-medium rounded-full hover:bg-red-50 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   💬 Need Help?

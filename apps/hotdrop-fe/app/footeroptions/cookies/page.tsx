@@ -51,7 +51,7 @@ export default function CookiesPage() {
             transition={{ delay: 0.4 }}
           >
             <p className="text-gray-600 text-lg">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: 1/07/2025
             </p>
           </motion.div>
 
@@ -235,9 +235,9 @@ export default function CookiesPage() {
                   If you have any questions about our cookie policy or how we use cookies, please contact us:
                 </p>
                 <div className="space-y-2 text-gray-600">
-                  <p><strong>Email:</strong> mebotchess@gamil.com</p>
+                  <p><strong>Email:</strong> hotdrop.tech@gamil.com</p>
                   <p><strong>Phone:</strong> +91 9322902827</p>
-                  <p><strong>Address:</strong> 315B, BH-# ,LPU</p>
+                  <p><strong>Address:</strong> LPU</p>
                 </div>
               </div>
             </section>
