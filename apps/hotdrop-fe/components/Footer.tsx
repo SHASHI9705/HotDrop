@@ -12,7 +12,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="w-full bg-orange-50 border-t border-orange-200 mt-16 py-12 px-4 md:px-16">
+      <footer className="mt-8 w-full bg-orange-50 border-t border-orange-200 mt-16 py-12 px-4 md:px-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           {/* Brand and tagline */}
           <div className="flex-1 mb-8 md:mb-0">
@@ -30,12 +30,12 @@ export default function Footer() {
           <div className="flex-[2] grid grid-cols-2 md:grid-cols-4 gap-8">
             {/* Legal */}
             <div>
-              <div className="font-semibold text-orange-500 mb-3">Legal</div>
+              <div className="font-semibold text-orange-600 mb-3">Legal</div>
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li>
                   <a
                     href="/footeroptions/terms"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition-colors duration-200"
                   >
                     Terms & Conditions
                   </a>
@@ -43,7 +43,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/footeroptions/cookies"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                   >
                     Cookies Policy
                   </a>
@@ -60,12 +60,12 @@ export default function Footer() {
             </div>
             {/* Contact Us */}
             <div>
-              <div className="font-semibold text-orange-500 mb-3">Contact Us</div>
+              <div className="font-semibold text-orange-600 mb-3">Contact Us</div>
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li>
                   <a
                     href="/footeroptions/help"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                   >
                     Help & Support
                   </a>
@@ -73,14 +73,14 @@ export default function Footer() {
                 <li>
                   <a
                     href="/partner/signup"
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     Partner with us
                   </a>
                 </li>
                 <li>
                   <button
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                     onClick={() => {
                       setShowFeedback(true);
                       setFeedbackSent(false);
@@ -94,12 +94,12 @@ export default function Footer() {
             </div>
             {/* Company */}
             <div>
-              <div className="font-semibold text-orange-500 mb-3">Company</div>
+              <div className="font-semibold text-orange-600 mb-3">Company</div>
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li>
                   <a
                     href="/footeroptions/aboutus"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                   >
                     About Us
                   </a>
@@ -107,14 +107,14 @@ export default function Footer() {
                 <li>
                   <a
                     href="/footeroptions/teams"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                   >
                     Team
                   </a>
                 </li>
                 <li>
                   <button
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                     onClick={() => setShowCorporate(true)}
                   >
                     HotDrop Corporate
@@ -123,7 +123,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/partner/signup"
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     Careers
                   </a>
@@ -132,7 +132,7 @@ export default function Footer() {
             </div>
             {/* Social Media */}
             <div>
-              <div className="font-semibold text-orange-500 mb-3">Social Media</div>
+              <div className="font-semibold text-orange-600 mb-3">Social Media</div>
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li>
                   <a
@@ -141,7 +141,7 @@ export default function Footer() {
                       e.preventDefault();
                       setShowSocial(true);
                     }}
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     Twitter
                   </a>
@@ -153,7 +153,7 @@ export default function Footer() {
                       e.preventDefault();
                       setShowSocial(true);
                     }}
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     Instagram
                   </a>
@@ -165,7 +165,7 @@ export default function Footer() {
                       e.preventDefault();
                       setShowSocial(true);
                     }}
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     Facebook
                   </a>
@@ -177,7 +177,7 @@ export default function Footer() {
                       e.preventDefault();
                       setShowSocial(true);
                     }}
-                    className="hover:text-orange-600 transition"
+                    className="hover:text-black transition"
                   >
                     LinkedIn
                   </a>

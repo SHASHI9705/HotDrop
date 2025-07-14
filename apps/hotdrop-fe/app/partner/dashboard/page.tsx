@@ -57,7 +57,7 @@ function EarningSection({ orders }: { orders: any[] }) {
   const totalOrders = orders.length;
   const totalEarnings = orders.reduce((sum, order) => sum + (Number(order.price) || 0), 0);
   const todayEarnings = orders
-    .filter(order => (order.createdAt || '').slice(0, 10) === today)
+    .filter(order => (order.dateTime || '').slice(0, 10) === today)
     .reduce((sum, order) => sum + (Number(order.price) || 0), 0);
   return (
     <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
@@ -98,7 +98,7 @@ export default function DashboardPage() {
       return;
     }
     const { id, shopname } = JSON.parse(partner);
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
         const allOrders = (data.orders || []).filter((order: any) => order.shopName === shopname);

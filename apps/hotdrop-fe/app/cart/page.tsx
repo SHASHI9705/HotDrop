@@ -187,7 +187,7 @@ function CartContent() {
                   image: "/logo.png",
                   handler: async function (response: any) {
                     // On payment success, place order
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/order`, {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(orderData)
