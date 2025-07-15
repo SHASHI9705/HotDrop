@@ -1,34 +1,60 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-export default function PartnerSignup() {
-  const [shopname, setShopname] = useState("");
-  const [shopcategory, setShopcategory] = useState("");
-  const [password, setPassword] = useState("");
+export default function PartnerBankDetails() {
+  // Get partnerId from localStorage (client-side only)
+  const [partnerId, setPartnerId] = useState<string>("");
+  // On mount, fetch partnerId from localStorage (hotdrop_partner)
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const partner = localStorage.getItem("hotdrop_partner");
+      if (partner) {
+        try {
+          const parsed = JSON.parse(partner);
+          if (parsed && parsed.id) setPartnerId(parsed.id);
+        } catch {}
+      }
+    }
+  }, []);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [cardHolderName, setCardHolderName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/signup`, {
+      // Send data to backend
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/bank`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shopname, shopcategory, password }),
+        body: JSON.stringify({
+          accountNumber,
+          ifscCode,
+          cardHolderName,
+          accountId: "", // leave blank for now
+          partnerId
+        })
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Sign up failed");
-      // Store partner login in localStorage with id and shopname
-      localStorage.setItem("hotdrop_partner", JSON.stringify({ id: data.partner.id, shopname: data.partner.shopname }));
-      router.push("/partner/bank");
+      if (!res.ok) {
+        throw new Error("Failed to submit bank details");
+      }
+      setSuccess("Bank details submitted successfully!");
+      setTimeout(() => {
+        setSuccess("");
+        router.push("/partner/verification");
+      }, 1200);
     } catch (err: any) {
-      setError(err.message);
+      setError("Failed to submit bank details");
     } finally {
       setLoading(false);
     }
@@ -36,7 +62,7 @@ export default function PartnerSignup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-100 to-blue-50 animate-gradient-x p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -60,16 +86,16 @@ export default function PartnerSignup() {
               />
             </motion.div>
           </div>
-          <motion.h2 
+          <motion.h2
             className="text-3xl font-bold text-center mb-6 text-gray-800"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            Partner Sign Up
+            Bank Details
           </motion.h2>
           {error && (
-            <motion.div 
+            <motion.div
               className="p-3 bg-red-50 text-red-600 rounded-lg flex items-start mb-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -80,6 +106,18 @@ export default function PartnerSignup() {
               {error}
             </motion.div>
           )}
+          {success && (
+            <motion.div
+              className="p-3 bg-green-50 text-green-600 rounded-lg flex items-start mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <svg className="w-5 h-5 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              {success}
+            </motion.div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -87,14 +125,14 @@ export default function PartnerSignup() {
               transition={{ delay: 0.2 }}
             >
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Shop Name
+                Account Number
               </label>
               <input
                 type="text"
-                placeholder="Shop Name"
+                placeholder="Account Number"
                 className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
-                value={shopname}
-                onChange={e => setShopname(e.target.value)}
+                value={accountNumber}
+                onChange={e => setAccountNumber(e.target.value)}
                 required
               />
             </motion.div>
@@ -104,19 +142,16 @@ export default function PartnerSignup() {
               transition={{ delay: 0.25 }}
             >
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Shop Category
+                IFSC Code
               </label>
-              <select
-                value={shopcategory}
-                onChange={e => setShopcategory(e.target.value)}
+              <input
+                type="text"
+                placeholder="IFSC Code"
                 className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                value={ifscCode}
+                onChange={e => setIfscCode(e.target.value)}
                 required
-              >
-                <option value="" disabled>Select Shop Category</option>
-                <option value="food">Food</option>
-                <option value="stationary">Stationary</option>
-                <option value="clothes">Clothes</option>
-              </select>
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -124,14 +159,14 @@ export default function PartnerSignup() {
               transition={{ delay: 0.3 }}
             >
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                Card Holder's Name
               </label>
               <input
-                type="password"
-                placeholder="••••••••"
+                type="text"
+                placeholder="Card Holder's Name"
                 className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={cardHolderName}
+                onChange={e => setCardHolderName(e.target.value)}
                 required
               />
             </motion.div>
@@ -151,28 +186,13 @@ export default function PartnerSignup() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Signing up...
+                  Submitting...
                 </span>
               ) : (
-                "Sign Up"
+                "Submit"
               )}
             </motion.button>
           </form>
-          <motion.p 
-            className="text-center mt-6 text-sm text-gray-500"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="text-orange-600 hover:underline font-medium"
-              onClick={() => router.push('/partner/signin')}
-            >
-              Login here
-            </button>
-          </motion.p>
         </div>
       </motion.div>
     </div>

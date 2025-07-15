@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import { createBankAccount } from "../controllers/bankController.js";
 import {
   partnerSignup,
   partnerSignin,
@@ -11,6 +12,9 @@ import {
 import { upload } from "../config/multer.js";
 
 const router: Router = express.Router();
+
+// POST /partner/bank
+router.post("/bank", createBankAccount);
 
 router.post("/signup", partnerSignup);
 router.post("/signin", partnerSignin);

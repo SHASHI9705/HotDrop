@@ -24,6 +24,17 @@ model Partner {
   shopimage Shopimage?
   orders Order[] // relation to orders
   verification Verification? // relation to verification
+  bankAccount BankAccount?
+}
+
+model BankAccount {
+  id            String   @id @default(uuid())
+  partnerId     String   @unique
+  partner       Partner  @relation(fields: [partnerId], references: [id])
+  accountNumber String
+  ifscCode      String
+  cardHolderName String
+  accountId     String   // Razorpay sub-account ID
 }
 
 model Item {

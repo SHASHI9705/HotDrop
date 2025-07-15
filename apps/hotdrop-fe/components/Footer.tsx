@@ -27,7 +27,7 @@ export default function Footer() {
             </div>
           </div>
           {/* Footer columns */}
-          <div className="flex-[2] grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="flex-[2] grid grid-cols-2  sm:grid-cols-4 gap-8">
             {/* Legal */}
             <div>
               <div className="font-semibold text-orange-600 mb-3">Legal</div>
@@ -51,7 +51,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/footeroptions/privacy"
-                    className="hover:text-orange-600 transition focus:outline-none"
+                    className="hover:text-black transition focus:outline-none"
                   >
                     Privacy Policy
                   </a>

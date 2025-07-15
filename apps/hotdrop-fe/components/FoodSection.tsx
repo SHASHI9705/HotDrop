@@ -25,11 +25,11 @@ export default function FoodSection() {
     router.push(`/orders?food=${encodeURIComponent(foodName)}`);
   };
   return (
-    <section id={foodSectionId} className="my-8 w-full max-w-6xl mx-auto">
+    <section id={foodSectionId} className="my-8 w-full max-w-8xl mx-auto">
       <h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2 ml-2">
         Popular Foods
       </h2>
-      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-16 gap-y-12">
+      <ul className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-x-16 gap-y-12">
         {foods.map((food) => (
           <li
             key={food.name}

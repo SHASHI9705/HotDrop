@@ -83,7 +83,7 @@ export default function ReviewsSection() {
 							{[...group, ...group].map((review, idx) => (
 								<div
 									key={idx}
-									className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200"
+									className="bg-white mt-4 mb-4 rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200"
 								>
 									<div className="flex items-center mb-2">
 										<span className="font-bold text-gray-800 text-lg mr-2">

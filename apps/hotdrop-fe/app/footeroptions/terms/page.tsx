@@ -141,7 +141,7 @@ export default function TermsPage() {
                   </div>
                   <div className="space-y-4">
                     <p className="text-gray-700 leading-relaxed">
-                      HotDrop operates as an online food ordering and delivery platform that connects users 
+                      HotDrop operates as an online food ordering only with (takeaway method) platform that connects users 
                       with local restaurants and food establishments. Our Services include:
                     </p>
                     <div className="grid md:grid-cols-2 gap-4">

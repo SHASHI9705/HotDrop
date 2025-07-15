@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 // WaterLoader: animated water fill loader like your loader.tsx
 function WaterLoader() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen bg-white">
+    <div className="flex flex-col items-center justify-center w-full h-screen bg-gradient-to-r from-white via-red-200 to-blue-50">
       <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
         {/* Water */}
         <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
@@ -281,7 +281,7 @@ export default function PartnerHome() {
           ) : (
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
               {items.map((item, idx) => (
-                <div key={idx} className="bg-white rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
+                <div key={idx} className="bg-gradient-to-r from-white via-red-200 to-blue-50 rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
                   <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
                   <div className="flex flex-col justify-between h-1/3 w-full p-4">
                     <div className="flex items-center justify-between w-full">

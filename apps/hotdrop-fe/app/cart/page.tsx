@@ -125,8 +125,8 @@ function CartContent() {
                 <span className="text-gray-800 font-bold">₹{total}</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 font-semibold">GST (2%)</span>
-                <span className="text-gray-800 font-bold">₹{(total * 0.02).toFixed(2)}</span>
+                <span className="text-gray-700 font-semibold">GST (3%)</span>
+                <span className="text-gray-800 font-bold">₹{(total * 0.03).toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72">
                 <span className="text-gray-700 font-semibold">Maintenance Fees</span>
@@ -134,7 +134,7 @@ function CartContent() {
               </div>
               <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t pt-2">
                 <span className="text-xl font-bold text-gray-800">Total</span>
-                <span className="text-xl font-bold text-orange-500">₹{(total + total * 0.02 + 2).toFixed(2)}</span>
+                <span className="text-xl font-bold text-orange-500">₹{(total + total * 0.03 + 2).toFixed(2)}</span>
               </div>
             </div>
             <button
@@ -180,7 +180,7 @@ function CartContent() {
                 await loadRazorpay();
                 const options = {
                   key: `${process.env.NEXT_PUBLIC_RAZORPAY_KEY}`,
-                  amount: Math.round((total + total * 0.02 + 2) * 100), // Use total amount (subtotal + GST + maintenance fees) in paise
+                  amount: Math.round((total + total * 0.03 + 2) * 100), // Use total amount (subtotal + GST + maintenance fees) in paise
                   currency: "INR",
                   name: "HotDrop",
                   description: "Order Payment",
@@ -193,6 +193,18 @@ function CartContent() {
                       body: JSON.stringify(orderData)
                     });
                     if (res.ok) {
+                      // Get orderId from response
+                      const order = await res.json();
+                      // Call split API
+                      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order/split`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          orderId: order.id || order.orderId || "", // adapt to your backend response
+                          partnerId: orderData.partnerId,
+                          amount: Math.round((total + total * 0.03 + 2) * 100) // in paise
+                        })
+                      });
                       localStorage.removeItem("hotdrop_cart");
                       setCart([]);
                       alert("Order placed successfully!");

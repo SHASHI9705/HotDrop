@@ -2,6 +2,7 @@
 import { RefObject } from "react";
 import { motion } from "framer-motion";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { div } from "framer-motion/client";
 
 interface NavProps {
   user: { name: string; email: string } | null;
@@ -126,11 +127,11 @@ export default function Nav({
               {showDropdown && (
                 <div
                   ref={dropdownRef}
-                  className="mt-24 px-2 absolute top-[200%] right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto w-fit min-w-[220px] max-w-xs bg-white border border-gray-200 rounded-xl shadow-2xl z-50 flex flex-col gap-1 animate-fadeIn overflow-hidden"
+                  className="absolute top-[130%] right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto w-fit min-w-[220px] max-w-xs bg-white border border-gray-200 rounded-xl shadow-2xl z-50 flex flex-col animate-fadeIn overflow-hidden"
                   style={{ maxWidth: "90vw" }}
                 >
                   <button
-                    className="mt-24 block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-50 rounded-t-xl transition-colors"
+                    className=" block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-50 rounded-t-xl transition-colors"
                     onClick={() => {
                       setShowEditProfile(true);
                       setShowDropdown(false);
