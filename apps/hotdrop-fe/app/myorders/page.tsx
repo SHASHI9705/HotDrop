@@ -83,7 +83,13 @@ export default function MyOrdersPage() {
                   Total: ₹{order.price}
                 </div>
                 <div className="text-blue-500 text-base">
-                  Status: {order.status ? "Taken" : "Pending"}
+                  Status: {order.status ? "Taken" : (() => {
+                    if (typeof window !== 'undefined') {
+                      const timer = localStorage.getItem(`hotdrop_timer_${order.id}`);
+                      return timer ? `${timer} min` : "Pending";
+                    }
+                    return "Pending";
+                  })()}
                 </div>
                 <div className="text-gray-400 text-xs">
                   Placed:{" "}

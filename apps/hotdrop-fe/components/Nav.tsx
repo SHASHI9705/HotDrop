@@ -64,7 +64,7 @@ export default function Nav({
 
         {/* Center: Desktop Nav Options (hidden on phone) */}
         <div className="hidden md:flex gap-6 items-center text-lg font-semibold">
-          <a href="/how-it-works" className="nav-underline">How it works</a>
+          <a href="#" className="nav-underline">How it works</a>
           <a href="/footeroptions/help" className="nav-underline">Help</a>
           {user && (
             <a href="/myorders" className="nav-underline">My Orders</a>

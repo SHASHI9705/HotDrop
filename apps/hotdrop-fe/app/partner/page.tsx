@@ -102,7 +102,7 @@ export default function PartnerHome() {
       return;
     }
     const { id, shopname } = JSON.parse(partner);
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders?partnerId=${encodeURIComponent(id)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
         const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
@@ -264,7 +264,7 @@ export default function PartnerHome() {
               <button
                 className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-orange-200 text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
                 title="Notifications"
-                onClick={() => router.push('/partner/dashboard#latest-notification')}
+                onClick={() => router.push('/partner/dashboard#notification-section')}
               >
                 <span role="img" aria-label="bell">🔔</span>
                 {notificationCount > 0 && (

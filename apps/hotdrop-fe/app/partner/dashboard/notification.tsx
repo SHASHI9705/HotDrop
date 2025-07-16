@@ -71,7 +71,59 @@ export default function NotificationSection() {
               >
                 Mark as Delivered
               </button>
+              {/* Timer Dropdown Button */}
+              <div className="relative ml-2">
+                <TimerDropdown orderId={order.id} />
+              </div>
             </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// TimerDropdown component (should be outside NotificationSection)
+// TimerDropdown now takes an orderId prop to persist selection per order
+function TimerDropdown({ orderId }: { orderId: string }) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+  const options = [5, 10, 15, 20, 30];
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(`hotdrop_timer_${orderId}`);
+    if (stored) setSelected(Number(stored));
+  }, [orderId]);
+
+  // Save to localStorage when selected changes
+  useEffect(() => {
+    if (selected) {
+      localStorage.setItem(`hotdrop_timer_${orderId}`, String(selected));
+    }
+  }, [selected, orderId]);
+
+  return (
+    <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className={`px-3 py-2 ${selected ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
+        onClick={() => { if (!selected) setOpen(o => !o); }}
+        disabled={!!selected}
+      >
+        {selected ? `${selected} min` : "Set Timer"}
+        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {!selected && open && (
+        <div className="absolute right-0 mt-2 w-28 bg-white border border-orange-200 rounded-xl shadow-lg z-10">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-100 ${selected === opt ? 'bg-orange-50 font-bold' : ''}`}
+              onClick={() => { setSelected(opt); setOpen(false); }}
+            >
+              {opt} min
+            </button>
           ))}
         </div>
       )}
