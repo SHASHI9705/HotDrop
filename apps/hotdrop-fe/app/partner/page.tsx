@@ -105,7 +105,7 @@ export default function PartnerHome() {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
-        const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === false);
+        const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === 'pending' || /^\d+min$/.test(order.status));
         setNotificationCount(pending.length);
       });
   }, []);
@@ -203,7 +203,7 @@ export default function PartnerHome() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
           <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md mt-24 flex flex-col items-center">
             <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">Verification Pending</h2>
-            <p className="text-gray-700 text-center mb-6">Your partner profile is under review. Verification will be completed in a few hours. You will be notified once approved.</p>
+            <p className="text-gray-700 text-center mb-6">If you have filled out both the <a className="underline font-bold text-orange-500" href="/partner/bank">Bank details</a> and <a className="underline font-bold text-orange-500" href="/partner/verification">Verification</a> forms, please wait — the verification process will be completed within a few hours. You will be notified once it's approved.</p>
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-full transition-all text-lg"
               onClick={() => {

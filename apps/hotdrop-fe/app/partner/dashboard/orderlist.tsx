@@ -6,7 +6,7 @@ interface Order {
   shopName: string;
   price: number;
   dateTime: string;
-  status: boolean;
+  status: string;
   userId: string;
 }
 
@@ -25,8 +25,8 @@ export default function OrderListSection() {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then((res) => res.json())
       .then((data) => {
-        // Only show orders that are not pending (status === true)
-        setOrders((data.orders || []).filter((order: Order) => order.status === true));
+        // Show orders that are either taken or cancelled
+        setOrders((data.orders || []).filter((order: Order) => order.status === 'taken' || order.status === 'cancelled'));
       })
       .finally(() => setLoading(false));
   }, []);
@@ -47,7 +47,11 @@ export default function OrderListSection() {
               <div className="font-bold text-lg text-gray-700">Order #{order.id.slice(-4)}</div>
               <div className="text-gray-500 text-base">Items: {order.items}</div>
               <div className="text-green-600 font-semibold text-base">Total: ₹{order.price}</div>
-              <div className="text-blue-500 text-base">Status: {order.status ? "Taken" : "Pending"}</div>
+              <div className="text-blue-500 text-base">Status: {
+                order.status === 'taken' ? 'Taken'
+                : order.status === 'cancelled' ? 'Cancelled'
+                : order.status
+              }</div>
               <div className="text-gray-400 text-xs">Placed: {new Date(order.dateTime).toLocaleString()}</div>
               <div className="text-orange-500 text-xs font-semibold">Shop: {order.shopName}</div>
             </div>

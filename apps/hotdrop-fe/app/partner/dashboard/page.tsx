@@ -103,8 +103,9 @@ export default function DashboardPage() {
       .then(data => {
         const allOrders = (data.orders || []).filter((order: any) => order.shopName === shopname);
         setOrders(allOrders);
-        const pending = allOrders.filter((order: any) => order.status === false);
-        setNotificationCount(pending.length);
+        // Count orders that are pending or have a timer status (e.g., '10min')
+        const pendingOrTimer = allOrders.filter((order: any) => order.status === 'pending' || /^\d+min$/.test(order.status));
+        setNotificationCount(pendingOrTimer.length);
       });
   }, []);
 

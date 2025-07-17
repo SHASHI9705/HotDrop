@@ -31,19 +31,23 @@ export default function NotificationSection() {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
-        // Only show pending orders for this shop
-        const orders = (data.orders || []).filter((order: Order) => order.shopName === shopname && order.status === 'pending');
+        // Show orders for this shop that are either pending or have a timer status (e.g., '10min')
+        const orders = (data.orders || []).filter((order: Order) =>
+          order.shopName === shopname &&
+          (order.status === 'pending' || /^\d+min$/.test(order.status))
+        );
         setPendingOrders(orders);
       })
       .finally(() => setLoading(false));
   };
+
 
   const markAsDelivered = async (orderId: string) => {
     setLoading(true);
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order/${orderId}/delivered`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: true })
+      body: JSON.stringify({ status: 'taken' })
     });
     fetchPendingOrders();
   };
@@ -54,7 +58,7 @@ export default function NotificationSection() {
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order/${orderId}/cancel`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: true }) // Set status true for cancel as per your request
+      body: JSON.stringify({ status: 'cancelled' })
     });
     // Store cancel flag in localStorage for this order
     localStorage.setItem(`hotdrop_cancelled_${orderId}`, 'cancelled');
@@ -74,7 +78,13 @@ export default function NotificationSection() {
             <div key={order.id} className="flex flex-row items-center gap-4 bg-orange-50 border border-orange-200 rounded-xl p-4">
               <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold">New Order</div>
               <div className="text-gray-700 flex-1">
-                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">{order.status === 'taken' ? 'Taken' : order.status === 'cancelled' ? 'Cancelled' : order.status === 'pending' ? 'Pending' : order.status}</span>
+                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">{
+                  order.status === 'taken' ? 'Taken'
+                  : order.status === 'cancelled' ? 'Cancelled'
+                  : order.status === 'pending' ? 'Pending'
+                  : /^\d+min$/.test(order.status) ? `Ready in ${order.status.replace('min', '')} min`
+                  : order.status
+                }</span>
                 <div className="text-xs text-gray-500 mt-1">Items: {order.items}</div>
                 <div className="text-xs text-gray-400">Placed: {new Date(order.dateTime).toLocaleString()}</div>
               </div>
@@ -86,7 +96,7 @@ export default function NotificationSection() {
               </button>
               {/* Timer Dropdown Button */}
               <div className="relative ml-2">
-                <TimerDropdown orderId={order.id} />
+                <TimerDropdown orderId={order.id} disabled={/^\d+min$/.test(order.status)} initialValue={/^\d+min$/.test(order.status) ? order.status : undefined} />
               </div>
               {/* Cancel Order Button */}
               <button
@@ -105,12 +115,16 @@ export default function NotificationSection() {
 
 // TimerDropdown component (should be outside NotificationSection)
 // TimerDropdown now takes an orderId prop to persist selection per order
-function TimerDropdown({ orderId }: { orderId: string }) {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
-  const options = [5, 10, 15, 20, 30];
+interface TimerDropdownProps {
+  orderId: string;
+  disabled?: boolean;
+  initialValue?: string;
+}
 
-  // Optionally, fetch the current status from backend if needed
+function TimerDropdown({ orderId, disabled = false, initialValue }: TimerDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>(initialValue || null);
+  const options = [5, 10, 15, 20, 30];
 
   const handleSelect = async (opt: number) => {
     const timerValue = `${opt}min`;
@@ -121,21 +135,20 @@ function TimerDropdown({ orderId }: { orderId: string }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ timer: timerValue }),
     });
-    // Optionally, trigger a refresh of orders in parent
   };
 
   return (
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className={`px-3 py-2 ${selected ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
-        onClick={() => { if (!selected) setOpen(o => !o); }}
-        disabled={!!selected}
+        className={`px-3 py-2 ${selected || disabled ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
+        onClick={() => { if (!selected && !disabled) setOpen(o => !o); }}
+        disabled={!!selected || disabled}
       >
         {selected ? selected : "Set Timer"}
         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
       </button>
-      {!selected && open && (
+      {!selected && !disabled && open && (
         <div className="absolute right-0 mt-2 w-28 bg-white border border-orange-200 rounded-xl shadow-lg z-10">
           {options.map((opt) => (
             <button
