@@ -1,3 +1,5 @@
+
+
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
 
@@ -30,7 +32,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
         shopName,
         price: parseFloat(price),
         dateTime: new Date(),
-        status: false,
+        status: "pending",
       },
     });
 
@@ -40,13 +42,32 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+// Set order timer (status as timer value)
+export const setOrderTimer = async (req: Request, res: Response): Promise<void> => {
+  const { orderId } = req.params;
+  const { timer } = req.body; // timer should be a string like '5min', '10min', etc.
+  if (!timer) {
+    res.status(400).json({ error: "Timer value is required" });
+    return;
+  }
+  try {
+    const updated = await prismaClient.order.update({
+      where: { id: orderId },
+      data: { status: timer },
+    });
+    res.status(200).json({ order: updated });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to set timer for order", details: String(e) });
+  }
+};
+
 export const markOrderDelivered = async (req: Request, res: Response): Promise<void> => {
   const { orderId } = req.params;
 
   try {
     const updated = await prismaClient.order.update({
       where: { id: orderId },
-      data: { status: true },
+      data: { status: "taken" },
     });
 
     res.status(200).json({ order: updated });
@@ -76,5 +97,18 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ orders });
   } catch (e) {
     res.status(500).json({ error: "Failed to fetch orders", details: String(e) });
+  }
+};
+
+export const cancelOrder = async (req: Request, res: Response): Promise<void> => {
+  const { orderId } = req.params;
+  try {
+    const updated = await prismaClient.order.update({
+      where: { id: orderId },
+      data: { status: "cancelled" },
+    });
+    res.status(200).json({ order: updated });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to cancel order", details: String(e) });
   }
 };

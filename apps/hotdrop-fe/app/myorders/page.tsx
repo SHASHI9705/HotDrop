@@ -7,7 +7,7 @@ interface Order {
   shopName: string;
   price: number;
   dateTime: string;
-  status: boolean;
+  status: string;
 }
 
 export default function MyOrdersPage() {
@@ -83,12 +83,15 @@ export default function MyOrdersPage() {
                   Total: ₹{order.price}
                 </div>
                 <div className="text-blue-500 text-base">
-                  Status: {order.status ? "Taken" : (() => {
-                    if (typeof window !== 'undefined') {
-                      const timer = localStorage.getItem(`hotdrop_timer_${order.id}`);
-                      return timer ? `${timer} min` : "Pending";
+                  Status: {(() => {
+                    if (order.status === "taken") return "Taken";
+                    if (order.status === "cancelled") return "Cancelled";
+                    if (order.status === "pending") return "Pending";
+                    // If status is a timer value like '10min', '15min', etc.
+                    if (/^\d+min$/.test(order.status)) {
+                      return `Ready in ${order.status.replace('min', '')} min`;
                     }
-                    return "Pending";
+                    return order.status;
                   })()}
                 </div>
                 <div className="text-gray-400 text-xs">

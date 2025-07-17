@@ -6,7 +6,7 @@ interface Order {
   shopName: string;
   price: number;
   dateTime: string;
-  status: boolean;
+  status: string;
   userId: string;
 }
 
@@ -32,7 +32,7 @@ export default function NotificationSection() {
       .then(res => res.json())
       .then(data => {
         // Only show pending orders for this shop
-        const orders = (data.orders || []).filter((order: Order) => order.shopName === shopname && order.status === false);
+        const orders = (data.orders || []).filter((order: Order) => order.shopName === shopname && order.status === 'pending');
         setPendingOrders(orders);
       })
       .finally(() => setLoading(false));
@@ -45,6 +45,19 @@ export default function NotificationSection() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: true })
     });
+    fetchPendingOrders();
+  };
+
+  // Cancel order handler
+  const cancelOrder = async (orderId: string) => {
+    setLoading(true);
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order/${orderId}/cancel`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: true }) // Set status true for cancel as per your request
+    });
+    // Store cancel flag in localStorage for this order
+    localStorage.setItem(`hotdrop_cancelled_${orderId}`, 'cancelled');
     fetchPendingOrders();
   };
 
@@ -61,7 +74,7 @@ export default function NotificationSection() {
             <div key={order.id} className="flex flex-row items-center gap-4 bg-orange-50 border border-orange-200 rounded-xl p-4">
               <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold">New Order</div>
               <div className="text-gray-700 flex-1">
-                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">Pending</span>
+                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">{order.status === 'taken' ? 'Taken' : order.status === 'cancelled' ? 'Cancelled' : order.status === 'pending' ? 'Pending' : order.status}</span>
                 <div className="text-xs text-gray-500 mt-1">Items: {order.items}</div>
                 <div className="text-xs text-gray-400">Placed: {new Date(order.dateTime).toLocaleString()}</div>
               </div>
@@ -75,6 +88,13 @@ export default function NotificationSection() {
               <div className="relative ml-2">
                 <TimerDropdown orderId={order.id} />
               </div>
+              {/* Cancel Order Button */}
+              <button
+                className="ml-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold text-sm shadow"
+                onClick={() => cancelOrder(order.id)}
+              >
+                Cancel Order
+              </button>
             </div>
           ))}
         </div>
@@ -87,21 +107,22 @@ export default function NotificationSection() {
 // TimerDropdown now takes an orderId prop to persist selection per order
 function TimerDropdown({ orderId }: { orderId: string }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const options = [5, 10, 15, 20, 30];
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(`hotdrop_timer_${orderId}`);
-    if (stored) setSelected(Number(stored));
-  }, [orderId]);
+  // Optionally, fetch the current status from backend if needed
 
-  // Save to localStorage when selected changes
-  useEffect(() => {
-    if (selected) {
-      localStorage.setItem(`hotdrop_timer_${orderId}`, String(selected));
-    }
-  }, [selected, orderId]);
+  const handleSelect = async (opt: number) => {
+    const timerValue = `${opt}min`;
+    setSelected(timerValue);
+    setOpen(false);
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/order/${orderId}/timer`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ timer: timerValue }),
+    });
+    // Optionally, trigger a refresh of orders in parent
+  };
 
   return (
     <div className="relative inline-block text-left">
@@ -111,7 +132,7 @@ function TimerDropdown({ orderId }: { orderId: string }) {
         onClick={() => { if (!selected) setOpen(o => !o); }}
         disabled={!!selected}
       >
-        {selected ? `${selected} min` : "Set Timer"}
+        {selected ? selected : "Set Timer"}
         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
       </button>
       {!selected && open && (
@@ -119,8 +140,8 @@ function TimerDropdown({ orderId }: { orderId: string }) {
           {options.map((opt) => (
             <button
               key={opt}
-              className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-100 ${selected === opt ? 'bg-orange-50 font-bold' : ''}`}
-              onClick={() => { setSelected(opt); setOpen(false); }}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-100`}
+              onClick={() => handleSelect(opt)}
             >
               {opt} min
             </button>

@@ -7,7 +7,6 @@ export default function Footer() {
   const [showAbout, setShowAbout] = useState(false);
   const [showTeam, setShowTeam] = useState(false);
   const [showCorporate, setShowCorporate] = useState(false);
-  const [showSocial, setShowSocial] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
 
   return (
@@ -27,7 +26,7 @@ export default function Footer() {
             </div>
           </div>
           {/* Footer columns */}
-          <div className="flex-[2] grid grid-cols-2  sm:grid-cols-4 gap-8">
+          <div className="flex-[2] grid grid-cols-2  sm:grid-cols-3 gap-4">
             {/* Legal */}
             <div>
               <div className="font-semibold text-orange-600 mb-3">Legal</div>
@@ -130,60 +129,6 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            {/* Social Media */}
-            <div>
-              <div className="font-semibold text-orange-600 mb-3">Social Media</div>
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowSocial(true);
-                    }}
-                    className="hover:text-black transition"
-                  >
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowSocial(true);
-                    }}
-                    className="hover:text-black transition"
-                  >
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowSocial(true);
-                    }}
-                    className="hover:text-black transition"
-                  >
-                    Facebook
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowSocial(true);
-                    }}
-                    className="hover:text-black transition"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </footer>
@@ -265,30 +210,7 @@ export default function Footer() {
           </div>
         </div>
       )}
-      {/* Social Media Coming Soon Modal */}
-      {showSocial && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full relative animate-fadeIn">
-            <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-orange-500 text-2xl font-bold focus:outline-none"
-              onClick={() => setShowSocial(false)}
-              aria-label="Close Social Media"
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-orange-600">
-              Coming Soon
-            </h2>
-            <p className="mb-3 text-gray-700">
-              Our official social media pages are launching soon! Stay tuned for
-              updates, news, and more ways to connect with HotDrop.
-            </p>
-            <p className="text-gray-600">
-              Thank you for your interest and support!
-            </p>
-          </div>
-        </div>
-      )}
+      
     </>
   );
 }

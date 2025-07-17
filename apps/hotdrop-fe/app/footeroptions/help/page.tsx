@@ -118,14 +118,8 @@ export default function HelpSupportPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
+            className="grid grid-cols-1 md:grid-cols-1  mb-12"
           >
-            <div className="bg-gradient-to-r from-red-500 to-orange-500 p-6 rounded-xl text-white text-center">
-              <div className="text-3xl mb-3">📞</div>
-              <h3 className="font-bold text-lg mb-2">Call Us</h3>
-              <p className="text-sm mb-3">Get immediate help</p>
-              <p className="font-semibold">+91 9322902827 </p>
-            </div>
             <div className="bg-gradient-to-r from-green-500 to-teal-500 p-6 rounded-xl text-white text-center">
               <div className="text-3xl mb-3">📧</div>
               <h3 className="font-bold text-lg mb-2">Email Us</h3>
@@ -206,16 +200,6 @@ export default function HelpSupportPage() {
                 <h3 className="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-red-100 p-3 rounded-full">
-                      <span className="text-red-600 text-xl">📞</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-800">Phone</p>
-                      <p className="text-gray-600">+91 9322902827 </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3">
                     <div className="bg-blue-100 p-3 rounded-full">
                       <span className="text-blue-600 text-xl">📧</span>
                     </div>
@@ -248,6 +232,15 @@ export default function HelpSupportPage() {
                       name="name"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
                       placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="number" className="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                      placeholder="Your phone number"
                     />
                   </div>
                   

@@ -64,7 +64,7 @@ model Order {
   shopName   String
   price      Float
   dateTime   DateTime
-  status     Boolean  // true = order taken, false = not taken
+  status     String   // e.g. 'pending', 'taken', 'cancelled', etc.
 }
 
 model Verification {

@@ -144,7 +144,7 @@ export default function TermsPage() {
                       HotDrop operates as an online food ordering only with (takeaway method) platform that connects users 
                       with local restaurants and food establishments. Our Services include:
                     </p>
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4">
                       <div className="bg-blue-50 p-4 rounded-lg">
                         <h4 className="font-semibold text-blue-600 mb-2">🔍 Restaurant Discovery</h4>
                         <p className="text-gray-600 text-sm">Browse and search local restaurants and cuisines</p>
@@ -252,16 +252,17 @@ export default function TermsPage() {
                     <div className="bg-red-50 p-6 rounded-xl">
                       <h4 className="font-semibold text-red-600 mb-3">Cancellation Policy:</h4>
                       <ul className="space-y-2 text-gray-700">
-                        <li>• Orders can't be cancelled once they are placed</li>
-                        <li>• Restaurant policies may affect cancellation eligibility</li>
-                        <li>• Customer support can assist with special circumstances</li>
+                        <li>• Orders cannot be canceled once they are successfully placed.</li>
+                        <li>• Cancellations initiated by the shopkeeper will be communicated to you.</li>
+                        <li>• Eligibility for cancellation may vary based on the shopkeeper's policy.</li>
+                        <li>• For genuine issues or exceptional cases, our customer support team is here to help.</li>
                       </ul>
                     </div>
                     
                     <div className="bg-green-50 p-6 rounded-xl">
                       <h4 className="font-semibold text-green-600 mb-3">Refund Process:</h4>
                       <p className="text-gray-700">
-                        Please note that refunds are not provided once an order is placed. All payments are final. In exceptional cases, refund requests may be reviewed based on order status, restaurant policies, and specific circumstances, but approval is not guaranteed.
+                        All payments are considered final once an order is placed. However, if the shopkeeper cancels the order and you do not receive the item, a full refund will be processed to your original payment method within 4 business days. Refunds, if applicable, are subject to verification of order status and the shopkeeper’s policy. Approval is not guaranteed in all cases, but we aim to resolve every issue fairly and promptly regarding the issue.
                       </p>
                     </div>
                   </div>
@@ -346,16 +347,11 @@ export default function TermsPage() {
                   </div>
                   <div className="bg-gradient-to-r from-red-500 to-orange-500 p-6 rounded-xl text-white">
                     <h4 className="font-semibold mb-4">Have questions about these Terms?</h4>
-                    <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div className="grid md:grid-cols-1 gap-4 text-sm">
                       <div className="text-center">
                         <div className="text-2xl mb-2">📧</div>
                         <p className="font-medium">Email Us</p>
                         <p className="opacity-90">hotdrop.tech@gmail.com</p>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl mb-2">📞</div>
-                        <p className="font-medium">Call Us</p>
-                        <p className="opacity-90">+91 9322902827</p>
                       </div>
                     </div>
                   </div>
