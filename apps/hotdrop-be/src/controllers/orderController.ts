@@ -1,7 +1,14 @@
 
-
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
+
+
+// Utility to remove null bytes from strings
+function sanitizeString(str: string) {
+  return str.replace(/\0/g, "");
+}
+
+
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
   const { userId, partnerId, items, shopName, price } = req.body;
@@ -24,12 +31,17 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
+
+    // Sanitize string fields to remove null bytes
+    const cleanItems = sanitizeString(typeof items === "string" ? items : JSON.stringify(items));
+    const cleanShopName = sanitizeString(shopName);
+
     const order = await prismaClient.order.create({
       data: {
         userId,
         partnerId,
-        items: typeof items === "string" ? items : JSON.stringify(items),
-        shopName,
+        items: cleanItems,
+        shopName: cleanShopName,
         price: parseFloat(price),
         dateTime: new Date(),
         status: "pending",

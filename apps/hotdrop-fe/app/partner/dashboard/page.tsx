@@ -109,6 +109,7 @@ export default function DashboardPage() {
       });
   }, []);
 
+  
   useEffect(() => {
     const partner = localStorage.getItem("hotdrop_partner");
     if (partner) {
