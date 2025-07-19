@@ -32,17 +32,21 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     }
 
 
-    // Sanitize string fields to remove null bytes
+
+    // Sanitize all string fields to remove null bytes
+    const cleanUserId = sanitizeString(userId);
+    const cleanPartnerId = sanitizeString(partnerId);
     const cleanItems = sanitizeString(typeof items === "string" ? items : JSON.stringify(items));
     const cleanShopName = sanitizeString(shopName);
+    const cleanPrice = sanitizeString(String(price));
 
     const order = await prismaClient.order.create({
       data: {
-        userId,
-        partnerId,
+        userId: cleanUserId,
+        partnerId: cleanPartnerId,
         items: cleanItems,
         shopName: cleanShopName,
-        price: parseFloat(price),
+        price: parseFloat(cleanPrice),
         dateTime: new Date(),
         status: "pending",
       },

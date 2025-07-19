@@ -1,6 +1,12 @@
+
 "use client";
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+
+// Utility to remove null bytes from strings
+function sanitizeString(str: string) {
+  return typeof str === "string" ? str.replace(/\0/g, "") : str;
+}
 
 interface CartItem {
   id: string;
@@ -157,11 +163,11 @@ function CartContent() {
                 }
                 // Prepare order data
                 const orderData = {
-                  userId: user.id,
-                  partnerId: partner.id,
-                  items: cart.map(item => `${item.name} x${item.quantity}`).join(", "),
-                  shopName: partner.name || partner.shopname || "",
-                  price: (total + total * 0.02 + 2).toFixed(2)
+                  userId: sanitizeString(user.id),
+                  partnerId: sanitizeString(partner.id),
+                  items: sanitizeString(cart.map(item => `${sanitizeString(item.name)} x${item.quantity}`).join(", ")),
+                  shopName: sanitizeString(partner.name || partner.shopname || ""),
+                  price: sanitizeString((total + total * 0.03 + 2).toFixed(2))
                 };
                 // Razorpay integration
                 const loadRazorpay = () => {
