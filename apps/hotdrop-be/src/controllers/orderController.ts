@@ -1,4 +1,5 @@
 
+
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
 
@@ -10,7 +11,10 @@ function sanitizeString(str: string) {
 
 
 
+
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
+  // Debug: Log the raw incoming payload
+  console.log("RAW ORDER PAYLOAD:", req.body);
   const { userId, partnerId, items, shopName, price } = req.body;
 
   if (!userId || !partnerId || !items || !shopName || !price) {
@@ -33,12 +37,22 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
 
 
+
     // Sanitize all string fields to remove null bytes
     const cleanUserId = sanitizeString(userId);
     const cleanPartnerId = sanitizeString(partnerId);
     const cleanItems = sanitizeString(typeof items === "string" ? items : JSON.stringify(items));
     const cleanShopName = sanitizeString(shopName);
     const cleanPrice = sanitizeString(String(price));
+
+    // Debug: Log the sanitized payload
+    console.log("SANITIZED ORDER DATA:", {
+      userId: cleanUserId,
+      partnerId: cleanPartnerId,
+      items: cleanItems,
+      shopName: cleanShopName,
+      price: cleanPrice,
+    });
 
     const order = await prismaClient.order.create({
       data: {
