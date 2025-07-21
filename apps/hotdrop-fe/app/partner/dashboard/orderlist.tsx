@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 interface Order {
   id: string;
@@ -13,8 +13,10 @@ interface Order {
 export default function OrderListSection() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const fetchRef = useRef<() => void>(() => {});
 
-  useEffect(() => {
+  const fetchOrderList = () => {
+    setLoading(true);
     const partner = localStorage.getItem("hotdrop_partner");
     if (!partner) {
       setOrders([]);
@@ -25,10 +27,18 @@ export default function OrderListSection() {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then((res) => res.json())
       .then((data) => {
-        // Show orders that are either taken or cancelled
         setOrders((data.orders || []).filter((order: Order) => order.status === 'taken' || order.status === 'cancelled'));
       })
       .finally(() => setLoading(false));
+  };
+  fetchRef.current = fetchOrderList;
+
+  useEffect(() => {
+    fetchRef.current();
+    const interval = setInterval(() => {
+      fetchRef.current();
+    }, 60000); // 30 seconds
+    return () => clearInterval(interval);
   }, []);
 
   return (

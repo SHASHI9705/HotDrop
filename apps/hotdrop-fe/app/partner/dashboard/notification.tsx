@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface Order {
   id: string;
@@ -13,13 +13,10 @@ interface Order {
 export default function NotificationSection() {
   const [pendingOrders, setPendingOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchPendingOrders();
-    // eslint-disable-next-line
-  }, []);
+  const fetchRef = useRef<() => void>(() => {});
 
   const fetchPendingOrders = () => {
+    setLoading(true);
     const partner = localStorage.getItem("hotdrop_partner");
     if (!partner) {
       setPendingOrders([]);
@@ -27,11 +24,9 @@ export default function NotificationSection() {
       return;
     }
     const { id, shopname } = JSON.parse(partner);
-    // Fetch all orders for this partner
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
       .then(res => res.json())
       .then(data => {
-        // Show orders for this shop that are either pending or have a timer status (e.g., '10min')
         const orders = (data.orders || []).filter((order: Order) =>
           order.shopName === shopname &&
           (order.status === 'pending' || /^\d+min$/.test(order.status))
@@ -40,6 +35,15 @@ export default function NotificationSection() {
       })
       .finally(() => setLoading(false));
   };
+  fetchRef.current = fetchPendingOrders;
+
+  useEffect(() => {
+    fetchRef.current();
+    const interval = setInterval(() => {
+      fetchRef.current();
+    }, 60000); // 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
 
   const markAsDelivered = async (orderId: string) => {
@@ -75,9 +79,12 @@ export default function NotificationSection() {
       ) : (
         <div className="flex flex-col gap-4">
           {pendingOrders.map(order => (
-            <div key={order.id} className="flex flex-row items-center gap-4 bg-orange-50 border border-orange-200 rounded-xl p-4">
-              <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold">New Order</div>
-              <div className="text-gray-700 flex-1">
+            <div
+              key={order.id}
+              className="flex flex-col sm:flex-row sm:items-center gap-4 bg-orange-50 border border-orange-200 rounded-xl p-4"
+            >
+              <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold w-fit">New Order</div>
+              <div className="text-gray-700 flex-1 min-w-0">
                 Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">{
                   order.status === 'taken' ? 'Taken'
                   : order.status === 'cancelled' ? 'Cancelled'
@@ -85,26 +92,28 @@ export default function NotificationSection() {
                   : /^\d+min$/.test(order.status) ? `Ready in ${order.status.replace('min', '')} min`
                   : order.status
                 }</span>
-                <div className="text-xs text-gray-500 mt-1">Items: {order.items}</div>
+                <div className="text-xs text-gray-500 mt-1 truncate">Items: {order.items}</div>
                 <div className="text-xs text-gray-400">Placed: {new Date(order.dateTime).toLocaleString()}</div>
               </div>
-              <button
-                className="ml-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold text-sm shadow"
-                onClick={() => markAsDelivered(order.id)}
-              >
-                Mark as Delivered
-              </button>
-              {/* Timer Dropdown Button */}
-              <div className="relative ml-2">
-                <TimerDropdown orderId={order.id} disabled={/^\d+min$/.test(order.status)} initialValue={/^\d+min$/.test(order.status) ? order.status : undefined} />
+              <div className="flex flex-col gap-2 sm:flex-row sm:gap-2 w-full sm:w-auto">
+                <button
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold text-sm shadow"
+                  onClick={() => markAsDelivered(order.id)}
+                >
+                  Mark as Delivered
+                </button>
+                <div className="flex flex-row gap-2">
+                  <div className="relative">
+                    <TimerDropdown orderId={order.id} disabled={/^\d+min$/.test(order.status)} initialValue={/^\d+min$/.test(order.status) ? order.status : undefined} />
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold text-sm shadow"
+                    onClick={() => cancelOrder(order.id)}
+                  >
+                    Cancel Order
+                  </button>
+                </div>
               </div>
-              {/* Cancel Order Button */}
-              <button
-                className="ml-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold text-sm shadow"
-                onClick={() => cancelOrder(order.id)}
-              >
-                Cancel Order
-              </button>
             </div>
           ))}
         </div>
@@ -141,7 +150,7 @@ function TimerDropdown({ orderId, disabled = false, initialValue }: TimerDropdow
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className={`px-3 py-2 ${selected || disabled ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
+        className={`px-4 py-2 ${selected || disabled ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
         onClick={() => { if (!selected && !disabled) setOpen(o => !o); }}
         disabled={!!selected || disabled}
       >

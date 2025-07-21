@@ -231,7 +231,7 @@ function CartContent() {
                 rzp.open();
               }}
             >
-              <span role="img" aria-label="rocket">🚀</span> Checkout
+              <span role="img" aria-label="rocket">🚀</span> Pay Now
             </button>
           </div>
         )}

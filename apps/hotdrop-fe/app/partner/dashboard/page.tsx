@@ -90,11 +90,14 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState<any[]>([]);
 
   // Fetch orders for this partner (for notification, earnings, and order list)
-  useEffect(() => {
+  // Move fetchOrdersAndNotifications outside useEffect to avoid closure issues
+  const fetchOrdersAndNotifications = () => {
+    setLoading(true);
     const partner = localStorage.getItem("hotdrop_partner");
     if (!partner) {
       setNotificationCount(0);
       setOrders([]);
+      setLoading(false);
       return;
     }
     const { id, shopname } = JSON.parse(partner);
@@ -102,11 +105,16 @@ export default function DashboardPage() {
       .then(res => res.json())
       .then(data => {
         const allOrders = (data.orders || []).filter((order: any) => order.shopName === shopname);
-        setOrders(allOrders);
+        setOrders(() => allOrders);
         // Count orders that are pending or have a timer status (e.g., '10min')
         const pendingOrTimer = allOrders.filter((order: any) => order.status === 'pending' || /^\d+min$/.test(order.status));
-        setNotificationCount(pendingOrTimer.length);
-      });
+        setNotificationCount(() => pendingOrTimer.length);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchOrdersAndNotifications();
   }, []);
 
   

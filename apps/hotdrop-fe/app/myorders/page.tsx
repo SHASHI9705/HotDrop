@@ -16,19 +16,27 @@ export default function MyOrdersPage() {
 
   useEffect(() => {
     document.title = "My Orders | HotDrop";
-    const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
-    if (!user || (!user.id && !user.email)) {
-      setOrders([]);
-      setLoading(false);
-      return;
-    }
-    const userId = user.id || user.email;
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?userId=${encodeURIComponent(userId)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data.orders || []);
-      })
-      .finally(() => setLoading(false));
+
+    const fetchOrders = () => {
+      setLoading(true);
+      const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
+      if (!user || (!user.id && !user.email)) {
+        setOrders([]);
+        setLoading(false);
+        return;
+      }
+      const userId = user.id || user.email;
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?userId=${encodeURIComponent(userId)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setOrders(data.orders || []);
+        })
+        .finally(() => setLoading(false));
+    };
+
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 60000); // 30 seconds
+    return () => clearInterval(interval);
   }, []);
 
   return (
