@@ -8,6 +8,7 @@ import {
   uploadShopImage,
   verifyPartner,
   getVerificationStatus,
+  savePushSubscription,
 } from "../controllers/partnerController.js";
 import { upload } from "../config/multer.js";
 
@@ -21,6 +22,9 @@ router.post("/signin", partnerSignin);
 router.put("/update", updatePartner);
 router.get("/", getPartnerById);
 router.post("/shopimage", upload.single("image"), uploadShopImage);
+
+// Push subscription endpoint
+router.post("/push-subscription", savePushSubscription);
 router.post("/verification", verifyPartner);
 router.get("/verification/status", getVerificationStatus);
 

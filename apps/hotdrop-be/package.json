@@ -14,7 +14,8 @@
     "@types/aws-sdk": "^2.7.4",
     "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.3",
-    "@types/multer": "^2.0.0"
+    "@types/multer": "^2.0.0",
+    "web-push": "^3.6.7"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.842.0",
+    "@prisma/client": "6.10.1",
     "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/cors": "^2.8.19",

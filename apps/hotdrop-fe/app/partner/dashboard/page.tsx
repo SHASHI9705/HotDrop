@@ -79,6 +79,26 @@ function EarningSection({ orders }: { orders: any[] }) {
 
 // Main Dashboard Page Component
 export default function DashboardPage() {
+  // Scroll to section if hash is present (for notification click)
+  useEffect(() => {
+    function scrollToHash() {
+      if (window.location.hash === '#notification-section') {
+        const el = document.getElementById('notification-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+    scrollToHash();
+    window.addEventListener('hashchange', scrollToHash);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') scrollToHash();
+    });
+    return () => {
+      window.removeEventListener('hashchange', scrollToHash);
+      document.removeEventListener('visibilitychange', scrollToHash);
+    };
+  }, []);
   const router = useRouter();
   const [shopName, setShopName] = useState("");
   const [shopCategory, setShopCategory] = useState("");

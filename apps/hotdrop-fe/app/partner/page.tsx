@@ -36,6 +36,7 @@ export default function PartnerHome() {
   const [items, setItems] = useState<Array<{ id: string; name: string; image: string; price: string; available?: boolean }>>([]);
   const [loading, setLoading] = useState(true);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   const [shopName, setShopName] = useState("");
   const [profile, setProfile] = useState<{ shopname: string } | null>(null);
   const [verificationStatus, setVerificationStatus] = useState<null | boolean>(null);
@@ -55,11 +56,20 @@ export default function PartnerHome() {
         if (res.ok) {
           const data = await res.json();
           setVerificationStatus(data.verified === true);
+          // Show notification prompt if verified and not already handled
+          if (data.verified === true) {
+            // Only show if not already granted/denied in this session
+            if (typeof window !== 'undefined' && Notification && Notification.permission === 'default') {
+              setShowNotificationPrompt(true);
+            }
+          }
         } else {
           setVerificationStatus(null);
+          console.error('Verification status fetch failed:', res.status, await res.text());
         }
-      } catch {
+      } catch (err) {
         setVerificationStatus(null);
+        console.error('Error fetching verification status:', err);
       }
     };
     fetchVerification();
@@ -70,29 +80,18 @@ export default function PartnerHome() {
         if (res.ok) {
           const data = await res.json();
           setItems(data.items);
+        } else {
+          console.error('Items fetch failed:', res.status, await res.text());
         }
-      } catch {}
+      } catch (err) {
+        console.error('Error fetching items:', err);
+      }
       setLoading(false);
     };
     fetchItems();
   }, [router]);
 
-  useEffect(() => {
-    // Fetch notification count from dashboard API
-    const fetchNotifications = async () => {
-      try {
-        const partner = localStorage.getItem("hotdrop_partner");
-        if (!partner) return;
-        const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/notifications/count?partnerId=${partnerId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setNotificationCount(data.count || 0);
-        }
-      } catch {}
-    };
-    fetchNotifications();
-  }, []);
+  // Removed useEffect for /partner/notifications/count (endpoint does not exist)
 
   useEffect(() => {
     // Fetch notification count (pending orders) for badge
@@ -103,43 +102,60 @@ export default function PartnerHome() {
     }
     const { id, shopname } = JSON.parse(partner);
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?partnerId=${encodeURIComponent(id)}`)
-      .then(res => res.json())
+      .then(async res => {
+        if (!res.ok) {
+          console.error('Orders fetch failed:', res.status, await res.text());
+          return { orders: [] };
+        }
+        return res.json();
+      })
       .then(data => {
         const pending = (data.orders || []).filter((order: any) => order.shopName === shopname && order.status === 'pending' || /^\d+min$/.test(order.status));
         setNotificationCount(pending.length);
+      })
+      .catch(err => {
+        console.error('Error fetching orders:', err);
       });
   }, []);
 
   useEffect(() => {
-    // Fetch shop name from backend
+    // Fetch shop name from backend (correct endpoint)
     const fetchShopName = async () => {
       try {
         const partner = localStorage.getItem("hotdrop_partner");
         if (!partner) return;
         const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/profile?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner?id=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setShopName(data.shopname || "");
+        } else {
+          console.error('Shop name fetch failed:', res.status, await res.text());
         }
-      } catch {}
+      } catch (err) {
+        console.error('Error fetching shop name:', err);
+      }
     };
     fetchShopName();
   }, []);
 
   useEffect(() => {
-    // Fetch profile/shopname from backend
+    // Fetch profile/shopname from backend (correct endpoint)
     const fetchProfile = async () => {
       try {
         const partner = localStorage.getItem("hotdrop_partner");
         if (!partner) return;
         const { id: partnerId } = JSON.parse(partner);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/profile?partnerId=${partnerId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner?id=${partnerId}`);
         if (res.ok) {
           const data = await res.json();
           setProfile({ shopname: data.shopname });
+        } else {
+          console.error('Profile fetch failed:', res.status, await res.text());
         }
-      } catch {}
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+      }
     };
     fetchProfile();
   }, []);
@@ -197,25 +213,132 @@ export default function PartnerHome() {
     }
   };
 
-  return (
-    <>
-      {verificationStatus === false ? (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
-          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md mt-24 flex flex-col items-center">
-            <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">Verification Pending</h2>
-            <p className="text-gray-700 text-center mb-6">If you have filled out both the <a className="underline font-bold text-orange-500" href="/partner/bank">Bank details</a> and <a className="underline font-bold text-orange-500" href="/partner/verification">Verification</a> forms, please wait — the verification process will be completed within a few hours. You will be notified once it's approved.</p>
+  // Notification permission handler
+  const handleNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('This browser does not support notifications.');
+      setShowNotificationPrompt(false);
+      return;
+    }
+    try {
+      const permission = await Notification.requestPermission();
+      setShowNotificationPrompt(false);
+      if (permission === 'granted') {
+        // Register the service worker for push notifications
+        if ('serviceWorker' in navigator) {
+          try {
+            await navigator.serviceWorker.register('/sw.js');
+            const reg = await navigator.serviceWorker.ready;
+            console.log('Service Worker ready:', reg);
+            // Subscribe for push notifications
+            const partner = localStorage.getItem('hotdrop_partner');
+            if (!partner) return;
+            const { id: partnerId } = JSON.parse(partner);
+            const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+            if (!vapidPublicKey) {
+              alert('VAPID public key not found.');
+              return;
+            }
+            // Convert VAPID key to Uint8Array
+            function urlBase64ToUint8Array(base64String: string) {
+              const padding = '='.repeat((4 - base64String.length % 4) % 4);
+              const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+              const rawData = window.atob(base64);
+              const outputArray = new Uint8Array(rawData.length);
+              for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+              }
+              return outputArray;
+            }
+            try {
+              const subscription = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+              });
+              // Send subscription to backend
+              await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/push-subscription`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partnerId, subscription })
+              });
+              console.log('Push subscription sent to backend');
+            } catch (err) {
+              console.error('Push subscription failed:', err);
+            }
+          } catch (err) {
+            console.error('Service Worker registration/ready failed:', err);
+          }
+        }
+      }
+    } catch {
+      setShowNotificationPrompt(false);
+    }
+  };
+
+  // Error and loading fallback
+  if (loading) {
+    return <WaterLoader />;
+  }
+
+  // Notification Permission Prompt Card
+  if (verificationStatus === true && showNotificationPrompt) {
+    return (
+      <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md flex flex-col items-center relative animate-fadeIn">
+            <img src="/logo.png" alt="HotDrop Logo" className="w-16 h-16 mb-4 rounded-full shadow" />
+            <h2 className="text-2xl font-bold text-orange-600 mb-2 text-center">Enable Order Notifications</h2>
+            <p className="text-gray-700 text-center mb-6">Stay updated! Allow notifications to get instant alerts when you receive new orders, even when HotDrop is closed.</p>
             <button
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-full transition-all text-lg"
-              onClick={() => {
-                localStorage.removeItem("hotdrop_partner");
-                router.push("/");
-              }}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-2 rounded-full transition-all text-lg shadow-lg"
+              onClick={handleNotificationPermission}
             >
-              Logout
+              Enable Notifications
+            </button>
+            <button
+              className="mt-4 text-gray-400 hover:text-gray-700 text-sm underline"
+              onClick={() => setShowNotificationPrompt(false)}
+            >
+              Maybe later
             </button>
           </div>
+          <style>{`
+            @keyframes fadeIn {
+              from { opacity: 0; transform: scale(0.95); }
+              to { opacity: 1; transform: scale(1); }
+            }
+            .animate-fadeIn {
+              animation: fadeIn 0.3s ease;
+            }
+          `}</style>
         </div>
-      ) : (
+      </>
+    );
+  }
+
+  if (verificationStatus === false) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md mt-24 flex flex-col items-center">
+          <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">Verification Pending</h2>
+          <p className="text-gray-700 text-center mb-6">If you have filled out both the <a className="underline font-bold text-orange-500" href="/partner/bank">Bank details</a> and <a className="underline font-bold text-orange-500" href="/partner/verification">Verification</a> forms, please wait — the verification process will be completed within a few hours. You will be notified once it's approved.</p>
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-full transition-all text-lg"
+            onClick={() => {
+              localStorage.removeItem("hotdrop_partner");
+              router.push("/");
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main dashboard UI
+  return (
+    <>
         <div className={
           (showModal ?
             "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm"
@@ -312,7 +435,6 @@ export default function PartnerHome() {
             </div>
           )}
         </div>
-      )}
       {showModal && <AddItemModal onClose={() => setShowModal(false)} onAdd={handleAddItem} />}
       {/* Add glowing effect for notification badge */}
       <style jsx global>{`
@@ -340,6 +462,7 @@ export default function PartnerHome() {
     </>
   );
 }
+
 
 function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: { id: string; name: string; image: string; price: string }) => void }) {
   const [itemName, setItemName] = useState("");

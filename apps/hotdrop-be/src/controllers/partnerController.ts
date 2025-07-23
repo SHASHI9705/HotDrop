@@ -1,8 +1,36 @@
+
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { s3 } from "../config/s3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+
+export const savePushSubscription = async (req: Request, res: Response): Promise<void> => {
+  const { partnerId, subscription } = req.body;
+  if (!partnerId || !subscription || !subscription.endpoint || !subscription.keys) {
+    res.status(400).json({ error: "partnerId and valid subscription required" });
+    return;
+  }
+  try {
+    // Upsert: update if exists, else create
+    await prismaClient.pushSubscription.upsert({
+      where: { endpoint: subscription.endpoint },
+      update: {
+        partnerId,
+        keys: subscription.keys as unknown as Prisma.InputJsonValue,
+      },
+      create: {
+        partnerId,
+        endpoint: subscription.endpoint,
+        keys: subscription.keys as unknown as Prisma.InputJsonValue,
+      },
+    });
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to save push subscription", details: String(e) });
+  }
+};
 
 export const partnerSignup = async (req: Request, res: Response): Promise<void> => {
   const { shopname, shopcategory, password } = req.body;
