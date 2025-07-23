@@ -70,8 +70,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <link rel="icon" href="/logo.png" type="image/x-icon" />
-
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <link rel="manifest" href="/manifest.json" />
+      <meta name="theme-color" content="#ff6600" />
+      <link rel="apple-touch-icon" href="/logo.png" />
+      <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         {children}
       </body>
     </html>
