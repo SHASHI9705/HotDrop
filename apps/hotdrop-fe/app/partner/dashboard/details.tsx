@@ -34,7 +34,7 @@ export default function PartnerDetails({
   return (
     <div className="w-full max-w-4xl flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
       {/* Profile Update Card */}
-      <div className="bg-white rounded-xl shadow-lg p-6 flex-1 flex flex-col gap-2 border border-gray-200 min-h-[320px]">
+      <div className="bg-white rounded-xl shadow-lg p-6 w-full md:flex-1 flex flex-col gap-2 border border-gray-200 min-h-[320px]">
         <div className="font-bold text-lg text-gray-700 mb-2">Profile Update</div>
         <input className="border rounded p-2 mb-2" placeholder="Shop Name" value={shopName} onChange={e => setShopName(e.target.value)} disabled={loading} />
         <select className="border rounded p-2 mb-2" value={shopCategory} onChange={e => setShopCategory(e.target.value)} disabled={loading}>
@@ -53,7 +53,7 @@ export default function PartnerDetails({
         </button>
       </div>
       {/* Shop Image Card */}
-      <div className="bg-white rounded-xl shadow-lg p-6 flex-1 flex flex-col items-center border border-gray-200 min-h-[320px] justify-between">
+      <div className="bg-white rounded-xl shadow-lg p-6 w-full md:flex-1 flex flex-col items-center border border-gray-200 min-h-[320px] justify-between">
         <div className="w-full flex flex-col items-center">
           <div className="font-bold text-lg text-gray-700 mb-2">Shop Image</div>
           <img src={encodeURI(shopImage)} alt="Shop" className="w-32 h-32 rounded-full border-2 border-orange-400 object-cover mb-4" />
