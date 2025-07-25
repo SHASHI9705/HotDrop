@@ -28,8 +28,8 @@ export default function PhoneFooter() {
         </svg>
       </button>
       <button
-        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "orders" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
-        onClick={() => handleSelect("orders", "/orders")}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "restaurants" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        onClick={() => handleSelect("restaurants", "/restaurants")}
         aria-label="Restaurants"
       >
         {/* Fork and Knife Icon */}
