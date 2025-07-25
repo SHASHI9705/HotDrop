@@ -106,127 +106,128 @@ export default function Nav({
         </div>
       )}
       <nav className="fixed pt-4 top-0 left-0 w-full z-50 bg-gradient-to-r from-white via-red-200 to-blue-50 backdrop-blur-md mb-4 overflow-x-hidden">
-        {/* Left: Logo, Heading, and Search */}
-        <div className="flex items-center gap-2">
-          <motion.img
-            src="/logo.png"
-            alt="Logo"
-            className="w-10 h-10 md:w-12 md:h-12 rounded ml-2"
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              type: "spring",
-              stiffness: 120,
-              damping: 18,
-              duration: 1.2,
-            }}
-          />
-          <motion.div
-            className="text-4xl font-extrabold text-gray-800 hidden sm:block"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              type: "spring",
-              stiffness: 180,
-              delay: 0.2,
-              duration: 0.7,
-            }}
-          >
-            HotDrop
-          </motion.div>
-          <div className="relative ml-2 flex-1 max-w-xs hidden sm:block">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-              </svg>
-            </span>
-            <input
-              type="text"
-              placeholder="Search for any food e.g. burger"
-              className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-56 md:w-72"
-              style={{ minWidth: '180px' }}
+        <div className="max-w-screen-xl mx-auto flex flex-row items-center justify-center px-2 w-full">
+          {/* Left: Logo, Heading, and Search */}
+          <div className="flex items-center gap-2">
+            <motion.img
+              src="/logo.png"
+              alt="Logo"
+              className="w-10 h-10 md:w-12 md:h-12 rounded ml-2"
+              initial={{ y: -60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 120,
+                damping: 18,
+                duration: 1.2,
+              }}
             />
-          </div>
-          {/* Mobile search box */}
-          <div className="relative ml-2 flex-1 max-w-xs sm:hidden">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+            <motion.div
+              className="text-4xl font-extrabold text-gray-800 hidden sm:block"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 180,
+                delay: 0.2,
+                duration: 0.7,
+              }}
+            >
+              HotDrop
+            </motion.div>
+            <div className="relative ml-2 flex-1 max-w-xs hidden sm:block">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search for any food e.g. burger"
+                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-56 md:w-72"
+                style={{ minWidth: '180px' }}
+              />
+            </div>
+            {/* Mobile search box */}
+            <div className="relative ml-2 flex-1 max-w-xs sm:hidden">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search for any food e.g. burger"
+                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-full"
+                style={{ minWidth: '120px' }}
+              />
+            </div>
+            {/* Hamburger menu for mobile */}
+            <button className="sm:hidden ml-2 p-2 rounded focus:outline-none" aria-label="Open menu" onClick={handleSidebarOpen}>
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-orange-500">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-            </span>
-            <input
-              type="text"
-              placeholder="Search for any food e.g. burger"
-              className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-full"
-              style={{ minWidth: '120px' }}
-            />
+            </button>
           </div>
-          {/* Hamburger menu for mobile */}
-          <button className="sm:hidden ml-2 p-2 rounded focus:outline-none" aria-label="Open menu" onClick={handleSidebarOpen}>
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-orange-500">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Right: Nav Options and Profile (hidden on mobile) */}
-        <div className="hidden sm:flex items-center gap-2 relative mr-4 text-lg font-semibold whitespace-nowrap">
-          {user && (
-            <a href="/myorders" className="nav-underline px-4 min-w-[130px]">My Orders</a>
-          )}
-          {user ? (
-            <>
-              <a href="/partner/signup" className="nav-underline px-4 min-w-[160px]">Partner with us</a>
-              <a href="/settings" className="nav-underline px-4 min-w-[100px]">Settings</a>
-              <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
-            </>
-          ) : (
-            <>
-              <a href="/signin" className="nav-underline min-w-[90px]">Login</a>
-              <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
-            </>
-          )}
-          {user ? (
-            <button
-              className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105"
-              onClick={() => router.push("/profile")}
-              title={user.name}
-              style={{ minWidth: '48px', minHeight: '48px' }}
-            >
-              {user.name?.charAt(0).toUpperCase()}
-            </button>
-          ) : (
-            <button
-              className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80"
-              onClick={() => (window.location.href = "/signup")}
-            >
-              Get Started
-            </button>
-          )}
-          <style jsx global>{`
-            body { overflow-x: hidden; }
-            .nav-underline {
-              position: relative;
-              color: #000000ff; /* text-gray-700 */
-              text-decoration: none;
-              transition: color 0.2s;
-              display: inline-block;
-              min-width: 0 !important;
-            }
-            .nav-underline::after {
-              content: '';
-              position: absolute;
-              left: 0;
-              bottom: -2px;
-              width: 0%;
-              height: 2.4px;
-              background: #000000ff; /* orange-400 */
-              transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
-            }
-            .nav-underline:hover::after {
-              width: 100%;
-            }
-          `}</style>
+          {/* Right: Nav Options and Profile (hidden on mobile) */}
+          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap">
+            {user && (
+              <a href="/myorders" className="nav-underline px-4 min-w-[130px]">My Orders</a>
+            )}
+            {user ? (
+              <>
+                <a href="/partner/signup" className="nav-underline px-4 min-w-[160px]">Partner with us</a>
+                <a href="/settings" className="nav-underline px-4 min-w-[100px]">Settings</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
+              </>
+            ) : (
+              <>
+                <a href="/signin" className="nav-underline min-w-[90px]">Login</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
+              </>
+            )}
+            {user ? (
+              <button
+                className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105"
+                onClick={() => router.push("/profile")}
+                title={user.name}
+                style={{ minWidth: '48px', minHeight: '48px' }}
+              >
+                {user.name?.charAt(0).toUpperCase()}
+              </button>
+            ) : (
+              <button
+                className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80"
+                onClick={() => (window.location.href = "/signup")}
+              >
+                Get Started
+              </button>
+            )}
+            <style jsx global>{`
+              body { overflow-x: hidden; }
+              .nav-underline {
+                position: relative;
+                color: #000000ff; /* text-gray-700 */
+                text-decoration: none;
+                transition: color 0.2s;
+                display: inline-block;
+                min-width: 0 !important;
+              }
+              .nav-underline::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -2px;
+                width: 0%;
+                height: 2.4px;
+                background: #000000ff; /* orange-400 */
+                transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+              }
+              .nav-underline:hover::after {
+                width: 100%;
+              }
+            `}</style>
+          </div>
         </div>
       </nav>
     </>

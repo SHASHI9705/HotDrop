@@ -34,7 +34,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="mt-8 w-full bg-orange-50 border-t border-orange-200 mt-16 py-12 px-4 md:px-16">
+      <footer className="hidden md:block mt-8 w-full bg-orange-50 border-t border-orange-200 mt-16 py-12 px-4 md:px-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           {/* Brand and tagline */}
           <div className="flex-1 mb-8 md:mb-0">
