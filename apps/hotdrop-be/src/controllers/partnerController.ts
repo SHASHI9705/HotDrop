@@ -1,10 +1,24 @@
 
+
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { s3 } from "../config/s3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+
+
+// Get all partners
+export const getAllPartners = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const partners = await prismaClient.partner.findMany({
+      include: { shopimage: true, items: true }
+    });
+    res.status(200).json({ partners });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch partners", details: String(e) });
+  }
+};
 
 export const savePushSubscription = async (req: Request, res: Response): Promise<void> => {
   const { partnerId, subscription } = req.body;

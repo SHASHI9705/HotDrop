@@ -9,10 +9,15 @@ import {
   verifyPartner,
   getVerificationStatus,
   savePushSubscription,
+  getAllPartners,
 } from "../controllers/partnerController.js";
 import { upload } from "../config/multer.js";
 
+
 const router: Router = express.Router();
+
+// GET /partner/all
+router.get("/all", getAllPartners);
 
 // POST /partner/bank
 router.post("/bank", createBankAccount);

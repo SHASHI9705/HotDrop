@@ -1,148 +1,178 @@
-import React, { useRef, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
-
-const restaurants = [
-	{
-		name: "Burger Palace",
-		image: "/burger.png",
-		cuisine: "American",
-		rating: 4.8,
-		deliveryTime: "20-30 min",
-	},
-	{
-		name: "Cake Castle",
-		image: "/cake.png",
-		cuisine: "Bakery",
-		rating: 4.7,
-		deliveryTime: "25-35 min",
-	},
-	{
-		name: "Pizza Point",
-		image: "/pizza.png",
-		cuisine: "Italian",
-		rating: 4.9,
-		deliveryTime: "15-25 min",
-	},
-	{
-		name: "Momo Magic",
-		image: "/momo.png",
-		cuisine: "Tibetan",
-		rating: 4.6,
-		deliveryTime: "18-28 min",
-	},
-	{
-		name: "Ice Cream Hub",
-		image: "/icecream.png",
-		cuisine: "Desserts",
-		rating: 4.8,
-		deliveryTime: "10-20 min",
-	},
-	{
-		name: "Chinese Express",
-		image: "/chinese.png",
-		cuisine: "Chinese",
-		rating: 4.7,
-		deliveryTime: "22-32 min",
-	},
-	{
-		name: "Rolls Republic",
-		image: "/rolls.png",
-		cuisine: "Street Food",
-		rating: 4.5,
-		deliveryTime: "17-27 min",
-	},
-	{
-		name: "Sandwich Stop",
-		image: "/sandwich.png",
-		cuisine: "Cafe",
-		rating: 4.6,
-		deliveryTime: "12-22 min",
-	},
-	{
-		name: "Dosa Delight",
-		image: "/dosaf.png",
-		cuisine: "South Indian",
-		rating: 4.9,
-		deliveryTime: "20-30 min",
-	},
-];
+import React, { useState, useEffect } from "react";
 
 export default function PopularRestaurantsSection() {
-	const [isPaused, setIsPaused] = useState(false);
-	const controls = useAnimation();
-	const containerRef = useRef<HTMLDivElement>(null);
+  const [cards, setCards] = useState<any[]>([]); // [{type, data, fav}]
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-	// Calculate total width for seamless loop
-	// Each card is ~260px wide (p-6 + w-28 + margins), 9 cards, plus gap
-	const cardWidth = 260;
-	const gap = 32; // gap-8
-	const totalCards = restaurants.length;
-	const totalWidth = totalCards * (cardWidth + gap);
-	const repeatedRestaurants = [...restaurants, ...restaurants, ...restaurants];
+  const foodTypes = [
+	{ type: "burger", label: "Burger" },
+	{ type: "pizza", label: "Pizza" },
+	{ type: "momo", label: "Momos" },
+	{ type: "chinese", label: "Chinese" }
+  ];
 
-	React.useEffect(() => {
-		if (isPaused) {
-			controls.stop();
-		} else {
-			controls.start({
-				x: [0, -totalWidth],
-				transition: {
-					x: {
-						repeat: Infinity,
-						repeatType: "loop",
-						ease: "linear",
-						duration: (40 * 3) / 2, // 3x cards, keep speed similar
-					},
-				},
-			});
-		}
-	}, [isPaused, controls, totalWidth]);
+  useEffect(() => {
+	setLoading(true);
+	fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/partner/all`)
+	  .then((res) => res.json())
+	  .then((data) => {
+		const partners = data.partners || [];
+		const favs = (() => {
+		  try {
+			return JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
+		  } catch { return []; }
+		})();
+		const foundCards = foodTypes.map(({ type, label }) => {
+		  const partner = partners.find((p: any) =>
+			p.items.some((item: any) => item.name && item.name.toLowerCase().includes(type))
+		  );
+		  if (!partner) return null;
+		  const item = partner.items.find((item: any) => item.name && item.name.toLowerCase().includes(type));
+		  const cardData = {
+			type,
+			label,
+			shop: {
+			  id: partner.id,
+			  name: partner.shopname,
+			  image: partner.shopimage?.url || null
+			},
+			item: {
+			  name: item.name,
+			  price: item.price,
+			  image: item.image
+			},
+			fav: favs.some((f: any) => f.shop && f.shop.id === partner.id)
+		  };
+		  return cardData;
+		}).filter(Boolean);
+		setCards(foundCards);
+		setLoading(false);
+	  })
+	  .catch(() => {
+		setError("Failed to load shops");
+		setLoading(false);
+	  });
+  }, []);
 
-	return (
-		<section className="my-16 w-full max-w-6xl mx-auto">
-			<h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2 ml-2">
-				Popular Restaurants
-			</h2>
-			<div className="overflow-hidden w-full max-w-6xl mx-auto" ref={containerRef}>
-				<motion.div
-					className="flex gap-4 flex-nowrap"
-					animate={controls}
-					style={{ width: totalWidth * 3 }}
+  return (
+	<section className="my-16 w-full max-w-6xl mx-auto">
+	  <h2 className="-mt-12 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2">
+		Popular near <span className="text-orange-600">you</span>!
+	  </h2>
+	  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+		{loading ? (
+		  <div className="flex items-center justify-center h-full w-full py-16 text-gray-400">Loading...</div>
+		) : error ? (
+		  <div className="flex items-center justify-center h-full w-full py-16 text-red-400">{error}</div>
+		) : cards.length === 0 ? (
+		  <div className="flex items-center justify-center h-full w-full py-16 text-gray-400">No shops found</div>
+		) : (
+		  cards.map((card, idx) => (
+			<div key={card.type} className="relative bg-white rounded-xl shadow p-0 w-11/12 max-w-xs flex flex-col border border-orange-100 overflow-hidden mx-auto">
+			  {/* Shop Name */}
+			  <div className="absolute top-2 right-4 z-10 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold text-orange-600 shadow">{card.shop.name}</div>
+			  {/* Favorite Heart Button */}
+			  <button
+				className={`absolute top-2 left-2 rounded-full p-2 shadow transition ${card.fav ? "bg-red-500" : "bg-white hover:bg-orange-100"}`}
+				onClick={() => {
+				  try {
+					let favs = [];
+					try {
+					  favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
+					} catch {}
+					if (!card.fav) {
+					  // Add to favourites
+					  favs.push(card);
+					  localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
+					} else {
+					  // Remove from favourites
+					  favs = favs.filter((f: any) => f.shop && f.shop.id !== card.shop.id);
+					  localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
+					}
+					// Update UI
+					setCards((prev) => prev.map((c, i) => i === idx ? { ...c, fav: !c.fav } : c));
+				  } catch {}
+				}}
+				aria-label="Add to favorites"
+			  >
+				<svg
+				  xmlns="http://www.w3.org/2000/svg"
+				  fill={card.fav ? "#fff" : "none"}
+				  viewBox="0 0 24 24"
+				  strokeWidth={1.5}
+				  stroke={card.fav ? "#fff" : "#f97316"}
+				  className="w-5 h-5"
 				>
-					{repeatedRestaurants.map((rest, idx) => (
-						<div
-							key={idx}
-							className="bg-white rounded-xl shadow p-3 flex flex-col items-center border border-orange-100 hover:shadow-lg transition-shadow duration-200 w-[180px] h-[220px] overflow-hidden justify-between cursor-pointer flex-shrink-0"
-							onMouseEnter={() => setIsPaused(true)}
-							onMouseLeave={() => setIsPaused(false)}
-						>
-							<img
-								src={rest.image}
-								alt={rest.name}
-								className="w-16 h-16 object-cover mb-2 rounded"
-							/>
-							<div className="font-bold text-base text-gray-800 mb-0.5 text-center truncate w-full whitespace-nowrap">
-								{rest.name}
-							</div>
-							<div className="text-orange-500 font-medium text-xs mb-0.5 text-center truncate w-full whitespace-nowrap">
-								{rest.cuisine}
-							</div>
-							<div className="flex items-center gap-1 text-gray-600 text-xs mb-0.5 justify-center w-full">
-								<span className="font-bold text-orange-500 truncate whitespace-nowrap">
-									★ {rest.rating}
-								</span>
-								<span>•</span>
-								<span className="truncate whitespace-nowrap">
-									{rest.deliveryTime}
-								</span>
-							</div>
-							<button className="mt-2 px-2 py-1 bg-orange-500 text-white rounded-full font-semibold text-xs hover:bg-orange-600 transition w-full truncate whitespace-nowrap">
-								View Menu
-							</button>
-						</div>
-					))}
-				</motion.div>
+				  <path
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					d="M16.5 3.75a5.25 5.25 0 00-4.5 2.472A5.25 5.25 0 007.5 3.75C5.014 3.75 3 5.764 3 8.25c0 7.25 9 12 9 12s9-4.75 9-12c0-2.486-2.014-4.5-4.5-4.5z"
+				  />
+				</svg>
+			  </button>
+			  {/* Food Image */}
+			  <div className="w-full" style={{height: '150px'}}>
+				<img src={card.item.image || "/pizza.png"} alt={card.item.name} className="w-full h-full object-cover" style={{minHeight: 120, maxHeight: 150}} />
+			  </div>
+			  {/* Name, Price & Rating Row */}
+			  <div className="flex items-center justify-between w-full mb-0 gap-2 px-3 max-w-full overflow-hidden" style={{ minHeight: 0, paddingBottom: 0 }}>
+				<div className="font-semibold text-lg text-gray-800 truncate text-left max-w-[50%]">{card.item.name}</div>
+				<div className="flex items-center gap-4 flex-shrink-0 max-w-[48%]">
+				  <div className="text-gray-700 font-medium text-base whitespace-nowrap">₹{card.item.price}</div>
+				  <div className="flex items-center gap-1 text-orange-500 text-sm whitespace-nowrap">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" className="w-4 h-4">
+					  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+					</svg>
+					<span>4.5</span>
+				  </div>
+				</div>
+			  </div>
+			  {/* Add to Cart Button */}
+			  <button
+				className="px-0 py-3 bg-orange-500 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 transition w-full"
+				style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}
+				onClick={() => {
+				  // Prepare cart item structure as in CartPage
+				  const cartItem = {
+					id: card.item.name + "-" + card.shop.id, // unique per shop+item
+					name: card.item.name,
+					price: card.item.price,
+					image: card.item.image,
+					quantity: 1,
+					shopId: card.shop.id,
+					shopName: card.shop.name,
+					shopImage: card.shop.image
+				  };
+				  // Get current cart
+				  let cart = [];
+				  try {
+					cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
+				  } catch {}
+				  // Check if item already in cart (by id)
+				  const existing = cart.find((item: any) => item.id === cartItem.id);
+				  if (existing) {
+					existing.quantity += 1;
+				  } else {
+					cart.push(cartItem);
+				  }
+				  localStorage.setItem("hotdrop_cart", JSON.stringify(cart));
+				  // Also store selected shop info
+				  const shopInfo = {
+					id: card.shop.id,
+					name: card.shop.name,
+					shopname: card.shop.name,
+					image: card.shop.image
+				  };
+				  localStorage.setItem("hotdrop_selected_shop", JSON.stringify(shopInfo));
+				}}
+			  >
+				Add to Cart
+			  </button>
 			</div>
-		</section>
-	);
+		  ))
+		)}
+	  </div>
+	</section>
+  );
 }
