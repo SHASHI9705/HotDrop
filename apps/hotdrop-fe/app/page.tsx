@@ -142,7 +142,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 flex flex-col items-center justify-start">
+    <div className="min-h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 flex flex-col items-center justify-start overflow-x-hidden">
       {/* Navbar */}
       <Nav
         user={user}
@@ -158,7 +158,7 @@ export default function Home() {
       />
 
       {/* Hero Content */}
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-6xl w-full mt-28">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-6xl mt-28">
         {/* Left Content */}
         <div className="md:w-1/2 text-center md:text-left">
           <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-6xl font-extrabold text-gray-900 leading-tight">
@@ -219,7 +219,7 @@ export default function Home() {
           {/* Animated food images in two circles behind the girl */}
           {/* Outer, larger circle with only food images, repeated as needed */}
           <motion.div
-            className="hidden md:flex absolute inset-0 items-center justify-center z-0"
+            className="flex absolute inset-0 items-center justify-center z-0"
             style={{ pointerEvents: "none" }}
             animate={{ rotate: -360 }}
             transition={{ repeat: Infinity, duration: 32, ease: "linear" }}
@@ -242,11 +242,13 @@ export default function Home() {
                   key={src + i}
                   src={src}
                   alt="food"
-                  className="w-14 h-14 md:w-20 md:h-20 rounded-full absolute"
+                  className="w-10 h-10 md:w-20 md:h-20 rounded-full absolute"
                   style={{
-                    left: `calc(50% - 2.5rem)`,
-                    top: `calc(50% - 2.5rem)`,
-                    transform: `rotate(${angle}deg) translateY(-240px) rotate(-${angle}deg)`
+                    left: '50%',
+                    top: '50%',
+                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-140px) rotate(-${angle}deg)`,
+                    // On desktop, use a larger radius
+                    ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? { transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-240px) rotate(-${angle}deg)` } : {})
                   }}
                 />
               );
