@@ -1,13 +1,25 @@
-import React from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 
 export default function PhoneFooter() {
   const router = useRouter();
+  const [selected, setSelected] = useState("home");
+  useEffect(() => {
+    // On mount, set from localStorage or default to home
+    const stored = localStorage.getItem("hotdrop_footer_tab");
+    setSelected(stored || "home");
+  }, []);
+  const handleSelect = (tab: string, path: string) => {
+    setSelected(tab);
+    localStorage.setItem("hotdrop_footer_tab", tab);
+    router.push(path);
+  };
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-orange-200 flex justify-between items-center px-6 py-2 shadow-lg">
       <button
-        className="flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none"
-        onClick={() => router.push("/")}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "home" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        onClick={() => handleSelect("home", "/")}
         aria-label="Home"
       >
         {/* Home Icon */}
@@ -16,8 +28,8 @@ export default function PhoneFooter() {
         </svg>
       </button>
       <button
-        className="flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none"
-        onClick={() => router.push("/orders")}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "orders" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        onClick={() => handleSelect("orders", "/orders")}
         aria-label="Restaurants"
       >
         {/* Fork and Knife Icon */}
@@ -27,8 +39,8 @@ export default function PhoneFooter() {
         </svg>
       </button>
       <button
-        className="flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none"
-        onClick={() => router.push("/favourites")}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "favourites" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        onClick={() => handleSelect("favourites", "/favourites")}
         aria-label="Favourites"
       >
         {/* Heart Icon */}
@@ -37,8 +49,8 @@ export default function PhoneFooter() {
         </svg>
       </button>
       <button
-        className="flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none"
-        onClick={() => router.push("/cart")}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "cart" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        onClick={() => handleSelect("cart", "/cart")}
         aria-label="Cart"
       >
         {/* Cart Icon */}
