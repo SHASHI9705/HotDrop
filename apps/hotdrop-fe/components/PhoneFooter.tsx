@@ -5,15 +5,55 @@ import { useEffect, useState } from "react";
 export default function PhoneFooter() {
   const router = useRouter();
   const [selected, setSelected] = useState("home");
+  const [favCount, setFavCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+
   useEffect(() => {
     // On mount, set from localStorage or default to home
     const stored = localStorage.getItem("hotdrop_footer_tab");
     setSelected(stored || "home");
+    // Get counts
+    const updateCounts = () => {
+      const favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
+      setFavCount(Array.isArray(favs) ? favs.length : 0);
+      const cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
+      setCartCount(Array.isArray(cart) ? cart.length : 0);
+    };
+    updateCounts();
+    // Listen for storage changes (in case other tabs update)
+    const handleStorage = () => updateCounts();
+    window.addEventListener("storage", handleStorage);
+    // Poll localStorage every 200ms for instant UI update
+    const interval = setInterval(updateCounts, 200);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      clearInterval(interval);
+    };
   }, []);
+
+  // Also update counts when tab is focused (for SPA navigation)
+  useEffect(() => {
+    const onFocus = () => {
+      const favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
+      setFavCount(Array.isArray(favs) ? favs.length : 0);
+      const cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
+      setCartCount(Array.isArray(cart) ? cart.length : 0);
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
+
   const handleSelect = (tab: string, path: string) => {
     setSelected(tab);
     localStorage.setItem("hotdrop_footer_tab", tab);
     router.push(path);
+    // Update counts after navigation
+    setTimeout(() => {
+      const favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
+      setFavCount(Array.isArray(favs) ? favs.length : 0);
+      const cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
+      setCartCount(Array.isArray(cart) ? cart.length : 0);
+    }, 100);
   };
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-orange-200 flex justify-between items-center px-6 py-2 shadow-lg">
@@ -39,7 +79,7 @@ export default function PhoneFooter() {
         </svg>
       </button>
       <button
-        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "favourites" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none relative ${selected === "favourites" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
         onClick={() => handleSelect("favourites", "/favourites")}
         aria-label="Favourites"
       >
@@ -47,9 +87,14 @@ export default function PhoneFooter() {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-8 h-8">
           <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
         </svg>
+        {favCount > 0 && (
+          <span className="absolute top-1 right-3 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 min-w-[18px] h-4 flex items-center justify-center border-2 border-white z-10">
+            {favCount}
+          </span>
+        )}
       </button>
       <button
-        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none ${selected === "cart" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
+        className={`flex-1 flex flex-col items-center justify-center text-orange-500 focus:outline-none relative ${selected === "cart" ? "border-b-4 border-orange-500" : "border-b-4 border-transparent"}`}
         onClick={() => handleSelect("cart", "/cart")}
         aria-label="Cart"
       >
@@ -58,6 +103,11 @@ export default function PhoneFooter() {
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
           <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
         </svg>
+        {cartCount > 0 && (
+          <span className="absolute top-1 right-3 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 min-w-[18px] h-4 flex items-center justify-center border-2 border-white z-10">
+            {cartCount}
+          </span>
+        )}
       </button>
     </footer>
   );
