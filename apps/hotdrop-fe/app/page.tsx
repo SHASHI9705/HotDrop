@@ -139,7 +139,12 @@ export default function Home() {
   }, [showLoader]);
 
   if (showLoader) {
-    return <WaterLoader />;
+    return (
+      <>
+        <WaterLoader />
+        <PhoneFooter />
+      </>
+    );
   }
 
   return (
