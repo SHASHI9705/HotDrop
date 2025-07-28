@@ -54,11 +54,13 @@ export default function Nav({
                   title={user?.name}
                 >
                   {user?.name?.charAt(0).toUpperCase()}
-                  {/* Star SVG at bottom left */}
-                  <span className="absolute -bottom-2 -left-2">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fbbf24" stroke="#f59e42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="12 2 15 8.5 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 9 8.5 12 2" />
-                    </svg>
+                  {/* Star SVG at bottom right with thin white circle background */}
+                  <span className="absolute -bottom-2 -right-2">
+                    <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-white">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fbbf24" stroke="#f59e42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="12 2 15 8.5 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 9 8.5 12 2" />
+                      </svg>
+                    </span>
                   </span>
                 </button>
               </div>
