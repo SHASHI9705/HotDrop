@@ -51,9 +51,41 @@ function isAvailable(item: Item) {
 
 export default function ShopItemsPage() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <ShopItemsContent />
-    </Suspense>
+    <>
+      {/* Nav Bar with Back, Heading, and Home (no ratings) */}
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+        {/* Back Button (left) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          title="Back"
+          onClick={() => window.history.back()}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          <span className="hidden md:inline">Back</span>
+        </button>
+        {/* Centered logo and heading */}
+        <div className="flex items-center gap-3 mx-auto">
+          <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
+          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">{typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('shop') || 'Shop')}</h1>
+        </div>
+        {/* Home Button (right) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          title="Home"
+          onClick={() => window.location.href = '/'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
+          </svg>
+          <span className="hidden md:inline">Home</span>
+        </button>
+      </div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ShopItemsContent />
+      </Suspense>
+    </>
   );
 }
 
@@ -160,27 +192,7 @@ function ShopItemsContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
-      <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 sm:py-8 px-4 sm:pl-12 sm:pr-12 gap-4 sm:gap-0">
-        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-2 sm:gap-0">
-          <Image src="/logo.png" alt="HotDrop Logo" width={44} height={44} className="mr-0 sm:mr-4 rounded-xl" />
-          <div className="flex flex-col items-center sm:items-start w-full">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-black mb-1 flex items-center text-center sm:text-left">{shop?.name || "Shop"}</h1>
-            <div className="flex items-center mb-1 justify-center sm:justify-start">
-              <span className="text-yellow-400 text-lg sm:text-xl mr-2">★</span>
-              <span className="text-base sm:text-lg font-semibold text-gray-800">{shop?.rating || "4.5"}</span>
-              <span className="text-gray-500 text-xs sm:text-sm ml-2">({shop?.ratingsCount || "0"} ratings)</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end">
-          <a
-            href={foodName ? `/orders?food=${encodeURIComponent(foodName)}` : "/orders"}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 sm:px-6 py-2 rounded-full shadow transition-colors duration-200 text-base sm:text-lg w-full sm:w-auto text-center"
-          >
-            Back
-          </a>
-        </div>
-      </header>
+      {/* ...header removed, replaced by nav above... */}
       <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
         <h2 className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
         {loading ? (

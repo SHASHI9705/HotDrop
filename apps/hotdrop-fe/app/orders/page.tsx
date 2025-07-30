@@ -20,9 +20,41 @@ interface Partner {
 
 export default function OrdersPage() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <OrdersContent />
-    </Suspense>
+    <>
+      {/* Nav Bar with Back, Heading, and Home */}
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+        {/* Back Button (left) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          title="Back"
+          onClick={() => window.history.back()}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          <span className="hidden md:inline">Back</span>
+        </button>
+        {/* Centered logo and heading */}
+        <div className="flex items-center gap-3 mx-auto">
+          <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
+          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">HotDrop Orders</h1>
+        </div>
+        {/* Home Button (right) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          title="Home"
+          onClick={() => window.location.href = '/'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
+          </svg>
+          <span className="hidden md:inline">Home</span>
+        </button>
+      </div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <OrdersContent />
+      </Suspense>
+    </>
   );
 }
 
@@ -106,20 +138,6 @@ function OrdersContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-red-100 to-red-300">
-      <header className="w-full flex flex-col sm:flex-row items-center justify-between py-6 px-4 sm:py-10 sm:pl-12 sm:pr-12">
-        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
-          <Image src="/logo.png" alt="HotDrop Logo" width={60} height={60} className="mb-2 sm:mb-0 sm:mr-6" />
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-center sm:text-left">
-            <span className="text-black">HotDrop</span> <span className="text-orange-500">Orders</span>
-          </h1>
-        </div>
-        <a
-          href="/"
-          className="mt-4 sm:mt-0 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-colors duration-200 text-lg"
-        >
-          Home
-        </a>
-      </header>
       <div className="pl-12">
         <h2 className="text-3xl font-extrabold text-orange-500 mb-2 drop-shadow-sm">{itemName}</h2>
         <p className="text-lg text-gray-700 mb-8">{getFoodTagline(itemName)}</p>

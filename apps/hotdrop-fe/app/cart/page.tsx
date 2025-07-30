@@ -21,6 +21,36 @@ interface CartItem {
 export default function CartPage() {
   return (
     <>
+      {/* Nav Bar with Back, Heading, and Home */}
+      <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+        {/* Back Button (left) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          title="Back"
+          onClick={() => window.history.back()}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          <span className="hidden md:inline">Back</span>
+        </button>
+        {/* Centered logo and heading */}
+        <div className="flex items-center gap-3 mx-auto">
+          <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
+          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">Your Cart</h1>
+        </div>
+        {/* Home Button (right) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          title="Home"
+          onClick={() => window.location.href = '/'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
+          </svg>
+          <span className="hidden md:inline">Home</span>
+        </button>
+      </div>
       <Suspense fallback={<div className="text-center text-gray-500 py-12">Loading...</div>}>
         <CartContent />
       </Suspense>
@@ -36,7 +66,8 @@ function CartContent() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const foodHeading = searchParams.get("food") || "Your Cart";
+  // Heading is now in nav, so only use foodHeading for accessibility if needed
+  // const foodHeading = searchParams.get("food") || "Your Cart";
 
   useEffect(() => {
     // Example: fetch cart from localStorage or API
@@ -95,12 +126,8 @@ function CartContent() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-4 px-4">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8 mb-8 border border-orange-200">
-        <div className="flex items-center gap-4 mb-8">
-          <img src="/logo.png" alt="Logo" className="w-12 h-12 rounded" />
-          <h1 className="text-3xl font-extrabold text-orange-500">{foodHeading}</h1>
-        </div>
         {loading ? (
           <div className="text-center text-gray-500 py-12">Loading...</div>
         ) : cart.length === 0 ? (
@@ -116,14 +143,13 @@ function CartContent() {
                     <div className="text-orange-500 font-semibold text-base">₹{item.price}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                {/* Controls Row: plus, minus, price, remove */}
+                <div className="flex items-center gap-3 w-full md:w-auto justify-end">
                   <button className="bg-orange-200 text-orange-700 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-300" onClick={() => updateQuantity(item.id, -1)}>-</button>
                   <span className="font-semibold text-lg text-gray-700">{item.quantity}</span>
                   <button className="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-600" onClick={() => updateQuantity(item.id, 1)}>+</button>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <div className="font-bold text-lg text-gray-800">₹{item.price * item.quantity}</div>
-                  <button className="text-red-500 hover:text-red-700 text-xs font-bold border border-red-200 rounded px-3 py-1 transition-colors duration-200" onClick={() => removeItem(item.id)}>Remove</button>
+                  <div className="font-bold text-lg text-gray-800 ml-2">₹{item.price * item.quantity}</div>
+                  <button className="text-red-500 hover:text-red-700 text-xs font-bold border border-red-200 rounded px-3 py-1 transition-colors duration-200 ml-2" onClick={() => removeItem(item.id)}>Remove</button>
                 </div>
               </div>
             ))}

@@ -94,7 +94,7 @@ export default function SettingsPage() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
-          Back
+          <span className="hidden md:inline">Back</span>
         </button>
         {/* Centered Settings Heading */}
         <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap mx-auto">Settings</h1>
@@ -107,7 +107,7 @@ export default function SettingsPage() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
           </svg>
-          Home
+          <span className="hidden md:inline">Home</span>
         </button>
       </div>
 

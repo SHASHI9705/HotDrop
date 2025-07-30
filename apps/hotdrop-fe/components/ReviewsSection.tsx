@@ -63,8 +63,8 @@ const speeds = [40, 55]; // seconds for one full loop, different for each line
 export default function ReviewsSection() {
 	return (
 		<section className="my-16 w-full max-w-6xl mx-auto">
-			<h2 className="mt-12 text-3xl font-extrabold text-orange-600 mb-8 text-left pl-2 ml-2">
-				What Our Customers Say
+			<h2 className="mt-12 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2">
+				What Our <span className="text-orange-600">Customers</span> Say
 			</h2>
 			<div className="space-y-8">
 				{reviewGroups.map((group, i) => (

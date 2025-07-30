@@ -67,7 +67,7 @@ export default function ProfilePage() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
-          Back
+          <span className="hidden md:inline">Back</span>
         </button>
         {/* Centered Profile Heading */}
         <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap mx-auto">Profile</h1>
@@ -224,7 +224,7 @@ export default function ProfilePage() {
           const routes: Record<string, string> = {
             'Favourites': '/favourites',
             'Order History': '/myorders',
-            'Order Points': '/points',
+            'Order Points': '/orderpoints',
             'Settings': '/settings',
             'Help & Support': '/footeroptions/help',
             'Terms & Conditions': '/footeroptions/terms',

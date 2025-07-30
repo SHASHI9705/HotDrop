@@ -26,32 +26,32 @@ export default function FavouritesPage() {
     <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
       <div className="w-full max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8 w-full px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
-          {/* Back Button (left, rectangle) */}
+          {/* Back Button (left) */}
           <button
-            className="hidden md:flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
             title="Back"
             onClick={() => window.history.back()}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
-            Back
+            <span className="hidden md:inline">Back</span>
           </button>
           {/* Centered logo and heading */}
           <div className="flex items-center gap-3 mx-auto">
             <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-16 md:h-16" />
             <h1 className="text-xl md:text-4xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">Your Favourites!</h1>
           </div>
-          {/* Home Button (right, rectangle) */}
+          {/* Home Button (right) */}
           <button
-            className="hidden md:flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
             title="Home"
             onClick={() => window.location.href = '/'}
           >
-            Home
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 ml-2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21a1.5 1.5 0 001.5 1.5h3.75A1.5 1.5 0 0011.25 21V16.5a1.5 1.5 0 011.5-1.5h0a1.5 1.5 0 011.5 1.5V21a1.5 1.5 0 001.5 1.5h3.75A1.5 1.5 0 0021 21V10.5" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
             </svg>
+            <span className="hidden md:inline">Home</span>
           </button>
         </div>
 
@@ -204,7 +204,10 @@ export default function FavouritesPage() {
                   <button
                     className="px-0 py-3 bg-orange-500 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 transition w-full"
                     style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 'auto' }}
-                    // onClick={() => {}}
+                    onClick={() => {
+                      // Navigate to allitems page for this shop
+                      window.location.href = `/allitems?shop=${encodeURIComponent(shop.shopname || shop.name || shop.id)}`;
+                    }}
                   >
                     View Menu
                   </button>

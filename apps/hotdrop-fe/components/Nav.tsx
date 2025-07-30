@@ -107,7 +107,7 @@ export default function Nav({
           `}</style>
         </div>
       )}
-      <nav className="fixed pt-4 top-0 left-0 w-full z-50 bg-gradient-to-r from-white via-red-200 to-blue-50 backdrop-blur-md mb-4 overflow-x-hidden">
+      <nav className="fixed pt-4 top-0 left-0 w-full z-50 bg-gradient-to-r from-white via-red-200 to-blue-50 backdrop-blur-md mb-4 overflow-x-hidden overflow-y-hidden">
         <div className="max-w-screen-xl mx-auto flex flex-row items-center justify-center px-2 w-full">
           {/* Left: Logo, Heading, and Search */}
           <div className="flex items-center gap-2">
@@ -174,14 +174,14 @@ export default function Nav({
             )}
           </div>
           {/* Right: Nav Options and Profile (hidden on mobile) */}
-          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap">
+          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden" style={{height: '64px'}}>
             {user && (
               <a href="/myorders" className="nav-underline px-4 min-w-[130px]">My Orders</a>
             )}
             {user ? (
               <>
-                <a href="/partner/signup" className="nav-underline px-4 min-w-[160px]">Partner with us</a>
-                <a href="/settings" className="nav-underline px-4 min-w-[100px]">Settings</a>
+                <a href="/restaurants" className="nav-underline px-4 min-w-[130px]">Restaurants</a>
+                <a href="/favourites" className="nav-underline px-4 min-w-[120px]">Favourites</a>
                 <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
               </>
             ) : (
@@ -192,7 +192,7 @@ export default function Nav({
             )}
             {user ? (
               <button
-                className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105"
+                className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105 overflow-hidden"
                 onClick={() => router.push("/profile")}
                 title={user.name}
                 style={{ minWidth: '48px', minHeight: '48px' }}
