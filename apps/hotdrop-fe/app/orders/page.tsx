@@ -138,22 +138,22 @@ function OrdersContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-red-100 to-red-300">
-      <div className="pl-12">
-        <h2 className="text-3xl font-extrabold text-orange-500 mb-2 drop-shadow-sm">{itemName}</h2>
-        <p className="text-lg text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
+      <div className="pl-0 md:pl-12">
+        <h2 className="text-3xl font-extrabold text-black/80 ml-2 mb-2 drop-shadow-sm">{itemName.toUpperCase()}</h2>
+        <p className="text-lg ml-2 text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
         {loading ? (
           <WaterLoader />
         ) : foodPartners.length === 0 ? (
           <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 w-full">Coming soon...</div>
         ) : (
-          <div className="flex flex-row gap-6 mb-10 overflow-x-auto pr-12">
+          <div className="flex flex-col md:flex-row gap-6 mb-10 md:overflow-x-auto md:pr-12">
             {foodPartners.map((partner, idx) => {
               const specialItem = partner.items.find((item) => normalize(item.name).includes(foodKey));
               return (
                 <a
                   key={idx}
                   href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}&food=${encodeURIComponent(itemName)}`}
-                  className="w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden"
+                  className="w-[80vw] md:w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden mx-auto"
                   style={{ textDecoration: 'none' }}
                 >
                   <img

@@ -1,9 +1,37 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function OrderPointsPage() {
   const router = useRouter();
+  const [user, setUser] = useState<{ id?: string; name: string; email: string } | null>(null);
+  const [orderCount, setOrderCount] = useState<number>(0);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("hotdrop_user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const fetchOrders = async () => {
+        const userId = user.id || user.email;
+        if (!userId) {
+          setOrderCount(0);
+          return;
+        }
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?userId=${encodeURIComponent(userId)}`);
+          const data = await res.json();
+          setOrderCount(Array.isArray(data.orders) ? data.orders.length : 0);
+        } catch {
+          setOrderCount(0);
+        }
+      };
+      fetchOrders();
+    }
+  }, [user]);
   return (
     <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
       {/* Nav Bar */}
@@ -57,8 +85,10 @@ export default function OrderPointsPage() {
         {/* Your Order Points Box */}
         <div className="w-full mt-4">
           <div className="bg-white/90 rounded-xl shadow border border-orange-200 px-4 sm:px-6 py-5 flex flex-col gap-2">
-            <h3 className="text-lg sm:text-xl font-bold text-orange-500 mb-1">Your Order Points</h3>
-            {/* You can display the user's points here in the future */}
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-lg sm:text-xl font-bold text-orange-500">Your Order Points</h3>
+              <span className="ml-2 bg-orange-500 text-white font-bold px-3 py-1 rounded-full text-base sm:text-lg shadow">{orderCount * 5}</span>
+            </div>
             <div className="text-gray-700 text-base sm:text-lg font-medium">Check your current order points here!</div>
           </div>
         </div>

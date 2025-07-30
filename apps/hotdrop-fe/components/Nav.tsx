@@ -1,5 +1,6 @@
 "use client";
 import { RefObject, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { div } from "framer-motion/client";
@@ -30,6 +31,14 @@ export default function Nav({
   router,
 }: NavProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const routerNav = useRouter();
+
+  const handleSearch = () => {
+    if (search.trim()) {
+      routerNav.push(`/orders?food=${encodeURIComponent(search.trim())}`);
+    }
+  };
   const handleSidebarClose = () => setSidebarOpen(false);
   const handleSidebarOpen = () => setSidebarOpen(true);
   const handleLogout = () => {
@@ -138,13 +147,16 @@ export default function Nav({
               HotDrop
             </motion.div>
             <div className="relative ml-2 flex-1 max-w-xs hidden sm:block">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none cursor-pointer" onClick={handleSearch}>
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
                 </svg>
               </span>
               <input
                 type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSearch(); } }}
                 placeholder="Search for any food e.g. burger"
                 className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-56 md:w-72"
                 style={{ minWidth: '180px' }}
@@ -152,13 +164,16 @@ export default function Nav({
             </div>
             {/* Mobile search box */}
             <div className="relative ml-2 flex-1 max-w-xs sm:hidden">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none cursor-pointer" onClick={handleSearch}>
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
                 </svg>
               </span>
               <input
                 type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSearch(); } }}
                 placeholder="Search for any food item"
                 className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-full"
                 style={{ minWidth: '120px' }}
