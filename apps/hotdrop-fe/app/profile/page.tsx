@@ -224,7 +224,7 @@ export default function ProfilePage() {
           const routes: Record<string, string> = {
             'Favourites': '/favourites',
             'Order History': '/myorders',
-            'Order Points': '/profile/points',
+            'Order Points': '/points',
             'Settings': '/settings',
             'Help & Support': '/footeroptions/help',
             'Terms & Conditions': '/footeroptions/terms',
@@ -244,18 +244,21 @@ export default function ProfilePage() {
           };
           if (opt.label === 'Sign Out') {
             return (
-              <button
+              <div
                 key={opt.label}
-                className="w-full flex items-center justify-center bg-white rounded-xl shadow border border-orange-100 px-4 py-4 transition hover:bg-orange-50"
-                onClick={handleClick}
+                className="w-full max-w-2xl mx-auto bg-red-500 rounded-xl shadow border border-red-500 px-6 py-4 flex items-center justify-center"
               >
-                <span className="flex items-center justify-center w-full">
-                  <span className="w-10 h-10 flex items-center justify-center rounded-lg bg-orange-50 mr-4">
-                    {opt.icon}
-                  </span>
-                  <span className="text-base md:text-lg font-semibold text-gray-700 text-center">{opt.label}</span>
-                </span>
-              </button>
+                <button
+                  className="flex items-center gap-2 py-1.5 px-3 bg-red-500 hover:bg-red-600 focus:bg-red-600 rounded-lg transition w-full justify-center outline-none min-h-0"
+                  onClick={handleClick}
+                >
+                  {/* Logout SVG (centered, no background, white) */}
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#fff"></path>
+                  </svg>
+                  <span className="text-base font-semibold text-white text-center">Logout</span>
+                </button>
+              </div>
             );
           }
           return (
