@@ -20,15 +20,22 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      // Fetch orders count (match logic from myorders)
-      const userId = user.id || user.email;
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?userId=${encodeURIComponent(userId)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data.orders)) setOrderCount(data.orders.length);
-          else setOrderCount(0);
-        })
-        .catch(() => setOrderCount(0));
+      // Match myorders logic: fetch orders using id or email, count length
+      const fetchOrders = async () => {
+        const userId = user.id || user.email;
+        if (!userId) {
+          setOrderCount(0);
+          return;
+        }
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders/orders?userId=${encodeURIComponent(userId)}`);
+          const data = await res.json();
+          setOrderCount(Array.isArray(data.orders) ? data.orders.length : 0);
+        } catch {
+          setOrderCount(0);
+        }
+      };
+      fetchOrders();
       // Get favourites count from localStorage
       const favs = localStorage.getItem("hotdrop_favourites");
       if (favs) {
@@ -218,7 +225,7 @@ export default function ProfilePage() {
             'Favourites': '/favourites',
             'Order History': '/myorders',
             'Order Points': '/profile/points',
-            'Settings': '/profile/settings',
+            'Settings': '/settings',
             'Help & Support': '/footeroptions/help',
             'Terms & Conditions': '/footeroptions/terms',
             'About Us': '/footeroptions/aboutus',
