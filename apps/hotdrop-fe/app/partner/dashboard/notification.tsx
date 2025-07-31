@@ -1,4 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
+// --- Push Notification Subscription Logic ---
+const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+}
 
 interface Order {
   id: string;
@@ -11,6 +19,44 @@ interface Order {
 }
 
 export default function NotificationSection() {
+  // Subscribe partner to push notifications on mount
+  useEffect(() => {
+    async function subscribePartner() {
+      if (typeof window === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") return;
+
+        const reg = await navigator.serviceWorker.register("/sw.js");
+        const sub = await reg.pushManager.getSubscription() ||
+          await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+          });
+
+        // Get partnerId from localStorage
+        const partner = localStorage.getItem("hotdrop_partner");
+        if (!partner) return;
+        const { id: partnerId } = JSON.parse(partner);
+
+        // Send subscription to backend (for partner)
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/user/push-subscription`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            partnerId,
+            subscription: {
+              endpoint: sub.endpoint,
+              keys: sub.toJSON().keys,
+            },
+          }),
+        });
+      } catch (err) {
+        // Optionally handle/log errors
+      }
+    }
+    subscribePartner();
+  }, []);
   const [pendingOrders, setPendingOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const fetchRef = useRef<() => void>(() => {});

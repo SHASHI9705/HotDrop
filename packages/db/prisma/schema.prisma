@@ -3,8 +3,10 @@ generator client {
 }
 model PushSubscription {
   id         String   @id @default(uuid())
-  partnerId  String
-  partner    Partner  @relation(fields: [partnerId], references: [id])
+  partnerId  String?
+  partner    Partner? @relation(fields: [partnerId], references: [id])
+  userId     String?
+  user       Signup?  @relation(fields: [userId], references: [id])
   endpoint   String   @unique
   keys       Json
   createdAt  DateTime @default(now())
@@ -21,6 +23,7 @@ model Signup {
   email String @unique
   password String
   orders Order[] // relation to orders
+  pushSubscriptions PushSubscription[]
 }
 
 model Partner {

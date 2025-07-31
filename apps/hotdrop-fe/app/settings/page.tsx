@@ -1,9 +1,72 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// --- Push Notification Subscription Logic ---
+const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+}
+
 export default function SettingsPage() {
+  // Notification toggles state (fix hydration)
+  const [orderUpdatesEnabled, setOrderUpdatesEnabled] = useState(true);
+  const [promoUpdatesEnabled, setPromoUpdatesEnabled] = useState(false);
+  const [smsNotificationsEnabled, setSmsNotificationsEnabled] = useState(false);
+
+  // Subscribe/unsubscribe user to push notifications for order updates
+  useEffect(() => {
+    async function handlePushSubscription() {
+      if (typeof window === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+      const user = localStorage.getItem("hotdrop_user");
+      if (!user) return;
+      const parsedUser = JSON.parse(user);
+      const userId = parsedUser.id || parsedUser.email;
+      const email = parsedUser.email;
+      const reg = await navigator.serviceWorker.getRegistration("/sw.js") || await navigator.serviceWorker.register("/sw.js");
+      const sub = await reg.pushManager.getSubscription();
+      if (orderUpdatesEnabled) {
+        // Enable: request permission and subscribe
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") return;
+        const subscription = sub || await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        });
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/user/push-subscription`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            email,
+            subscription: {
+              endpoint: subscription.endpoint,
+              keys: subscription.toJSON().keys,
+            },
+          }),
+        });
+      } else {
+        // Disable: unsubscribe and optionally remove from backend
+        if (sub) {
+          await sub.unsubscribe();
+          // Optionally notify backend to remove subscription (not required for web-push, but good practice)
+          await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/user/push-subscription`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, email, endpoint: sub.endpoint }),
+          });
+        }
+      }
+    }
+    handlePushSubscription();
+    // Only run when orderUpdatesEnabled changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderUpdatesEnabled]);
   // Share App copied state
   const [showShareCopied, setShowShareCopied] = useState(false);
 
@@ -28,10 +91,7 @@ export default function SettingsPage() {
     }
   }, [theme]);
 
-  // Notification toggles state (fix hydration)
-  const [orderUpdatesEnabled, setOrderUpdatesEnabled] = useState(true);
-  const [promoUpdatesEnabled, setPromoUpdatesEnabled] = useState(false);
-  const [smsNotificationsEnabled, setSmsNotificationsEnabled] = useState(false);
+  // ...existing code...
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('hotdrop_order_updates');

@@ -16,7 +16,8 @@ self.addEventListener('push', function(event) {
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  const targetUrl = '/partner/dashboard#notification-section';
+  // Use the url from notification data if present, else fallback to homepage
+  const targetUrl = (event.notification && event.notification.data && event.notification.data.url) ? event.notification.data.url : '/';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
       for (const client of clientList) {

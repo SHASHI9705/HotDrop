@@ -1,6 +1,32 @@
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
 
+// Save push subscription for user
+export const saveUserPushSubscription = async (req: Request, res: Response) => {
+  const { userId, subscription } = req.body;
+  if (!userId || !subscription || !subscription.endpoint || !subscription.keys) {
+    return res.status(400).json({ error: 'Missing userId or subscription' });
+  }
+  try {
+    // Upsert: update if exists, else create
+    await prismaClient.pushSubscription.upsert({
+      where: { endpoint: subscription.endpoint },
+      update: {
+        userId,
+        keys: subscription.keys,
+      },
+      create: {
+        userId,
+        endpoint: subscription.endpoint,
+        keys: subscription.keys,
+      },
+    });
+    res.status(201).json({ message: 'Subscription saved or updated' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save subscription' });
+  }
+};
+
 export const getUserByEmail = async (req: Request, res: Response): Promise<void> => {
   const { email } = req.query;
 

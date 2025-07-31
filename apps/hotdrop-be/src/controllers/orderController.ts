@@ -2,7 +2,7 @@
 
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
-import { sendPushToPartner } from "./pushUtils.js";
+import { sendPushToPartner,sendPushToUser } from "./pushUtils.js";
 
 
 // Utility to remove null bytes from strings
@@ -63,7 +63,14 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     sendPushToPartner(cleanPartnerId, {
       title: "New Order Received!",
       body: `Order for ₹${cleanPrice} at your shop, ${cleanShopName}!`,
-      data: { orderId: order.id, shopName: cleanShopName, price: cleanPrice },
+      data: { orderId: order.id, shopName: cleanShopName, price: cleanPrice, url: "/partner/dashboard" },
+    });
+
+    // Send push notification to user
+    sendPushToUser(cleanUserId, {
+      title: "Order Placed!",
+      body: `Your order at ${cleanShopName} has been placed!`,
+      data: { orderId: order.id, shopName: cleanShopName, price: cleanPrice,url: "/myorders" },
     });
 
     res.status(201).json({ order });
@@ -85,6 +92,12 @@ export const setOrderTimer = async (req: Request, res: Response): Promise<void> 
       where: { id: orderId },
       data: { status: timer },
     });
+    // Notify user about timer set
+    sendPushToUser(updated.userId, {
+      title: "Order Update",
+      body: `Your order will be ready in ${timer}.`,
+      data: { orderId,url: "/myorders" },
+    });
     res.status(200).json({ order: updated });
   } catch (e) {
     res.status(500).json({ error: "Failed to set timer for order", details: String(e) });
@@ -100,6 +113,12 @@ export const markOrderDelivered = async (req: Request, res: Response): Promise<v
       data: { status: "taken" },
     });
 
+    // Notify user about delivery
+    sendPushToUser(updated.userId, {
+      title: "Order Delivered!",
+      body: "Your order has been delivered!",
+      data: { orderId,url: "/myorders" },
+    });
     res.status(200).json({ order: updated });
   } catch (e) {
     res.status(500).json({ error: "Failed to update order status", details: String(e) });
@@ -136,6 +155,12 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
     const updated = await prismaClient.order.update({
       where: { id: orderId },
       data: { status: "cancelled" },
+    });
+    // Notify user about cancellation
+    sendPushToUser(updated.userId, {
+      title: "Order Cancelled",
+      body: "Your order has been cancelled.",
+      data: { orderId },
     });
     res.status(200).json({ order: updated });
   } catch (e) {
