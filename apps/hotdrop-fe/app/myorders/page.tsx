@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface Order {
   id: string;
@@ -41,31 +42,35 @@ export default function MyOrdersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 py-10 px-4 flex flex-col items-center">
-      <div className="w-full max-w-3xl flex items-center justify-between mb-8">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-          My Orders
-        </h1>
+    <div className="min-h-screen bg-gradient-to-r from-white via-red-100 to-red-300 flex flex-col items-center pt-8 px-4 pb-24">
+      {/* Nav Bar with Back, Heading, and Home */}
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+        {/* Back Button (left) */}
         <button
-          onClick={() => (window.location.href = "/")}
-          className="ml-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl shadow transition-all font-semibold text-base flex items-center gap-2"
-          title="Go to Home"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          title="Back"
+          onClick={() => window.history.back()}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
-          Home
+          <span className="hidden md:inline">Back</span>
+        </button>
+        {/* Centered logo and heading */}
+        <div className="flex items-center gap-3 mx-auto">
+          <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
+          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">My Orders</h1>
+        </div>
+        {/* Home Button (right) */}
+        <button
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          title="Home"
+          onClick={() => window.location.href = '/'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
+          </svg>
+          <span className="hidden md:inline">Home</span>
         </button>
       </div>
 

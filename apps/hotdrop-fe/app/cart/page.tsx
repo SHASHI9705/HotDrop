@@ -20,9 +20,8 @@ interface CartItem {
 
 export default function CartPage() {
   return (
-    <>
-      {/* Nav Bar with Back, Heading, and Home */}
-      <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
+      <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
         {/* Back Button (left) */}
         <button
           className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
@@ -57,7 +56,7 @@ export default function CartPage() {
       <div className="md:hidden">
         <PhoneFooter />
       </div>
-    </>
+    </div>
   );
 }
 

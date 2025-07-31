@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
+import Loader from "../../components/Loader";
+
 
 // Define types for partner and item
 interface Item {
@@ -20,9 +22,8 @@ interface Partner {
 
 export default function OrdersPage() {
   return (
-    <>
-      {/* Nav Bar with Back, Heading, and Home */}
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 flex flex-col items-center pt-8 px-4 pb-24">
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
         {/* Back Button (left) */}
         <button
           className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
@@ -54,36 +55,10 @@ export default function OrdersPage() {
       <Suspense fallback={<p>Loading...</p>}>
         <OrdersContent />
       </Suspense>
-    </>
-  );
-}
-
-// WaterLoader: animated water fill loader (copied from main page)
-function WaterLoader() {
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-64">
-      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
-        {/* Water */}
-        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
-        {/* Text */}
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <span className="text-white font-bold text-lg">Loading</span>
-        </div>
-      </div>
-      {/* Keyframes for the wave animation */}
-      <style>{`
-        @keyframes fillWave {
-          0% { transform: translateY(100%); }
-          50% { transform: translateY(50%); }
-          100% { transform: translateY(100%); }
-        }
-        .animate-fillWave {
-          animation: fillWave 2s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
+
 
 function OrdersContent() {
   const searchParams = useSearchParams();
@@ -137,12 +112,14 @@ function OrdersContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-red-100 to-red-300">
+    <div className="min-h-screen flex flex-col ">
       <div className="pl-0 md:pl-12">
         <h2 className="text-3xl font-extrabold text-black/80 ml-2 mb-2 drop-shadow-sm">{itemName.toUpperCase()}</h2>
         <p className="text-lg ml-2 text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
         {loading ? (
-          <WaterLoader />
+          <div className="flex items-center justify-center min-h-[60vh] w-full">
+            <Loader />
+          </div>
         ) : foodPartners.length === 0 ? (
           <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 w-full">Coming soon...</div>
         ) : (

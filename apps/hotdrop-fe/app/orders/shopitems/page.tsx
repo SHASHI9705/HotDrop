@@ -1,36 +1,14 @@
 "use client"
 
 
+
 import Image from "next/image";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Loader from "../../../components/Loader";
 
-// WaterLoader: animated water fill loader (copied from main page)
-function WaterLoader() {
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-64">
-      <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
-        {/* Water */}
-        <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
-        {/* Text */}
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <span className="text-white font-bold text-lg">Loading</span>
-        </div>
-      </div>
-      {/* Keyframes for the wave animation */}
-      <style>{`
-        @keyframes fillWave {
-          0% { transform: translateY(100%); }
-          50% { transform: translateY(50%); }
-          100% { transform: translateY(100%); }
-        }
-        .animate-fillWave {
-          animation: fillWave 2s ease-in-out infinite;
-        }
-      `}</style>
-    </div>
-  );
-}
+
+
 
 interface Item {
   name: string;
@@ -50,10 +28,18 @@ function isAvailable(item: Item) {
 }
 
 export default function ShopItemsPage() {
+  const [shopHeading, setShopHeading] = useState('Shop');
+  // Set shop heading from URL on client only
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const shop = new URLSearchParams(window.location.search).get('shop');
+      setShopHeading(shop || 'Shop');
+    }
+  }, []);
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 flex flex-col items-center pt-8 px-4 pb-24">
       {/* Nav Bar with Back, Heading, and Home (no ratings) */}
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-1 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200 mt-1">
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
         {/* Back Button (left) */}
         <button
           className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
@@ -68,7 +54,7 @@ export default function ShopItemsPage() {
         {/* Centered logo and heading */}
         <div className="flex items-center gap-3 mx-auto">
           <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
-          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">{typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('shop') || 'Shop')}</h1>
+          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">{shopHeading}</h1>
         </div>
         {/* Home Button (right) */}
         <button
@@ -85,7 +71,7 @@ export default function ShopItemsPage() {
       <Suspense fallback={<p>Loading...</p>}>
         <ShopItemsContent />
       </Suspense>
-    </>
+    </div>
   );
 }
 
@@ -191,12 +177,14 @@ function ShopItemsContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-white via-orange-100 to-orange-300">
+    <div className="min-h-screen flex flex-col">
       {/* ...header removed, replaced by nav above... */}
       <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
         <h2 className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
         {loading ? (
-          <WaterLoader />
+          <div className="flex items-center justify-center min-h-[60vh] w-full">
+            <Loader />
+          </div>
         ) : items.length === 0 ? (
           <div className="text-center text-gray-500 py-12 text-base sm:text-lg">No items found for this menu.</div>
         ) : (
