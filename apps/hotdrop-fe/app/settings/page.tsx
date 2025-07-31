@@ -88,6 +88,20 @@ export default function SettingsPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('hotdrop_theme', theme);
+      // Set cookie for SSR dark mode
+      document.cookie = `hotdrop_theme=${theme}; path=/; max-age=31536000`;
+    }
+  }, [theme]);
+
+  // Toggle the 'dark' class on <html> when theme changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const root = window.document.documentElement;
+      if (theme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
     }
   }, [theme]);
 
@@ -142,9 +156,9 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 flex flex-col items-center pt-8 px-4 pb-24 transition-colors duration-300">
       {/* Nav Bar */}
-      <div className="w-full max-w-2xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+      <div className="w-full max-w-2xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700 transition-colors duration-300">
         {/* Back Button (left) */}
         <button
           className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
@@ -172,7 +186,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Profile Information Card */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-orange-200 px-6 py-8 mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-orange-200 dark:border-gray-700 px-6 py-8 mb-8 transition-colors duration-300">
         <h2 className="text-lg sm:text-xl font-bold text-orange-500 mb-6 pl-1">Profile Information</h2>
         <div className="flex flex-row items-center gap-6">
           {/* Profile Circle with Star */}
@@ -191,8 +205,8 @@ export default function SettingsPage() {
           </div>
           {/* Name and Email (right side) */}
           <div className="flex flex-col items-start justify-center w-full ml-4 sm:ml-6">
-            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2 break-words w-full">{user?.name || "Your Name"}</div>
-            <div className="text-xs sm:text-lg md:text-xl text-gray-500 font-medium break-words w-full sm:max-w-xs sm:max-w-none">{user?.email || "your@email.com"}</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 break-words w-full">{user?.name || "Your Name"}</div>
+            <div className="text-xs sm:text-lg md:text-xl text-gray-500 dark:text-gray-300 font-medium break-words w-full sm:max-w-xs sm:max-w-none">{user?.email || "your@email.com"}</div>
             <button
               className="mt-4 px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition"
               onClick={() => {
@@ -284,13 +298,13 @@ export default function SettingsPage() {
         </div>
       </div>
       {/* Appearance Box */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow border border-orange-200 px-6 py-6 flex items-center justify-between mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-200 dark:border-gray-700 px-6 py-6 flex items-center justify-between mb-8 transition-colors duration-300">
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-orange-500 mb-1">Appearance</h3>
-          <p className="text-gray-600 text-sm sm:text-base">Switch between light and dark theme.</p>
+          <h3 className="text-base sm:text-lg font-bold text-orange-500 dark:text-orange-300 mb-1 transition-colors duration-300">Appearance</h3>
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base transition-colors duration-300">Switch between light and dark theme.</p>
         </div>
         <button
-          className="ml-4 flex items-center justify-center w-14 h-14 rounded-full bg-orange-50 hover:bg-orange-100 transition border border-orange-100"
+          className="ml-4 flex items-center justify-center w-14 h-14 rounded-full bg-orange-50 dark:bg-gray-700 hover:bg-orange-100 dark:hover:bg-gray-600 transition border border-orange-100 dark:border-gray-600"
           aria-label="Toggle theme"
           onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         >
@@ -310,17 +324,17 @@ export default function SettingsPage() {
       </div>
 
       {/* Notifications Card */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow border border-orange-200 px-6 py-6 flex flex-col gap-4 mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-200 dark:border-gray-700 px-6 py-6 flex flex-col gap-4 mb-8 transition-colors duration-300">
         <h3 className="text-base sm:text-lg font-bold text-orange-500 mb-2">Notifications</h3>
         <div className="flex flex-col gap-4 w-full">
           {/* Order Updates */}
           <div className="flex items-center justify-between w-full">
             <div>
-              <div className="text-sm sm:text-base font-semibold text-gray-800 mb-1">Order Updates</div>
-              <p className="text-gray-600 text-xs sm:text-sm max-w-xs">Get notified about your order status.</p>
+              <div className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">Order Updates</div>
+              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm max-w-xs">Get notified about your order status.</p>
             </div>
             <button
-              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${orderUpdatesEnabled ? 'bg-orange-400 border-orange-400' : 'bg-gray-200 border-gray-300'}`}
+              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${orderUpdatesEnabled ? 'bg-gradient-to-r from-orange-500 to-red-500' : 'bg-gray-200 border-gray-300'}`}
               role="switch"
               aria-checked={orderUpdatesEnabled}
               onClick={() => setOrderUpdatesEnabled(v => !v)}
@@ -333,11 +347,11 @@ export default function SettingsPage() {
           {/* Promotion Updates */}
           <div className="flex items-center justify-between w-full">
             <div>
-              <div className="text-sm sm:text-base font-semibold text-gray-800 mb-1">Promotion Updates</div>
-              <p className="text-gray-600 text-xs sm:text-sm max-w-xs">Get offers and deals.</p>
+              <div className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">Promotion Updates</div>
+              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm max-w-xs">Get offers and deals.</p>
             </div>
             <button
-              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${promoUpdatesEnabled ? 'bg-orange-400 border-orange-400' : 'bg-gray-200 border-gray-300'}`}
+              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${promoUpdatesEnabled ? 'bg-gradient-to-r from-orange-500 to-red-500' : 'bg-gray-200 border-gray-300'}`}
               role="switch"
               aria-checked={promoUpdatesEnabled}
               onClick={() => setPromoUpdatesEnabled(v => !v)}
@@ -350,11 +364,11 @@ export default function SettingsPage() {
           {/* SMS Notifications */}
           <div className="flex items-center justify-between w-full">
             <div>
-              <div className="text-sm sm:text-base font-semibold text-gray-800 mb-1">SMS Notifications</div>
-              <p className="text-gray-600 text-xs sm:text-sm max-w-xs">Get updates via SMS.</p>
+              <div className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">SMS Notifications</div>
+              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm max-w-xs">Get updates via SMS.</p>
             </div>
             <button
-              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${smsNotificationsEnabled ? 'bg-orange-400 border-orange-400' : 'bg-gray-200 border-gray-300'}`}
+              className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${smsNotificationsEnabled ? 'bg-gradient-to-r from-orange-500 to-red-500' : 'bg-gray-200 border-gray-300'}`}
               role="switch"
               aria-checked={smsNotificationsEnabled}
               onClick={() => setSmsNotificationsEnabled(v => !v)}
@@ -368,20 +382,20 @@ export default function SettingsPage() {
       </div>
 
       {/* Data and Privacy Card */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow border border-orange-200 px-6 py-6 flex flex-col gap-2 mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-200 dark:border-gray-700 px-6 py-6 flex flex-col gap-2 mb-8 transition-colors duration-300">
         <h3 className="text-base sm:text-lg font-bold text-orange-500 mb-2">Data and Privacy</h3>
         <div className="flex flex-col divide-y divide-orange-100">
           {/* Export My Data */}
-          <button className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition">
+          <button className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition">
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
               {/* Download SVG */}
               <svg width="22" height="22" fill="none" stroke="#fb923c" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 3v14m0 0l-4-4m4 4l4-4" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="17" width="16" height="4" rx="2" fill="#fff3"/></svg>
             </span>
-            <span className="text-base font-medium text-gray-800">Export My Data</span>
+            <span className="text-base font-medium text-gray-800 dark:text-gray-100">Export My Data</span>
           </button>
           {/* Share App */}
           <button
-            className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition relative"
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition relative"
             onClick={async () => {
               try {
                 await navigator.clipboard.writeText('https://hotdrop.tech');
@@ -404,7 +418,7 @@ export default function SettingsPage() {
               {/* Share SVG */}
               <svg width="22" height="22" fill="none" stroke="#fb923c" strokeWidth="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </span>
-            <span className="text-base font-medium text-gray-800">Share App</span>
+            <span className="text-base font-medium text-gray-800 dark:text-gray-100">Share App</span>
             {/* Copied message */}
             {showShareCopied && (
               <span
@@ -417,7 +431,7 @@ export default function SettingsPage() {
           </button>
           {/* Delete Account */}
           <button
-            className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition"
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition"
             onClick={() => setShowDeleteConfirm(true)}
           >
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
@@ -430,7 +444,7 @@ export default function SettingsPage() {
                 <path d="M14 11v4" strokeLinecap="round"/>
               </svg>
             </span>
-            <span className="text-base font-medium text-red-500">Delete Account</span>
+            <span className="text-base font-medium text-red-500 dark:text-red-400">Delete Account</span>
           </button>
           {/* Delete Account Confirmation Popup */}
           {typeof window !== 'undefined' && showDeleteConfirm && (
@@ -502,23 +516,23 @@ export default function SettingsPage() {
       </div>
 
       {/* Help and Support Card */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow border border-orange-200 px-6 py-6 flex flex-col gap-2 mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-200 dark:border-gray-700 px-6 py-6 flex flex-col gap-2 mb-8 transition-colors duration-300">
         <h3 className="text-base sm:text-lg font-bold text-orange-500 mb-2">Help and Support</h3>
         <div className="flex flex-col divide-y divide-orange-100">
           {/* Help Center */}
           <button
-            className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition"
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition"
             onClick={() => router.push('/footeroptions/help')}
           >
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
               {/* Help SVG */}
               <svg width="22" height="22" fill="none" stroke="#fb923c" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 3-3 3" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="17" r="1"/></svg>
             </span>
-            <span className="text-base font-medium text-gray-800">Help Center</span>
+            <span className="text-base font-medium text-gray-800 dark:text-gray-100">Help Center</span>
           </button>
           {/* Contact Support */}
           <button
-            className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition"
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition"
             onClick={() => router.push('/footeroptions/help')}
           >
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
@@ -528,25 +542,25 @@ export default function SettingsPage() {
                 <path d="M3 7l9 6 9-6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </span>
-            <span className="text-base font-medium text-gray-800">Contact Support</span>
+            <span className="text-base font-medium text-gray-800 dark:text-gray-100">Contact Support</span>
           </button>
           {/* Send Feedback */}
           <button
-            className="flex items-center gap-4 py-4 hover:bg-orange-50 rounded-lg transition"
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition"
             onClick={() => router.push('/footeroptions/help')}
           >
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
               {/* Feedback SVG */}
               <svg width="22" height="22" fill="none" stroke="#fb923c" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="11" r="1"/><circle cx="17" cy="11" r="1"/><circle cx="7" cy="11" r="1"/></svg>
             </span>
-            <span className="text-base font-medium text-gray-800">Send Feedback</span>
+            <span className="text-base font-medium text-gray-800 dark:text-gray-100">Send Feedback</span>
           </button>
         </div>
       </div>
       {/* Logout Card */}
-      <div className="w-full max-w-2xl mx-auto bg-red-500 rounded-xl shadow border border-red-500 px-6 py-4 flex items-center justify-center mb-8">
+      <div className="w-full max-w-2xl mx-auto bg-gradient-to-r from-orange-500 to-red-500 dark:from-gray-900 dark:to-gray-800 rounded-xl shadow border border-red-500 dark:border-gray-700 px-6 py-4 flex items-center justify-center mb-8 transition-colors duration-300">
         <button
-          className="flex items-center gap-2 py-1.5 px-3 bg-red-500 hover:bg-red-600 focus:bg-red-600 rounded-lg transition w-full justify-center outline-none min-h-0"
+          className="flex items-center gap-2 py-1.5 px-3 bg-gradient-to-r from-orange-500 to-red-500 hover:bg-red-600 focus:bg-red-600 rounded-lg transition w-full justify-center outline-none min-h-0"
           onClick={() => {
             if (typeof window !== 'undefined') {
               localStorage.removeItem('hotdrop_user');

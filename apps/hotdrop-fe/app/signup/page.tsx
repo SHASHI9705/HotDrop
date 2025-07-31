@@ -96,16 +96,16 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-100 to-blue-50 animate-gradient-x p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-100 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient-x p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="backdrop-blur-lg bg-white/90 shadow-xl rounded-3xl px-8 py-10 w-full max-w-md border border-white/20 relative overflow-hidden"
+        className="backdrop-blur-lg bg-white/90 dark:bg-gray-900/90 shadow-xl rounded-3xl px-8 py-10 w-full max-w-md border border-white/20 dark:border-gray-700 relative overflow-hidden"
       >
         {/* Decorative elements */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-200 dark:bg-orange-900 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="relative z-10">
           <div className="flex justify-center mb-6">
             <motion.div
@@ -117,7 +117,7 @@ export default function Signup() {
             </motion.div>
           </div>
           <motion.h2
-            className="text-3xl font-bold text-center mb-6 text-gray-800"
+            className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -126,7 +126,7 @@ export default function Signup() {
           </motion.h2>
           {error && (
             <motion.div
-              className="p-3 bg-red-50 text-red-600 rounded-lg flex items-start mb-4"
+              className="p-3 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-lg flex items-start mb-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -143,11 +143,11 @@ export default function Signup() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1">Name</label>
                 <input
                   type="text"
                   placeholder="Your Name"
-                  className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                  className="w-full border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   required
@@ -158,11 +158,11 @@ export default function Signup() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.25 }}
               >
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1">Email</label>
                 <input
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                  className="w-full border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
@@ -173,11 +173,11 @@ export default function Signup() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1">Password</label>
                 <input
                   type="password"
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                  className="w-full border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
@@ -208,13 +208,13 @@ export default function Signup() {
             </form>
           )}
           <div className="my-6 flex items-center">
-            <div className="flex-grow border-t border-gray-200"></div>
-            <span className="mx-4 text-sm text-gray-500">or continue with</span>
-            <div className="flex-grow border-t border-gray-200"></div>
+            <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+            <span className="mx-4 text-sm text-gray-500 dark:text-gray-300">or continue with</span>
+            <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
           </div>
           <motion.button
             onClick={handleGoogleSignup}
-            className="w-full border border-gray-200 py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3 bg-white"
+            className="w-full border border-gray-200 dark:border-gray-700 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-3 bg-white dark:bg-gray-900"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0, y: 10 }}
@@ -223,10 +223,10 @@ export default function Signup() {
             disabled={loading}
           >
             <img src="/google.svg" alt="Google" className="w-5 h-5" />
-            <span className="text-sm text-gray-700 font-medium">Google</span>
+            <span className="text-sm text-gray-700 dark:text-gray-100 font-medium">Google</span>
           </motion.button>
           <motion.p
-            className="text-center mt-6 text-sm text-gray-500"
+            className="text-center mt-6 text-sm text-gray-500 dark:text-gray-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
@@ -234,7 +234,7 @@ export default function Signup() {
             Already have an account?{" "}
             <button
               type="button"
-              className="text-orange-600 hover:underline font-medium"
+              className="text-orange-600 dark:text-orange-400 hover:underline font-medium"
               onClick={() => router.push("/signin")}
             >
               Log in

@@ -33,15 +33,15 @@ function ShopNameSubheading() {
   return (
     <div className="relative ml-4">
       <button
-        className="text-lg md:text-xl font-bold text-black focus:outline-none"
+        className="text-lg md:text-xl font-bold text-black dark:text-gray-100 focus:outline-none"
         onClick={() => setShowDropdown((v) => !v)}
       >
         {shopname}
       </button>
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50">
           <button
-            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+            className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={handleLogout}
           >
             Logout
@@ -61,17 +61,17 @@ function EarningSection({ orders }: { orders: any[] }) {
     .reduce((sum, order) => sum + (Number(order.price) || 0), 0);
   return (
     <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
-        <div className="text-2xl font-bold text-orange-500">₹{totalEarnings.toFixed(2)}</div>
-        <div className="text-gray-700 mt-2">Total Earnings</div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200 dark:border-gray-700">
+        <div className="text-2xl font-bold text-orange-500 dark:text-orange-300">₹{totalEarnings.toFixed(2)}</div>
+        <div className="text-gray-700 dark:text-gray-300 mt-2">Total Earnings</div>
       </div>
-      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
-        <div className="text-2xl font-bold text-green-500">₹{todayEarnings.toFixed(2)}</div>
-        <div className="text-gray-700 mt-2">Today's Earnings</div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200 dark:border-gray-700">
+        <div className="text-2xl font-bold text-green-500 dark:text-green-400">₹{todayEarnings.toFixed(2)}</div>
+        <div className="text-gray-700 dark:text-gray-300 mt-2">Today's Earnings</div>
       </div>
-      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200">
-        <div className="text-2xl font-bold text-blue-500">{totalOrders}</div>
-        <div className="text-gray-700 mt-2">Total Orders</div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center border border-orange-200 dark:border-gray-700">
+        <div className="text-2xl font-bold text-blue-500 dark:text-blue-400">{totalOrders}</div>
+        <div className="text-gray-700 dark:text-gray-300 mt-2">Total Orders</div>
       </div>
     </div>
   );
@@ -239,77 +239,71 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50">
-      <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
-        <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="w-10 h-10 rounded"
-          />
-          <div className="text-3xl font-extrabold text-gray-800">HotDrop</div>
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-r from-white via-red-200 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 pt-2 p-6">
+      <nav className="pl-2 pr-2 w-full max-w-4xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
+        {/* Left: Logo and heading */}
+        <div className="flex items-center gap-2 md:gap-3">
+          <img src="/logo.png" alt="HotDrop Logo" className="w-8 h-8 md:w-12 md:h-12" />
+          <h1 className="text-lg md:text-2xl font-bold text-orange-500 dark:text-orange-300 drop-shadow-sm whitespace-nowrap">HotDrop Dashboard</h1>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0 justify-center">
+        {/* Right: Home button only */}
+        <div className="flex items-center gap-4">
           <button
-            className="relative bg-orange-400 text-white px-6 py-2 rounded-full hover:bg-orange-500 transition-colors duration-300 text-lg font-semibold w-full md:w-auto shadow-md border border-orange-500"
-            onClick={() => {
-              const section = document.getElementById('notification-section');
-              if (section) section.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            Notification
-            {notificationCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 border border-white">
-                {notificationCount}
-              </span>
-            )}
-          </button>
-        </div>
-        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0 justify-end">
-          <ShopNameSubheading />
-          <button
-            className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto"
+            className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-700 dark:to-red-700 text-white dark:text-gray-100 px-3 md:px-6 py-2 rounded-md hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 text-lg font-semibold flex items-center gap-2"
             onClick={() => router.push("/partner")}
           >
-            Home
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-0 md:mr-1">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
+            </svg>
+            <span className="hidden md:inline">Home</span>
           </button>
         </div>
       </nav>
-      {/* Profile Update + Shop Image Section (side by side, separate cards) */}
-      <PartnerDetails
-        shopName={shopName}
-        setShopName={setShopName}
-        shopCategory={shopCategory}
-        setShopCategory={setShopCategory}
-        shopImage={shopImage}
-        setShopImage={setShopImage}
-        imageFile={imageFile}
-        setImageFile={setImageFile}
-        loading={loading}
-        saving={saving}
-        handleProfileSave={handleProfileSave}
-        handleShopImageSave={handleShopImageSave}
-      />
-      {/* Earning Summary Section (dynamic) */}
-      <EarningSection orders={orders} />
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
+        {/* Profile Update + Shop Image Section (side by side, separate cards) */}
+        <div className="w-full flex justify-center">
+          <PartnerDetails
+            shopName={shopName}
+            setShopName={setShopName}
+            shopCategory={shopCategory}
+            setShopCategory={setShopCategory}
+            shopImage={shopImage}
+            setShopImage={setShopImage}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            loading={loading}
+            saving={saving}
+            handleProfileSave={handleProfileSave}
+            handleShopImageSave={handleShopImageSave}
+          />
+        </div>
+        {/* Earning Summary Section (dynamic) */}
+        <EarningSection orders={orders} />
 
-      {/* Reviews Section */}
-      <ShopReviewsSection />
-      {/* Notification Section */}
-      <NotificationSection />
-      {/* Order List Section */}
-      <h1 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mt-8 mb-8">Order list</h1>
-      <OrderListSection />
-      <div className="w-full flex justify-center mt-12 mb-8">
-        <button
-          className="bg-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-red-600 transition-colors duration-300"
-          onClick={() => {
-            localStorage.removeItem("hotdrop_partner");
-            router.push("/");
-          }}
-        >
-          Logout
-        </button>
+        {/* Reviews Section */}
+        <div className="w-full flex justify-center">
+          <ShopReviewsSection />
+        </div>
+        {/* Notification Section */}
+        <div className="w-full flex justify-center">
+          <NotificationSection />
+        </div>
+        {/* Order List Section */}
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center dark:text-white text-gray-900 mt-8 mb-8">Order list</h1>
+        <div className="w-full flex justify-center">
+          <OrderListSection />
+        </div>
+        <div className="w-full flex justify-center mt-12 mb-8">
+          <button
+            className="bg-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-red-600 transition-colors duration-300"
+            onClick={() => {
+              localStorage.removeItem("hotdrop_partner");
+              router.push("/");
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

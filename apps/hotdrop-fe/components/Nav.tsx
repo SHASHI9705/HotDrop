@@ -51,14 +51,14 @@ export default function Nav({
       {sidebarOpen && (
         <div className="fixed inset-0 z-[999999]">
           {/* Overlay */}
-          <div className="fixed inset-0 z-[999999] bg-black bg-opacity-40" onClick={handleSidebarClose}></div>
+          <div className="fixed inset-0 z-[999999] bg-black bg-opacity-40 dark:bg-gray-900 dark:bg-opacity-80" onClick={handleSidebarClose}></div>
           {/* Sidebar */}
-          <div className="fixed top-0 right-0 h-screen w-[90vw] max-w-xs z-[999999] bg-gradient-to-br from-white via-red-200 to-blue-50 shadow-2xl flex flex-col p-6 animate-slideInRight">
-            <button className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black" onClick={handleSidebarClose} aria-label="Close menu">&times;</button>
+          <div className="fixed top-0 right-0 h-screen w-[90vw] max-w-xs z-[999999] bg-gradient-to-br from-white via-red-200 to-blue-50 shadow-2xl flex flex-col p-6 animate-slideInRight dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+            <button className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black dark:text-gray-500 dark:hover:text-white" onClick={handleSidebarClose} aria-label="Close menu">&times;</button>
             <div className="flex flex-col gap-6 mt-10">
               <div className="relative flex justify-center mb-2">
                 <button
-                  className="w-20 h-20 rounded-full bg-orange-500 text-white font-bold text-4xl flex items-center justify-center shadow-lg border-4 border-white relative"
+                  className="w-20 h-20 rounded-full bg-orange-500 text-white font-bold text-4xl flex items-center justify-center shadow-lg border-4 border-white relative dark:bg-orange-700 dark:border-gray-900"
                   onClick={() => { router.push('/profile'); handleSidebarClose(); }}
                   title={user?.name}
                 >
@@ -73,31 +73,31 @@ export default function Nav({
                   </span>
                 </button>
               </div>
-              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3" onClick={() => { router.push('/profile'); handleSidebarClose(); }}>
+              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-orange-200 dark:hover:bg-orange-950" onClick={() => { router.push('/profile'); handleSidebarClose(); }}>
                 <span className="flex-shrink-0">
                   <svg width="24" height="24" fill="none" stroke="#f59e42" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
                 </span>
                 My Profile
               </button>
-              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3" onClick={() => { router.push('/myorders'); handleSidebarClose(); }}>
+              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-orange-200 dark:hover:bg-orange-950" onClick={() => { router.push('/myorders'); handleSidebarClose(); }}>
                 <span className="flex-shrink-0">
                   <svg width="24" height="24" fill="none" stroke="#f59e42" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>
                 </span>
                 My Orders
               </button>
-              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3" onClick={() => { router.push('/settings'); handleSidebarClose(); }}>
+              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-orange-200 dark:hover:bg-orange-950" onClick={() => { router.push('/settings'); handleSidebarClose(); }}>
                 <span className="flex-shrink-0">
                   <svg width="24" height="24" fill="none" stroke="#f59e42" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 5 15.4a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 5 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 4.6c.26-.17.57-.26.89-.26.32 0 .63.09.89.26a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .32.09.63.26.89a1.65 1.65 0 0 0 1.51 1h.09a2 2 0 1 1 0 4h-.09c-.32 0-.63.09-.89.26a1.65 1.65 0 0 0-1 1.51V12z"/></svg>
                 </span>
                 Settings
               </button>
-              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3" onClick={() => { router.push('/partner/signup'); handleSidebarClose(); }}>
+              <button className="text-lg font-semibold text-gray-800 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-50 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-orange-200 dark:hover:bg-orange-950" onClick={() => { router.push('/partner/signup'); handleSidebarClose(); }}>
                 <span className="flex-shrink-0">
                   <svg width="24" height="24" fill="none" stroke="#f59e42" strokeWidth="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 19v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </span>
                 Partner with us
               </button>
-              <button className="text-lg font-semibold text-red-600 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-red-100 transition flex items-center gap-3" onClick={() => { handleLogout(); handleSidebarClose(); }}>
+              <button className="text-lg font-semibold text-red-600 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-red-100 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-red-400 dark:hover:bg-red-950" onClick={() => { handleLogout(); handleSidebarClose(); }}>
                 <span className="flex-shrink-0">
                   <svg width="24" height="24" fill="none" stroke="#ef4444" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
                 </span>
@@ -116,7 +116,7 @@ export default function Nav({
           `}</style>
         </div>
       )}
-      <nav className="fixed pt-4 top-0 left-0 w-full z-50 bg-gradient-to-r from-white via-red-200 to-blue-50 backdrop-blur-md mb-4 overflow-x-hidden overflow-y-hidden">
+      <nav className="fixed pt-4 top-0 left-0 w-full z-50 bg-gradient-to-r from-white via-red-200 to-blue-50 backdrop-blur-md mb-4 overflow-x-hidden overflow-y-hidden dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
         <div className="max-w-screen-xl mx-auto flex flex-row items-center justify-center px-2 w-full">
           {/* Left: Logo, Heading, and Search */}
           <div className="flex items-center gap-2">
@@ -133,8 +133,8 @@ export default function Nav({
                 duration: 1.2,
               }}
             />
-            <motion.div
-              className="text-4xl font-extrabold text-gray-800 hidden sm:block"
+        <motion.div
+          className="text-4xl font-extrabold text-gray-800 hidden sm:block dark:text-orange-200"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
@@ -158,7 +158,7 @@ export default function Nav({
                 onChange={e => setSearch(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSearch(); } }}
                 placeholder="Search for any food e.g. burger"
-                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-56 md:w-72"
+                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-56 md:w-72 dark:bg-gray-900 dark:text-orange-200 dark:border-orange-700 dark:focus:ring-orange-500"
                 style={{ minWidth: '180px' }}
               />
             </div>
@@ -175,13 +175,13 @@ export default function Nav({
                 onChange={e => setSearch(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSearch(); } }}
                 placeholder="Search for any food item"
-                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-full"
+                className="pl-10 pr-4 py-2 rounded-full border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base w-full dark:bg-gray-900 dark:text-orange-200 dark:border-orange-700 dark:focus:ring-orange-500"
                 style={{ minWidth: '120px' }}
               />
             </div>
             {/* Hamburger menu for mobile: only show if logged in */}
             {user && (
-              <button className="sm:hidden ml-2 p-2 rounded focus:outline-none" aria-label="Open menu" onClick={handleSidebarOpen}>
+              <button className="sm:hidden ml-2 p-2 rounded focus:outline-none dark:bg-gray-900 dark:text-orange-300" aria-label="Open menu" onClick={handleSidebarOpen}>
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-orange-500">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -189,25 +189,25 @@ export default function Nav({
             )}
           </div>
           {/* Right: Nav Options and Profile (hidden on mobile) */}
-          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden" style={{height: '64px'}}>
+          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
             {user && (
-              <a href="/myorders" className="nav-underline px-4 min-w-[130px]">My Orders</a>
+              <a href="/myorders" className="nav-underline px-4 min-w-[130px] dark:text-orange-200">My Orders</a>
             )}
             {user ? (
               <>
-                <a href="/restaurants" className="nav-underline px-4 min-w-[130px]">Restaurants</a>
-                <a href="/favourites" className="nav-underline px-4 min-w-[120px]">Favourites</a>
-                <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
+                <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-orange-200">Restaurants</a>
+                <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-orange-200">Favourites</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-orange-200">Help</a>
               </>
             ) : (
               <>
-                <a href="/signin" className="nav-underline min-w-[90px]">Login</a>
-                <a href="/footeroptions/help" className="nav-underline min-w-[110px]">Help</a>
+                <a href="/signin" className="nav-underline min-w-[90px] dark:text-orange-200">Login</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-orange-200">Help</a>
               </>
             )}
             {user ? (
               <button
-                className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105 overflow-hidden"
+                className="w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-2xl flex items-center justify-center cursor-pointer focus:outline-none shadow-md border-4 border-white transition-transform hover:scale-105 overflow-hidden dark:bg-orange-700 dark:border-gray-900"
                 onClick={() => router.push("/profile")}
                 title={user.name}
                 style={{ minWidth: '48px', minHeight: '48px' }}
@@ -216,7 +216,7 @@ export default function Nav({
               </button>
             ) : (
               <button
-                className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80"
+                className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-black/80 dark:bg-gray-900 dark:text-orange-200 dark:hover:bg-gray-800"
                 onClick={() => (window.location.href = "/signup")}
               >
                 Get Started
@@ -232,6 +232,9 @@ export default function Nav({
                 display: inline-block;
                 min-width: 0 !important;
               }
+              .nav-underline.dark {
+                color: #fdba74 !important; /* orange-300 */
+              }
               .nav-underline::after {
                 content: '';
                 position: absolute;
@@ -241,6 +244,9 @@ export default function Nav({
                 height: 2.4px;
                 background: #000000ff; /* orange-400 */
                 transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+              }
+              .nav-underline.dark::after {
+                background: #fdba74 !important; /* orange-300 */
               }
               .nav-underline:hover::after {
                 width: 100%;

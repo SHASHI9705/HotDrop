@@ -25,9 +25,9 @@ export default function FoodSection() {
     router.push(`/orders?food=${encodeURIComponent(foodName)}`);
   };
   return (
-    <section id={foodSectionId} className="my-8 w-full max-w-8xl mx-auto">
-      <h2 className="mt-16 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2">
-        What are you <span className="text-orange-600">craving</span> for?
+    <section id={foodSectionId} className="my-8 w-full max-w-8xl mx-auto dark:from-gray-900 dark:via-gray-950 dark:to-gray-90">
+      <h2 className="mt-16 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2 dark:text-white">
+        What are you <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent dark:from-orange-400 dark:to-red-400">craving</span> for?
       </h2>
       <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-6 sm:gap-y-8">
         {foods.map((food) => (
@@ -44,7 +44,7 @@ export default function FoodSection() {
                 backgroundColor: "transparent"
               }}
               transition={{ type: "spring", stiffness: 300, damping: 18 }}
-              className="rounded-xl p-1 w-[96px] sm:w-full flex flex-col items-center transition-colors transition-shadow duration-200 bg-white border border-orange-300 md:bg-transparent md:border-0 sm:p-2"
+              className="rounded-xl p-1 w-[96px] sm:w-full flex flex-col items-center transition-colors transition-shadow duration-200 bg-white border border-orange-300 md:bg-transparent md:border-0 sm:p-2 dark:bg-gray-900 dark:border-orange-700"
               style={{ backgroundColor: undefined, boxShadow: "none" }}
             >
               <motion.img
@@ -54,7 +54,7 @@ export default function FoodSection() {
                 whileHover={{ scale: 1.08, rotate: -4 }}
                 transition={{ type: "spring", stiffness: 200, damping: 16 }}
               />
-              <span className="font-semibold text-gray-800 text-xs sm:text-base text-center truncate w-full">
+              <span className="font-semibold text-gray-800 text-xs sm:text-base text-center truncate w-full dark:text-orange-200">
                 {food.name}
               </span>
             </motion.div>

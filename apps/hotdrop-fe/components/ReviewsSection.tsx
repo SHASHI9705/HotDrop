@@ -62,15 +62,15 @@ const speeds = [40, 55]; // seconds for one full loop, different for each line
 
 export default function ReviewsSection() {
 	return (
-		<section className="my-16 w-full max-w-6xl mx-auto">
-			<h2 className="mt-12 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2">
-				What Our <span className="text-orange-600">Customers</span> Say
+	   <section className="my-16 w-full max-w-6xl mx-auto dark:from-gray-900 dark:via-gray-950 dark:to-gray-90">
+		   <h2 className=" text-3xl font-bold text-black mb-8 text-left pl-2 ml-2 dark:text-white">
+				What Our <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Customers</span> Say
 			</h2>
-			<div className="space-y-8">
+		   <div className="space-y-8">
 				{reviewGroups.map((group, i) => (
-					<div key={i} className="overflow-hidden w-full">
-						<motion.div
-							className="flex gap-8"
+			   <div key={i} className="overflow-hidden w-full">
+				   <motion.div
+					   className="flex gap-8"
 							animate={i === 1 ? { x: [-1000, 0] } : { x: [0, -1000] }}
 							transition={{
 								repeat: Infinity,
@@ -80,33 +80,33 @@ export default function ReviewsSection() {
 							}}
 							style={{ width: "max-content" }}
 						>
-							{[...group, ...group].map((review, idx) => (
-								<div
-									key={idx}
-									className="bg-white mt-4 mb-4 rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200"
-								>
-									<div className="flex items-center mb-2">
-										<span className="font-bold text-gray-800 text-lg mr-2">
-											{review.name}
-										</span>
-										<span className="flex items-center">
-											{Array.from({ length: review.rating }).map((_, i) => (
-												<svg
-													key={i}
-													className="w-5 h-5 text-yellow-400"
-													fill="currentColor"
-													viewBox="0 0 20 20"
-												>
-													<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
-												</svg>
-											))}
-										</span>
-									</div>
-									<p className="text-gray-700 text-base mt-2">
-										{review.text}
-									</p>
-								</div>
-							))}
+					   {[...group, ...group].map((review, idx) => (
+						   <div
+							   key={idx}
+							   className="bg-white mt-4 mb-4 rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200 dark:bg-gray-900 dark:border-gray-800"
+						   >
+							   <div className="flex items-center mb-2">
+								   <span className="font-bold text-gray-800 text-lg mr-2 dark:text-orange-200">
+									   {review.name}
+								   </span>
+								   <span className="flex items-center">
+									   {Array.from({ length: review.rating }).map((_, i) => (
+										   <svg
+											   key={i}
+											   className="w-5 h-5 text-yellow-400 dark:text-yellow-300"
+											   fill="currentColor"
+											   viewBox="0 0 20 20"
+										   >
+											   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+										   </svg>
+									   ))}
+								   </span>
+							   </div>
+							   <p className="text-gray-700 text-base mt-2 dark:text-gray-200">
+								   {review.text}
+							   </p>
+						   </div>
+					   ))}
 						</motion.div>
 					</div>
 				))}

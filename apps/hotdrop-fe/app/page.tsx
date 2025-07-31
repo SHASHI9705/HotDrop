@@ -125,7 +125,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 flex flex-col items-center justify-start overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 flex flex-col items-center justify-start overflow-x-hidden dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       {/* Navbar */}
       <Nav
         user={user}
@@ -144,9 +144,9 @@ export default function Home() {
       <div className="flex flex-col-reverse md:flex-row items-center gap-32 md:gap-48 max-w-6xl mt-20">
         {/* Left: Skip line content (on left for desktop, below for mobile) */}
         <div className="md:w-1/2 text-center md:text-left -mt-20 md:mt-0 flex flex-col items-center md:items-start">
-          <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-6xl font-extrabold text-gray-900 leading-tight whitespace-nowrap">
-            Skip The <span className="text-orange-500">Line</span><br />
-            Grab On <span className="text-orange-500">Time!</span>
+          <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-6xl font-extrabold text-gray-900 leading-tight whitespace-nowrap dark:text-white">
+            Skip The <span className="text-orange-500 dark:text-orange-400">Line</span><br />
+            Grab On <span className="text-orange-500 dark:text-orange-400">Time!</span>
           </h1>
           <div className="flex flex-row items-center mt-6 gap-2 w-full justify-center md:justify-start">
             {user ? (
@@ -158,7 +158,7 @@ export default function Home() {
                     const section = document.getElementById(foodSectionId);
                     if (section) section.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="bg-orange-500 text-white px-4 py-1.5 rounded-full hover:bg-orange-600 transition-colors duration-300 text-base font-semibold flex items-center gap-2 min-w-[110px]"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1.5 rounded-full hover:bg-orange-600 transition-colors duration-300 text-base font-semibold flex items-center gap-2 min-w-[110px] dark:from-orange-500 dark:to-red-500 dark:text-orange-100 dark:hover:from-orange-800 dark:hover:to-red-800"
                 >
                   <motion.span
                     role="img"
@@ -175,7 +175,7 @@ export default function Home() {
                 </button>
                 {/* View Cart: only show on md and up */}
                 <button
-                  className="hidden md:flex bg-white text-orange-500 border border-orange-300 px-4 py-1.5 rounded-full hover:bg-orange-100 transition-colors duration-300 text-base font-semibold items-center gap-2 ml-2 shadow-sm relative min-w-[110px]"
+                  className="hidden md:flex bg-white text-orange-500 border border-orange-300 px-4 py-1.5 rounded-full hover:bg-orange-100 transition-colors duration-300 text-base font-semibold items-center gap-2 ml-2 shadow-sm relative min-w-[110px] dark:bg-gray-900 dark:text-orange-300 dark:border-orange-700 dark:hover:bg-orange-950"
                   onClick={() => router.push('/cart')}
                 >
                   <span role="img" aria-label="cart" className="text-xl">🛒</span>
@@ -196,7 +196,7 @@ export default function Home() {
                 </button>
               </>
             ) : (
-              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold" onClick={() => window.location.href = '/signup'}>
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold dark:bg-orange-700 dark:hover:bg-orange-800 dark:text-orange-100" onClick={() => window.location.href = '/signup'}>
                 Get Started
               </button>
             )}
@@ -279,14 +279,14 @@ export default function Home() {
             className="absolute left-0 right-0 top-full mt-0 flex justify-center"
             style={{ marginTop: 0 }}
           >
-            <div className="w-full max-w-xs md:max-w-md lg:max-w-lg xl:max-w-2xl flex items-center px-3 md:px-4 py-2 bg-orange-100 rounded-full text-xs md:text-sm font-medium text-red-600 transition-colors duration-300 shadow">
+            <div className="w-full max-w-xs md:max-w-md lg:max-w-lg xl:max-w-2xl flex items-center px-3 md:px-4 py-2 bg-orange-100 rounded-full text-xs md:text-sm font-medium text-red-600 transition-colors duration-300 shadow dark:bg-orange-950 dark:text-orange-300">
               <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
               <span className="flex-1 text-center">Now accepting advance orders</span>
             </div>
           </div>
         </div>
       </div>
-      <main className="w-full max-w-6xl mx-auto flex flex-col items-center">
+      <main className="w-full max-w-6xl mx-auto flex flex-col items-center dark:from-gray-900 dark:via-gray-950 dark:to-gray-90">
         <FoodSection />
         <PopularRestaurantsSection />
         <ReviewsSection />
@@ -357,29 +357,29 @@ function EditProfileModal({ name, email, setName, setEmail, onClose, onSave, loa
   success?: string;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white p-8 rounded shadow-lg w-full max-w-md flex flex-col items-center relative">
-        <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl" onClick={onClose}>&times;</button>
-        <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 dark:bg-gray-900 dark:bg-opacity-80">
+      <div className="bg-white p-8 rounded shadow-lg w-full max-w-md flex flex-col items-center relative dark:bg-gray-900 dark:text-orange-200">
+        <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl dark:text-gray-500 dark:hover:text-white" onClick={onClose}>&times;</button>
+        <h2 className="text-2xl font-bold mb-6 dark:text-orange-400">Edit Profile</h2>
         <div className="w-full flex flex-col gap-4">
-          <label className="text-sm font-semibold text-gray-700">Name</label>
+          <label className="text-sm font-semibold text-gray-700 dark:text-orange-200">Name</label>
           <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full dark:bg-gray-900 dark:text-orange-200 dark:border-orange-700"
           />
-          <label className="text-sm font-semibold text-gray-700">Email</label>
+          <label className="text-sm font-semibold text-gray-700 dark:text-orange-200">Email</label>
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full dark:bg-gray-900 dark:text-orange-200 dark:border-orange-700"
           />
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-          {success && <div className="text-green-600 text-sm">{success}</div>}
+          {error && <div className="text-red-500 text-sm dark:text-red-400">{error}</div>}
+          {success && <div className="text-green-600 text-sm dark:text-green-400">{success}</div>}
           <button
-            className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-600 font-semibold mt-4"
+            className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-600 font-semibold mt-4 dark:bg-orange-700 dark:hover:bg-orange-800 dark:text-orange-100"
             onClick={onSave}
             disabled={loading}
           >

@@ -22,11 +22,11 @@ interface Partner {
 
 export default function OrdersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 flex flex-col pt-8 px-4 pb-24">
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col pt-8 px-4 pb-24">
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => window.history.back()}
         >
@@ -38,11 +38,11 @@ export default function OrdersPage() {
         {/* Centered logo and heading */}
         <div className="flex items-center gap-3 mx-auto">
           <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
-          <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">HotDrop Orders</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-300 drop-shadow-sm whitespace-nowrap">HotDrop Orders</h1>
         </div>
         {/* Home Button (right) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
           title="Home"
           onClick={() => window.location.href = '/'}
         >
@@ -112,16 +112,16 @@ function OrdersContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-stretch">
+    <div className="min-h-screen flex flex-col items-stretch dark:bg-gray-900">
       <div className="w-full">
-        <h2 className="text-3xl ml-4 font-extrabold text-black/80 mb-2 drop-shadow-sm text-left w-full">{itemName.toUpperCase()}</h2>
-        <p className="text-lg ml-4 text-gray-700 mb-8 text-left w-full">{getFoodTagline(itemName)}</p>
+        <h2 className="text-3xl ml-4 font-extrabold text-black/80 dark:text-gray-100 mb-2 drop-shadow-sm text-left w-full">{itemName.toUpperCase()}</h2>
+        <p className="text-lg ml-4 text-gray-700 dark:text-gray-300 mb-8 text-left w-full">{getFoodTagline(itemName)}</p>
         {loading ? (
           <div className="flex items-center justify-center min-h-[60vh] w-full">
             <Loader />
           </div>
         ) : foodPartners.length === 0 ? (
-          <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 w-full">Coming soon...</div>
+          <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 dark:text-orange-300 w-full">Coming soon...</div>
         ) : (
           <div className="flex ml-4 flex-col md:flex-row md:flex-nowrap gap-6 mb-10 md:overflow-x-auto md:overflow-y-visible md:pr-12 md:items-start md:justify-start w-full">
             {foodPartners.map((partner, idx) => {
@@ -130,7 +130,7 @@ function OrdersContent() {
                 <a
                   key={idx}
                   href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}&food=${encodeURIComponent(itemName)}`}
-                  className="w-[80vw] md:w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden md:ml-0 text-left"
+                  className="w-[80vw] md:w-64 h-64 bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex flex-col border border-orange-200 dark:border-gray-700 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden md:ml-0 text-left"
                   style={{ textDecoration: 'none' }}
                 >
                   <img
@@ -141,13 +141,13 @@ function OrdersContent() {
                   />
                   <div className="flex flex-col justify-between h-[35%] w-full p-3">
                     <div className="flex items-center justify-between w-full mb-1">
-                      <h3 className="text-lg font-bold text-gray-900 truncate">{partner.name}</h3>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate">{partner.name}</h3>
                       <div className="flex items-center">
-                        <span className="text-yellow-400 text-lg mr-1">★</span>
-                        <span className="text-base font-semibold text-gray-800">{partner.rating || "4.5"}</span>
+                        <span className="text-yellow-400 dark:text-yellow-300 text-lg mr-1">★</span>
+                        <span className="text-base font-semibold text-gray-800 dark:text-gray-200">{partner.rating || "4.5"}</span>
                       </div>
                     </div>
-                    <span className="text-orange-500 font-medium text-sm">Special: {specialItem?.name}</span>
+                    <span className="text-orange-500 dark:text-orange-300 font-medium text-sm">Special: {specialItem?.name}</span>
                   </div>
                 </a>
               );

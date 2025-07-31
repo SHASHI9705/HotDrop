@@ -116,34 +116,34 @@ export default function NotificationSection() {
   };
 
   return (
-    <div id="notification-section" className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-      <div className="font-bold text-lg text-gray-700 mb-4">Latest Order Notification</div>
+    <div id="notification-section" className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+      <div className="font-bold text-lg text-gray-700 dark:text-gray-100 mb-4">Latest Order Notification</div>
       {loading ? (
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-300">Loading...</div>
       ) : pendingOrders.length === 0 ? (
-        <div className="text-gray-500">No pending orders.</div>
+        <div className="text-gray-500 dark:text-gray-300">No pending orders.</div>
       ) : (
         <div className="flex flex-col gap-4">
           {pendingOrders.map(order => (
             <div
               key={order.id}
-              className="flex flex-col sm:flex-row sm:items-center gap-4 bg-orange-50 border border-orange-200 rounded-xl p-4"
+              className="flex flex-col sm:flex-row sm:items-center gap-4 bg-orange-50 dark:bg-gray-900 border border-orange-200 dark:border-gray-700 rounded-xl p-4"
             >
-              <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold w-fit">New Order</div>
-              <div className="text-gray-700 flex-1 min-w-0">
-                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600">{
+              <div className="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-4 py-2 rounded-full font-semibold w-fit">New Order</div>
+              <div className="text-gray-700 dark:text-gray-100 flex-1 min-w-0">
+                Order #{order.id.slice(-4)} for <span className="font-bold">₹{order.price}</span> - <span className="text-yellow-600 dark:text-yellow-300">{
                   order.status === 'taken' ? 'Taken'
                   : order.status === 'cancelled' ? 'Cancelled'
                   : order.status === 'pending' ? 'Pending'
                   : /^\d+min$/.test(order.status) ? `Ready in ${order.status.replace('min', '')} min`
                   : order.status
                 }</span>
-                <div className="text-xs text-gray-500 mt-1 truncate">Items: {order.items}</div>
-                <div className="text-xs text-gray-400">Placed: {new Date(order.dateTime).toLocaleString()}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-300 mt-1 truncate">Items: {order.items}</div>
+                <div className="text-xs text-gray-400 dark:text-gray-300">Placed: {new Date(order.dateTime).toLocaleString()}</div>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:gap-2 w-full sm:w-auto">
                 <button
-                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold text-sm shadow"
+                  className="px-4 py-2 bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-800 text-white dark:text-gray-100 rounded-xl font-semibold text-sm shadow"
                   onClick={() => markAsDelivered(order.id)}
                 >
                   Mark as Delivered
@@ -153,7 +153,7 @@ export default function NotificationSection() {
                     <TimerDropdown orderId={order.id} disabled={/^\d+min$/.test(order.status)} initialValue={/^\d+min$/.test(order.status) ? order.status : undefined} />
                   </div>
                   <button
-                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold text-sm shadow"
+                    className="px-4 py-2 bg-red-500 dark:bg-red-700 hover:bg-red-600 dark:hover:bg-red-800 text-white dark:text-gray-100 rounded-xl font-semibold text-sm shadow"
                     onClick={() => cancelOrder(order.id)}
                   >
                     Cancel Order
@@ -196,7 +196,7 @@ function TimerDropdown({ orderId, disabled = false, initialValue }: TimerDropdow
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className={`px-4 py-2 ${selected || disabled ? 'bg-orange-300 cursor-not-allowed' : 'bg-orange-200 hover:bg-orange-300'} text-orange-700 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
+        className={`px-4 py-2 ${selected || disabled ? 'bg-orange-300 dark:bg-orange-900 cursor-not-allowed' : 'bg-orange-200 dark:bg-orange-900 hover:bg-orange-300 dark:hover:bg-orange-800'} text-orange-700 dark:text-orange-300 rounded-xl font-semibold text-sm shadow flex items-center gap-1`}
         onClick={() => { if (!selected && !disabled) setOpen(o => !o); }}
         disabled={!!selected || disabled}
       >
@@ -204,11 +204,11 @@ function TimerDropdown({ orderId, disabled = false, initialValue }: TimerDropdow
         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
       </button>
       {!selected && !disabled && open && (
-        <div className="absolute right-0 mt-2 w-28 bg-white border border-orange-200 rounded-xl shadow-lg z-10">
+        <div className="absolute right-0 mt-2 w-28 bg-white dark:bg-gray-900 border border-orange-200 dark:border-gray-700 rounded-xl shadow-lg z-10">
           {options.map((opt) => (
             <button
               key={opt}
-              className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-100`}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-100 dark:hover:bg-orange-800 text-gray-900 dark:text-gray-100`}
               onClick={() => handleSelect(opt)}
             >
               {opt} min

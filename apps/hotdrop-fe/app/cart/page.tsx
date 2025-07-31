@@ -20,11 +20,11 @@ interface CartItem {
 
 export default function CartPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
-      <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
+      <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => window.history.back()}
         >
@@ -40,7 +40,7 @@ export default function CartPage() {
         </div>
         {/* Home Button (right) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
           title="Home"
           onClick={() => window.location.href = '/'}
         >
@@ -125,30 +125,30 @@ function CartContent() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen  flex flex-col items-center pt-4 px-4">
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8 mb-8 border border-orange-200">
+    <div className="min-h-screen flex flex-col items-center pt-4 px-4">
+      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8 border border-orange-200 dark:border-gray-700">
         {loading ? (
-          <div className="text-center text-gray-500 py-12">Loading...</div>
+          <div className="text-center text-gray-500 dark:text-gray-400 py-12">Loading...</div>
         ) : cart.length === 0 ? (
-          <div className="text-center text-gray-500 py-12 text-lg">Your cart is empty 🛒</div>
+          <div className="text-center text-gray-500 dark:text-gray-400 py-12 text-lg">Your cart is empty 🛒</div>
         ) : (
           <div className="flex flex-col gap-6">
             {cart.map((item) => (
-              <div key={item.id} className="flex flex-col md:flex-row items-center justify-between gap-4 bg-orange-50 rounded-lg p-4 border border-orange-100 shadow-sm">
+              <div key={item.id} className="flex flex-col md:flex-row items-center justify-between gap-4 bg-orange-50 dark:bg-gray-900 rounded-lg p-4 border border-orange-100 dark:border-gray-700 shadow-sm">
                 <div className="flex items-center gap-4 w-full md:w-1/2">
-                  <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-orange-200" />
+                  <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-orange-200 dark:border-gray-700" />
                   <div>
-                    <div className="font-bold text-lg text-gray-800">{item.name}</div>
-                    <div className="text-orange-500 font-semibold text-base">₹{item.price}</div>
+                    <div className="font-bold text-lg text-gray-800 dark:text-gray-100">{item.name}</div>
+                    <div className="text-orange-500 dark:text-orange-300 font-semibold text-base">₹{item.price}</div>
                   </div>
                 </div>
                 {/* Controls Row: plus, minus, price, remove */}
                 <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-                  <button className="bg-orange-200 text-orange-700 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-300" onClick={() => updateQuantity(item.id, -1)}>-</button>
-                  <span className="font-semibold text-lg text-gray-700">{item.quantity}</span>
-                  <button className="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-600" onClick={() => updateQuantity(item.id, 1)}>+</button>
-                  <div className="font-bold text-lg text-gray-800 ml-2">₹{item.price * item.quantity}</div>
-                  <button className="text-red-500 hover:text-red-700 text-xs font-bold border border-red-200 rounded px-3 py-1 transition-colors duration-200 ml-2" onClick={() => removeItem(item.id)}>Remove</button>
+                  <button className="bg-orange-200 dark:bg-gray-700 text-orange-700 dark:text-orange-300 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-300 dark:hover:bg-gray-600" onClick={() => updateQuantity(item.id, -1)}>-</button>
+                  <span className="font-semibold text-lg text-gray-700 dark:text-gray-100">{item.quantity}</span>
+                  <button className="bg-orange-500 dark:bg-orange-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold hover:bg-orange-600 dark:hover:bg-orange-700" onClick={() => updateQuantity(item.id, 1)}>+</button>
+                  <div className="font-bold text-lg text-gray-800 dark:text-gray-100 ml-2">₹{item.price * item.quantity}</div>
+                  <button className="text-red-500 dark:text-red-300 hover:text-red-700 dark:hover:text-red-400 text-xs font-bold border border-red-200 dark:border-red-700 rounded px-3 py-1 transition-colors duration-200 ml-2" onClick={() => removeItem(item.id)}>Remove</button>
                 </div>
               </div>
             ))}
@@ -156,27 +156,27 @@ function CartContent() {
         )}
         {/* Cart Summary */}
         {cart.length > 0 && (
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-6 border-t pt-8 w-full">
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-6 border-t dark:border-gray-700 pt-8 w-full">
             <div className="flex flex-col gap-2 w-full md:w-auto">
               <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 font-semibold">Subtotal</span>
-                <span className="text-gray-800 font-bold">₹{total}</span>
+                <span className="text-gray-700 dark:text-gray-100 font-semibold">Subtotal</span>
+                <span className="text-gray-800 dark:text-gray-100 font-bold">₹{total}</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 font-semibold">GST (3%)</span>
-                <span className="text-gray-800 font-bold">₹{(total * 0.03).toFixed(2)}</span>
+                <span className="text-gray-700 dark:text-gray-100 font-semibold">GST (3%)</span>
+                <span className="text-gray-800 dark:text-gray-100 font-bold">₹{(total * 0.03).toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 font-semibold">Maintenance Fees</span>
-                <span className="text-gray-800 font-bold">₹2.00</span>
+                <span className="text-gray-700 dark:text-gray-100 font-semibold">Maintenance Fees</span>
+                <span className="text-gray-800 dark:text-gray-100 font-bold">₹2.00</span>
               </div>
-              <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t pt-2">
-                <span className="text-xl font-bold text-gray-800">Total</span>
-                <span className="text-xl font-bold text-orange-500">₹{(total + total * 0.03 + 2).toFixed(2)}</span>
+              <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t dark:border-gray-700 pt-2">
+                <span className="text-xl font-bold text-gray-800 dark:text-gray-100">Total</span>
+                <span className="text-xl font-bold text-orange-500 dark:text-orange-300">₹{(total + total * 0.03 + 2).toFixed(2)}</span>
               </div>
             </div>
             <button
-              className="bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2"
+              className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-700 dark:to-red-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 flex items-center gap-2"
               onClick={async () => {
                 // Get user and partner info from localStorage
                 const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
@@ -268,7 +268,7 @@ function CartContent() {
           </div>
         )}
         <div className="mt-8 flex justify-center">
-          <button className="bg-orange-100 text-orange-500 px-6 py-2 rounded-full font-semibold hover:bg-orange-200 transition-colors duration-200" onClick={() => router.push("/")}>Continue Shopping</button>
+          <button className="bg-orange-100 dark:bg-gray-700 text-orange-500 dark:text-orange-300 px-6 py-2 rounded-full font-semibold hover:bg-orange-200 dark:hover:bg-gray-600 transition-colors duration-200" onClick={() => router.push("/")}>Continue Shopping</button>
         </div>
       </div>
     </div>

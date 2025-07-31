@@ -6,13 +6,6 @@ import Image from "next/image";
 
 export default function AboutPage() {
   const teamMembers = [
-    {
-      name: "Nikhil Singh",
-      role: "CTO",
-      image: "/cto.jpg",
-      bio: "Tech enthusiast building scalable solutions.",
-      social: { twitter: "#", linkedin: "#", email: "alex@hotdrop.com" }
-    },
 
     {
       name: "Shashiranjan Singh",
@@ -20,6 +13,13 @@ export default function AboutPage() {
       image: "/ceo.png",
       bio: "Passionate about connecting people with Tecnology and Food.",
       social: { twitter: "#", linkedin: "#", email: "sarah@hotdrop.com" }
+    },
+    {
+      name: "Nikhil Singh",
+      role: "CTO",
+      image: "/cto.jpg",
+      bio: "Tech enthusiast building scalable solutions.",
+      social: { twitter: "#", linkedin: "#", email: "alex@hotdrop.com" }
     }
   ];
 
@@ -58,7 +58,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
       <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6 px-4">
         <Link href="/" className="flex items-center space-x-2">
@@ -69,11 +69,11 @@ export default function AboutPage() {
             height={32}
             className="rounded-lg"
           />
-          <span className="text-xl font-bold text-gray-800">HotDrop</span>
+          <span className="text-xl font-bold text-gray-800 dark:text-gray-100">HotDrop</span>
         </Link>
         <Link 
           href="/" 
-          className="text-red-500 hover:text-red-600 font-medium transition-colors"
+          className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-medium transition-colors"
         >
           ← Back to Home
         </Link>
@@ -88,16 +88,16 @@ export default function AboutPage() {
           className="text-center mb-16"
         >
           <motion.h1 
-            className="text-5xl md:text-6xl font-bold text-gray-800 mb-6"
+            className="text-5xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            About <span className="text-red-500">HotDrop</span>
+            About <span className="text-red-500 dark:text-red-400">HotDrop</span>
           </motion.h1>
           
           <motion.p 
-            className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -119,11 +119,11 @@ export default function AboutPage() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.8 + index * 0.1 }}
-              className="text-center bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              className="text-center bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
             >
               <div className="text-4xl mb-3">{stat.icon}</div>
-              <div className="text-3xl font-bold text-gray-800 mb-2">{stat.number}</div>
-              <div className="text-gray-600 font-medium">{stat.label}</div>
+              <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{stat.number}</div>
+              <div className="text-gray-600 dark:text-gray-300 font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -133,14 +133,14 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}
-          className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-20"
+          className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-12 mb-20"
         >
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-6">
                 Our Story
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-xl">
+              <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed text-xl">
                 <p>
                   It all began with a simple thought: getting your favorite food should be fast and effortless. Frustrated with long queues and slow service, we set out to build something better.
                 </p>
@@ -185,7 +185,7 @@ export default function AboutPage() {
           transition={{ delay: 1.2 }}
           className="mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 text-center mb-12">
             Our Values
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -195,13 +195,13 @@ export default function AboutPage() {
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.4 + index * 0.2 }}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
               >
                 <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${value.color} flex items-center justify-center text-2xl mb-4`}>
                   {value.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">{value.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -227,7 +227,7 @@ export default function AboutPage() {
           transition={{ delay: 1.8 }}
           className="mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 text-center mb-12">
             Meet Our Team
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -237,7 +237,7 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.0 + index * 0.1 }}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-2"
+                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-2"
               >
                 <div className="relative mb-4">
                   <Image
@@ -245,26 +245,26 @@ export default function AboutPage() {
                     alt={member.name}
                     width={150}
                     height={150}
-                    className="rounded-full mx-auto border-4 border-red-100"
+                    className="rounded-full mx-auto border-4 border-red-100 dark:border-red-400"
                   />
                 </div>
                 <div className="text-center">
-                  <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
-                  <p className="text-red-500 font-medium mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{member.bio}</p>
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{member.name}</h3>
+                  <p className="text-red-500 dark:text-red-400 font-medium mb-3">{member.role}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">{member.bio}</p>
                   <div className="flex justify-center space-x-3">
-                    <a href={member.social.twitter} className="text-blue-500 hover:text-blue-700 transition">
+                    <a href={member.social.twitter} className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
                       </svg>
                     </a>
-                    <a href={member.social.linkedin} className="text-blue-600 hover:text-blue-800 transition">
+                    <a href={member.social.linkedin} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
                         <circle cx="4" cy="4" r="2"/>
                       </svg>
                     </a>
-                    <a href={`mailto:${member.social.email}`} className="text-red-500 hover:text-red-700 transition">
+                    <a href={`mailto:${member.social.email}`} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                         <polyline points="22,6 12,13 2,6"/>
@@ -286,7 +286,7 @@ export default function AboutPage() {
           transition={{ delay: 2.6 }}
           className="text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold dark:text-white text-gray-800 mb-6">
             Ready to Join Our Story?
           </h2>
           <p className="text-xl text-gray-600 mb-8">

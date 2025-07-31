@@ -1,7 +1,8 @@
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
+import { cookies as getCookies } from "next/headers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -67,12 +68,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // SSR: get theme from cookie, fallback to client-side cookie if needed
+  let themeClass = "";
+  try {
+    // SSR: Next.js app router cookies API
+    const cookieStore = getCookies?.();
+    //@ts-ignore
+    const theme = cookieStore?.get?.("hotdrop_theme");
+    if (theme && theme.value === "dark") themeClass = "dark";
+  } catch {
+    // Fallback: client-side cookie parsing
+    if (typeof document !== "undefined") {
+      const match = document.cookie.match(/hotdrop_theme=([^;]+)/);
+      if (match && match[1] === "dark") themeClass = "dark";
+    }
+  }
+
   return (
-    <html lang="en">
-      <link rel="icon" href="/logo.png" type="image/x-icon" />
-      <link rel="manifest" href="/manifest.json" />
-      <meta name="theme-color" content="#ff6600" />
-      <link rel="apple-touch-icon" href="/logo.png" />
+    <html lang="en" className={themeClass}>
+      <head>
+        <link rel="icon" href="/logo.png" type="image/x-icon" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ff6600" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         {children}
       </body>

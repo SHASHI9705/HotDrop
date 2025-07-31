@@ -42,12 +42,12 @@ export default function MyOrdersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-red-100 to-red-300 flex flex-col items-center pt-8 px-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-r from-white via-red-100 to-red-300 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
       {/* Nav Bar with Back, Heading, and Home */}
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => window.history.back()}
         >
@@ -63,7 +63,7 @@ export default function MyOrdersPage() {
         </div>
         {/* Home Button (right) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
           title="Home"
           onClick={() => window.location.href = '/'}
         >
@@ -76,15 +76,15 @@ export default function MyOrdersPage() {
 
       {/* Tab section for Active/Completed */}
       <div className="w-full max-w-3xl flex justify-center mb-8">
-        <div className="flex w-full max-w-xs bg-white rounded-full shadow border border-orange-200 overflow-hidden">
+        <div className="flex w-full max-w-xs bg-white dark:bg-gray-800 rounded-full shadow border border-orange-200 dark:border-gray-700 overflow-hidden">
           <button
-            className={`flex-1 py-2 text-sm font-semibold transition ${tab === 'active' ? 'bg-orange-100 text-orange-600' : 'bg-white text-gray-500'}`}
+            className={`flex-1 py-2 text-sm font-semibold transition ${tab === 'active' ? 'bg-orange-100 dark:bg-gray-700 text-orange-600 dark:text-orange-300' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300'}`}
             onClick={() => setTab('active')}
           >
             Active
           </button>
           <button
-            className={`flex-1 py-2 text-sm font-semibold transition ${tab === 'completed' ? 'bg-orange-100 text-orange-600' : 'bg-white text-gray-500'}`}
+            className={`flex-1 py-2 text-sm font-semibold transition ${tab === 'completed' ? 'bg-orange-100 dark:bg-gray-700 text-orange-600 dark:text-orange-300' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300'}`}
             onClick={() => setTab('completed')}
           >
             Completed
@@ -94,7 +94,7 @@ export default function MyOrdersPage() {
 
       <div className="w-full max-w-3xl flex flex-col gap-6">
         {loading ? (
-          <div className="text-center text-gray-500 py-12">Loading...</div>
+          <div className="text-center text-gray-500 dark:text-gray-400 py-12">Loading...</div>
         ) : (
           (() => {
             // Filter orders based on tab
@@ -105,7 +105,7 @@ export default function MyOrdersPage() {
               filteredOrders = orders.filter(order => order.status === 'taken' || order.status === 'cancelled');
             }
             if (filteredOrders.length === 0) {
-              return <div className="text-center text-gray-500 py-12 text-lg">No orders to display.</div>;
+              return <div className="text-center text-gray-500 dark:text-gray-400 py-12 text-lg">No orders to display.</div>;
             }
             return filteredOrders.map((order) => {
               // Status label and icon
@@ -161,13 +161,13 @@ export default function MyOrdersPage() {
               return (
                 <div
                   key={order.id}
-                  className="bg-white rounded-xl shadow-lg flex flex-col px-6 py-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300 relative"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg flex flex-col px-6 py-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300 relative"
                 >
                   {/* Top row: Shop name (label) left, status right */}
                   <div className="flex items-start justify-between mb-2 w-full">
                     <div className="flex flex-col items-start">
-                      <div className="bg-orange-100 text-orange-600 text-lg font-extrabold rounded-full px-2 mb-1 shadow-sm tracking-wide">{order.shopName}</div>
-                      <div className="font-semibold text-base text-gray-700 mt-1">Order <span className="text-gray-400">#{order.id.slice(-4)}</span></div>
+                      <div className="bg-orange-100 dark:bg-gray-700 text-orange-600 dark:text-orange-300 text-lg font-extrabold rounded-full px-2 mb-1 shadow-sm tracking-wide">{order.shopName}</div>
+                      <div className="font-semibold text-base text-gray-700 dark:text-gray-100 mt-1">Order <span className="text-gray-400 dark:text-gray-300">#{order.id.slice(-4)}</span></div>
                     </div>
                     <div className={`flex items-center px-3 py-1 rounded-full font-semibold text-xs shadow-sm ${statusColor}`}
                       style={{ minWidth: 'fit-content', minHeight: '2.2rem' }}
@@ -179,22 +179,22 @@ export default function MyOrdersPage() {
                   {/* Items List (dot left of name, bold font, left aligned) */}
                   <div className="flex flex-wrap gap-2 mb-2">
                     {itemsArr.map((item, idx) => (
-                      <span key={item.name + idx} className="flex items-center text-gray-800 font-bold text-base py-1">
-                        <span className="w-2 h-2 rounded-full bg-orange-400 mr-2 inline-block"></span>
+                      <span key={item.name + idx} className="flex items-center text-gray-800 dark:text-gray-100 font-bold text-base py-1">
+                        <span className="w-2 h-2 rounded-full bg-orange-400 dark:bg-orange-600 mr-2 inline-block"></span>
                         {item.name}
                       </span>
                     ))}
                   </div>
                   {/* Divider above Date/Time and Total Row */}
-                  <div className="w-full border-t border-gray-200 my-2" />
+                  <div className="w-full border-t border-gray-200 dark:border-gray-700 my-2" />
                   {/* Date/Time and Total Row */}
                   <div className="flex items-end justify-between w-full">
-                    <div className="text-gray-500 text-sm flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" /></svg>
+                    <div className="text-gray-500 dark:text-gray-300 text-sm flex items-center gap-2">
+                      <svg className="w-4 h-4 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" /></svg>
                       <span className="font-medium">{new Date(order.dateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</span>
                     </div>
-                    <div className="text-base font-bold text-green-700 flex items-center gap-1">
-                      <span className="bg-green-100 px-3 py-1 rounded-full">Total: ₹{order.price}</span>
+                    <div className="text-base font-bold text-green-700 dark:text-green-400 flex items-center gap-1">
+                      <span className="bg-green-100 dark:bg-green-900 px-3 py-1 rounded-full">Total: ₹{order.price}</span>
                     </div>
                   </div>
                 </div>

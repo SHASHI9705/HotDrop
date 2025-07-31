@@ -23,7 +23,14 @@ function getInitialCart() {
 }
 
 function ItemCard({ item }: { item: Item }) {
-  const [cart, setCart] = useState<Record<string, number>>(getInitialCart());
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cartLoaded, setCartLoaded] = useState(false);
+
+  // Load cart from localStorage on client only
+  useEffect(() => {
+    setCart(getInitialCart());
+    setCartLoaded(true);
+  }, []);
 
   const updateCart = (delta: number) => {
     setCart((prev) => {
@@ -48,8 +55,13 @@ function ItemCard({ item }: { item: Item }) {
     });
   };
 
+  if (!cartLoaded) {
+    // Render nothing or a spinner until cart is loaded on client
+    return null;
+  }
+
   return (
-    <div className="bg-white rounded-xl shadow p-0 flex flex-col border border-orange-100 overflow-hidden relative" style={{ minHeight: 180 }}>
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-0 flex flex-col border border-orange-100 dark:border-gray-700 overflow-hidden relative" style={{ minHeight: 180 }}>
       {/* Image with overlays */}
       <div className="w-full relative" style={{height: '150px'}}>
         <img
@@ -59,28 +71,28 @@ function ItemCard({ item }: { item: Item }) {
           style={{minHeight: 120, maxHeight: 150}}
         />
         {/* Name label top-left */}
-        <span className="absolute top-2 left-2 bg-white/90 text-orange-500 font-bold text-xs sm:text-sm rounded-full px-3 py-1 shadow max-w-[70%] truncate border border-orange-100">
+        <span className="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 text-orange-500 dark:text-orange-300 font-bold text-xs sm:text-sm rounded-full px-3 py-1 shadow max-w-[70%] truncate border border-orange-100 dark:border-gray-700">
           {item.name}
         </span>
         {/* Price top-right */}
-        <span className="absolute top-2 right-2 bg-orange-100 text-orange-600 font-semibold text-xs sm:text-sm rounded-full px-3 py-1 shadow border border-orange-200">
+        <span className="absolute top-2 right-2 bg-orange-100 dark:bg-gray-700 text-orange-600 dark:text-orange-300 font-semibold text-xs sm:text-sm rounded-full px-3 py-1 shadow border border-orange-200 dark:border-gray-700">
           ₹{item.price}
         </span>
       </div>
       {/* Row below image: available (left), plus/minus (right) */}
       <div className="flex items-end justify-between w-full px-4 pb-3 pt-2 mt-auto">
-        <span className={`text-xs font-medium rounded-full px-3 py-1 shadow bg-white/90 border ${item.available === true || item.available === "true" ? 'text-green-600 border-green-200' : 'text-red-400 border-red-200'}`}>
+        <span className={`text-xs font-medium rounded-full px-3 py-1 shadow bg-white/90 dark:bg-gray-900/90 border ${item.available === true || item.available === "true" ? 'text-green-600 dark:text-green-400 border-green-200 dark:border-green-700' : 'text-red-400 dark:text-red-300 border-red-200 dark:border-red-700'}`}>
           {item.available === true || item.available === "true" ? 'Available' : 'Out of Stock'}
         </span>
         <div className="flex items-center gap-2">
           <button
-            className="bg-orange-200 text-orange-700 rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-300 disabled:opacity-50"
+            className="bg-orange-200 dark:bg-gray-700 text-orange-700 dark:text-orange-300 rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-300 dark:hover:bg-gray-600 disabled:opacity-50"
             onClick={() => updateCart(-1)}
             disabled={!((cart[item.name] ?? 0) > 0)}
           >-</button>
-          <span className="font-semibold text-xs sm:text-base text-gray-700 min-w-[20px] text-center">{cart[item.name] || 0}</span>
+          <span className="font-semibold text-xs sm:text-base text-gray-700 dark:text-gray-100 min-w-[20px] text-center">{cart[item.name] || 0}</span>
           <button
-            className="bg-orange-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-600 disabled:opacity-50"
+            className="bg-orange-500 dark:bg-orange-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-600 dark:hover:bg-orange-700 disabled:opacity-50"
             onClick={() => updateCart(1)}
             disabled={item.available !== true && item.available !== "true"}
           >+</button>
@@ -115,12 +127,12 @@ export default function AllItemsContent() {
   }, [shopname]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
       <div className="w-full max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-4 w-full px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+        <div className="flex items-center justify-between mb-4 w-full px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
           {/* Back Button (left) */}
           <button
-            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
             title="Back"
             onClick={() => window.history.back()}
           >
@@ -132,11 +144,11 @@ export default function AllItemsContent() {
           {/* Centered logo and heading */}
           <div className="flex items-center gap-3 mx-auto">
             <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
-            <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">{shop?.name || "All Items"}</h1>
+            <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-500 drop-shadow-sm whitespace-nowrap">{shop?.name || "All Items"}</h1>
           </div>
           {/* Home Button (right) */}
           <button
-            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
             title="Home"
             onClick={() => window.location.href = '/'}
           >
@@ -149,7 +161,7 @@ export default function AllItemsContent() {
         {loading ? (
           <Loader />
         ) : items.length === 0 ? (
-          <div className="text-center text-gray-400 py-24 text-xl font-semibold">No items found for this shop.</div>
+          <div className="text-center text-gray-400 dark:text-gray-500 py-24 text-xl font-semibold">No items found for this shop.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center mt-8">
             {items.map((item, idx) => (

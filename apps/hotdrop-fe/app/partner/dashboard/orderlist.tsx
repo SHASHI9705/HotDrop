@@ -44,26 +44,26 @@ export default function OrderListSection() {
   return (
     <div className="w-full max-w-4xl flex flex-col gap-6">
       {loading ? (
-        <div className="text-center text-gray-500 py-12">Loading...</div>
+        <div className="text-center text-gray-500 dark:text-gray-300 py-12">Loading...</div>
       ) : orders.length === 0 ? (
-        <div className="text-center text-gray-500 py-12 text-lg">No orders to display.</div>
+        <div className="text-center text-gray-500 dark:text-gray-300 py-12 text-lg">No orders to display.</div>
       ) : (
         orders.map((order) => (
           <div
             key={order.id}
-            className="bg-white rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between px-8 py-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between px-8 py-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300"
           >
             <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
-              <div className="font-bold text-lg text-gray-700">Order #{order.id.slice(-4)}</div>
-              <div className="text-gray-500 text-base">Items: {order.items}</div>
-              <div className="text-green-600 font-semibold text-base">Total: ₹{order.price}</div>
-              <div className="text-blue-500 text-base">Status: {
+              <div className="font-bold text-lg text-gray-700 dark:text-gray-100">Order #{order.id.slice(-4)}</div>
+              <div className="text-gray-500 dark:text-gray-300 text-base">Items: {order.items}</div>
+              <div className="text-green-600 dark:text-green-400 font-semibold text-base">Total: ₹{order.price}</div>
+              <div className="text-blue-500 dark:text-blue-300 text-base">Status: {
                 order.status === 'taken' ? 'Taken'
                 : order.status === 'cancelled' ? 'Cancelled'
                 : order.status
               }</div>
-              <div className="text-gray-400 text-xs">Placed: {new Date(order.dateTime).toLocaleString()}</div>
-              <div className="text-orange-500 text-xs font-semibold">Shop: {order.shopName}</div>
+              <div className="text-gray-400 dark:text-gray-300 text-xs">Placed: {new Date(order.dateTime).toLocaleString()}</div>
+              <div className="text-orange-500 dark:text-orange-300 text-xs font-semibold">Shop: {order.shopName}</div>
             </div>
           </div>
         ))

@@ -56,122 +56,122 @@ export default function PopularRestaurantsSection() {
   }, []);
 
   return (
-	<section className="my-16 w-full max-w-6xl mx-auto">
-	  <h2 className="-mt-12 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2">
-		Popular near <span className="text-orange-600">you</span>!
-	  </h2>
-	  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
-		{loading ? (
-		  <div className="flex items-center justify-center h-full w-full py-16 text-gray-400">Loading...</div>
-		) : error ? (
-		  <div className="flex items-center justify-center h-full w-full py-16 text-red-400">{error}</div>
-		) : cards.length === 0 ? (
-		  <div className="flex items-center justify-center h-full w-full py-16 text-gray-400">No shops found</div>
-		) : (
-		  cards.map((card, idx) => (
-			<div key={card.type} className="relative bg-white rounded-xl shadow p-0 w-11/12 max-w-xs flex flex-col border border-orange-100 overflow-hidden mx-auto">
-			  {/* Shop Name */}
-			  <div className="absolute top-2 right-4 z-10 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold text-orange-600 shadow">{card.shop.name}</div>
-			  {/* Favorite Heart Button */}
-			  <button
-				className={`absolute top-2 left-2 rounded-full p-2 shadow transition ${card.fav ? "bg-red-500" : "bg-white hover:bg-orange-100"}`}
-				onClick={() => {
+   <section className="my-16 w-full max-w-6xl mx-auto dark:from-gray-900 dark:via-gray-950 dark:to-gray-90">
+	<h2 className="-mt-12 text-3xl font-bold text-black mb-8 text-left pl-2 ml-2 dark:text-white">
+	  Popular near <span className="text-orange-600 dark:text-orange-400">you</span>!
+	</h2>
+	<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+	  {loading ? (
+		<div className="flex items-center justify-center h-full w-full py-16 text-gray-400 dark:text-gray-500">Loading...</div>
+	  ) : error ? (
+		<div className="flex items-center justify-center h-full w-full py-16 text-red-400 dark:text-red-500">{error}</div>
+	  ) : cards.length === 0 ? (
+		<div className="flex items-center justify-center h-full w-full py-16 text-gray-400 dark:text-gray-500">No shops found</div>
+	  ) : (
+		cards.map((card, idx) => (
+		  <div key={card.type} className="relative bg-white rounded-xl shadow p-0 w-11/12 max-w-xs flex flex-col border border-orange-100 overflow-hidden mx-auto dark:bg-gray-900 dark:border-gray-800">
+			{/* Shop Name */}
+			<div className="absolute top-2 right-4 z-10 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold text-orange-600 shadow dark:bg-gray-900/80 dark:text-orange-300">{card.shop.name}</div>
+			{/* Favorite Heart Button */}
+			<button
+			  className={`absolute top-2 left-2 rounded-full p-2 shadow transition ${card.fav ? "bg-red-500 dark:bg-red-600" : "bg-white hover:bg-orange-100 dark:bg-gray-900 dark:hover:bg-orange-950"}`}
+			  onClick={() => {
+				try {
+				  let favs = [];
 				  try {
-					let favs = [];
-					try {
-					  favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
-					} catch {}
-					if (!card.fav) {
-					  // Add to favourites
-					  favs.push(card);
-					  localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
-					} else {
-					  // Remove from favourites
-					  favs = favs.filter((f: any) => f.shop && f.shop.id !== card.shop.id);
-					  localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
-					}
-					// Update UI
-					setCards((prev) => prev.map((c, i) => i === idx ? { ...c, fav: !c.fav } : c));
+					favs = JSON.parse(localStorage.getItem("hotdrop_favourites") || "[]");
 				  } catch {}
-				}}
-				aria-label="Add to favorites"
+				  if (!card.fav) {
+					// Add to favourites
+					favs.push(card);
+					localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
+				  } else {
+					// Remove from favourites
+					favs = favs.filter((f: any) => f.shop && f.shop.id !== card.shop.id);
+					localStorage.setItem("hotdrop_favourites", JSON.stringify(favs));
+				  }
+				  // Update UI
+				  setCards((prev) => prev.map((c, i) => i === idx ? { ...c, fav: !c.fav } : c));
+				} catch {}
+			  }}
+			  aria-label="Add to favorites"
+			>
+			  <svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill={card.fav ? "#fff" : "none"}
+				viewBox="0 0 24 24"
+				strokeWidth={1.5}
+				stroke={card.fav ? "#fff" : "#f97316"}
+				className="w-5 h-5"
 			  >
-				<svg
-				  xmlns="http://www.w3.org/2000/svg"
-				  fill={card.fav ? "#fff" : "none"}
-				  viewBox="0 0 24 24"
-				  strokeWidth={1.5}
-				  stroke={card.fav ? "#fff" : "#f97316"}
-				  className="w-5 h-5"
-				>
-				  <path
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					d="M16.5 3.75a5.25 5.25 0 00-4.5 2.472A5.25 5.25 0 007.5 3.75C5.014 3.75 3 5.764 3 8.25c0 7.25 9 12 9 12s9-4.75 9-12c0-2.486-2.014-4.5-4.5-4.5z"
-				  />
-				</svg>
-			  </button>
-			  {/* Food Image */}
-			  <div className="w-full" style={{height: '150px'}}>
-				<img src={card.item.image || "/pizza.png"} alt={card.item.name} className="w-full h-full object-cover" style={{minHeight: 120, maxHeight: 150}} />
-			  </div>
-			  {/* Name, Price & Rating Row */}
-			  <div className="flex items-center justify-between w-full mb-0 gap-2 px-3 max-w-full overflow-hidden" style={{ minHeight: 0, paddingBottom: 0 }}>
-				<div className="font-semibold text-lg text-gray-800 truncate text-left max-w-[50%]">{card.item.name}</div>
-				<div className="flex items-center gap-4 flex-shrink-0 max-w-[48%]">
-				  <div className="text-gray-700 font-medium text-base whitespace-nowrap">₹{card.item.price}</div>
-				  <div className="flex items-center gap-1 text-orange-500 text-sm whitespace-nowrap">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" className="w-4 h-4">
-					  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
-					</svg>
-					<span>4.5</span>
-				  </div>
+				<path
+				  strokeLinecap="round"
+				  strokeLinejoin="round"
+				  d="M16.5 3.75a5.25 5.25 0 00-4.5 2.472A5.25 5.25 0 007.5 3.75C5.014 3.75 3 5.764 3 8.25c0 7.25 9 12 9 12s9-4.75 9-12c0-2.486-2.014-4.5-4.5-4.5z"
+				/>
+			  </svg>
+			</button>
+			{/* Food Image */}
+			<div className="w-full" style={{height: '150px'}}>
+			  <img src={card.item.image || "/pizza.png"} alt={card.item.name} className="w-full h-full object-cover" style={{minHeight: 120, maxHeight: 150}} />
+			</div>
+			{/* Name, Price & Rating Row */}
+			<div className="flex items-center justify-between w-full mb-0 gap-2 px-3 max-w-full overflow-hidden" style={{ minHeight: 0, paddingBottom: 0 }}>
+			  <div className="font-semibold text-lg text-gray-800 truncate text-left max-w-[50%] dark:text-orange-200">{card.item.name}</div>
+			  <div className="flex items-center gap-4 flex-shrink-0 max-w-[48%]">
+				<div className="text-gray-700 font-medium text-base whitespace-nowrap dark:text-orange-200">₹{card.item.price}</div>
+				<div className="flex items-center gap-1 text-orange-500 text-sm whitespace-nowrap dark:text-orange-300">
+				  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" className="w-4 h-4">
+					<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+				  </svg>
+				  <span>4.5</span>
 				</div>
 			  </div>
-			  {/* Add to Cart Button */}
-			  <button
-				className="px-0 py-3 bg-orange-500 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 transition w-full"
-				style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}
-				onClick={() => {
-				  // Prepare cart item structure as in CartPage
-				  const cartItem = {
-					id: card.item.name + "-" + card.shop.id, // unique per shop+item
-					name: card.item.name,
-					price: card.item.price,
-					image: card.item.image,
-					quantity: 1,
-					shopId: card.shop.id,
-					shopName: card.shop.name,
-					shopImage: card.shop.image
-				  };
-				  // Get current cart
-				  let cart = [];
-				  try {
-					cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
-				  } catch {}
-				  // Check if item already in cart (by id)
-				  const existing = cart.find((item: any) => item.id === cartItem.id);
-				  if (existing) {
-					existing.quantity += 1;
-				  } else {
-					cart.push(cartItem);
-				  }
-				  localStorage.setItem("hotdrop_cart", JSON.stringify(cart));
-				  // Also store selected shop info
-				  const shopInfo = {
-					id: card.shop.id,
-					name: card.shop.name,
-					shopname: card.shop.name,
-					image: card.shop.image
-				  };
-				  localStorage.setItem("hotdrop_selected_shop", JSON.stringify(shopInfo));
-				}}
-			  >
-				Add to Cart
-			  </button>
 			</div>
-		  ))
-		)}
+			{/* Add to Cart Button */}
+			<button
+			  className="px-0 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 transition w-full dark:from-orange-500 dark:to-red-500 dark:text-orange-100 dark:hover:from-orange-800 dark:hover:to-red-800"
+			  style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}
+			  onClick={() => {
+				// Prepare cart item structure as in CartPage
+				const cartItem = {
+				  id: card.item.name + "-" + card.shop.id, // unique per shop+item
+				  name: card.item.name,
+				  price: card.item.price,
+				  image: card.item.image,
+				  quantity: 1,
+				  shopId: card.shop.id,
+				  shopName: card.shop.name,
+				  shopImage: card.shop.image
+				};
+				// Get current cart
+				let cart = [];
+				try {
+				  cart = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]");
+				} catch {}
+				// Check if item already in cart (by id)
+				const existing = cart.find((item: any) => item.id === cartItem.id);
+				if (existing) {
+				  existing.quantity += 1;
+				} else {
+				  cart.push(cartItem);
+				}
+				localStorage.setItem("hotdrop_cart", JSON.stringify(cart));
+				// Also store selected shop info
+				const shopInfo = {
+				  id: card.shop.id,
+				  name: card.shop.name,
+				  shopname: card.shop.name,
+				  image: card.shop.image
+				};
+				localStorage.setItem("hotdrop_selected_shop", JSON.stringify(shopInfo));
+			  }}
+			>
+			  Add to Cart
+			</button>
+		  </div>
+		))
+	  )}
 	  </div>
 	</section>
   );

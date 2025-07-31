@@ -92,16 +92,16 @@ export default function Signin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-100 to-blue-50 animate-gradient-x p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-100 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient-x p-4">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="backdrop-blur-lg bg-white/90 shadow-xl rounded-3xl px-8 py-10 w-full max-w-md border border-white/20 relative overflow-hidden"
+        className="backdrop-blur-lg bg-white/90 dark:bg-gray-900/90 shadow-xl rounded-3xl px-8 py-10 w-full max-w-md border border-white/20 dark:border-gray-700 relative overflow-hidden"
       >
         {/* Decorative elements */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-200 dark:bg-orange-900 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="relative z-10">
           <div className="flex justify-center mb-6">
             <motion.div
@@ -119,7 +119,7 @@ export default function Signin() {
             </motion.div>
           </div>
           <motion.h2 
-            className="text-3xl font-bold text-center mb-6 text-gray-800"
+            className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -128,7 +128,7 @@ export default function Signin() {
           </motion.h2>
           {error && (
             <motion.div 
-              className="p-3 bg-red-50 text-red-600 rounded-lg flex items-start mb-4"
+              className="p-3 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-lg flex items-start mb-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -144,20 +144,20 @@ export default function Signin() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1">
                 Email
               </label>
               <div className="relative">
                 <input
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                  className="w-full border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="h-5 w-5 text-gray-400 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -169,20 +169,20 @@ export default function Signin() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1">
                 Password
               </label>
               <div className="relative">
                 <input
                   type="password"
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 backdrop-blur-sm"
+                  className="w-full border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-sm transition bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="h-5 w-5 text-gray-400 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                   </svg>
                 </div>
@@ -212,13 +212,13 @@ export default function Signin() {
             </motion.button>
           </form>
           <div className="my-6 flex items-center">
-            <div className="flex-grow border-t border-gray-200"></div>
-            <span className="mx-4 text-sm text-gray-500">or continue with</span>
-            <div className="flex-grow border-t border-gray-200"></div>
+            <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+            <span className="mx-4 text-sm text-gray-500 dark:text-gray-300">or continue with</span>
+            <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
           </div>
           <motion.button
             onClick={handleGoogleSignin}
-            className="w-full border border-gray-200 py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3 bg-white"
+            className="w-full border border-gray-200 dark:border-gray-700 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-3 bg-white dark:bg-gray-900"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0, y: 10 }}
@@ -227,10 +227,10 @@ export default function Signin() {
             disabled={loading}
           >
             <img src="/google.svg" alt="Google" className="w-5 h-5" />
-            <span className="text-sm text-gray-700 font-medium">Google</span>
+            <span className="text-sm text-gray-700 dark:text-gray-100 font-medium">Google</span>
           </motion.button>
           <motion.p 
-            className="text-center mt-6 text-sm text-gray-500"
+            className="text-center mt-6 text-sm text-gray-500 dark:text-gray-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
@@ -238,7 +238,7 @@ export default function Signin() {
             Don't have an account?{" "}
             <button
               type="button"
-              className="text-orange-600 hover:underline font-medium"
+              className="text-orange-600 dark:text-orange-400 hover:underline font-medium"
               onClick={() => router.push('/signup')}
             >
               Sign Up

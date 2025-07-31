@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 // WaterLoader: animated water fill loader like your loader.tsx
 function WaterLoader() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen bg-gradient-to-r from-white via-red-200 to-blue-50">
+    <div className="flex flex-col items-center justify-center w-full h-screen bg-gradient-to-r from-white via-red-200 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       <div className="relative w-24 h-24 rounded-full border-4 border-orange-400 overflow-hidden">
         {/* Water */}
         <div className="absolute bottom-0 left-0 w-full h-full bg-orange-400 animate-fillWave z-10" />
@@ -341,61 +341,92 @@ export default function PartnerHome() {
     <>
         <div className={
           (showModal ?
-            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 filter blur-sm"
+            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 filter blur-sm"
             :
-            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50"
+            "min-h-screen flex flex-col items-center justify-start pt-2 p-6 bg-gradient-to-r from-white via-red-200 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900"
           )
         }>
           {/* Navbar */}
           <nav className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 py-6">
-            <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-              <motion.img
-                src="/logo.png"
-                alt="Logo"
-                className="w-10 h-10 rounded"
-                initial={{ y: -60, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
-              />
-              <motion.div
-                className="text-3xl font-extrabold text-gray-800"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
-              >
-                HotDrop
-              </motion.div>
+            {/* Left side: Logo + Shop name on mobile */}
+            <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+              <div className="flex items-center gap-3">
+                <motion.img
+                  src="/logo.png"
+                  alt="Logo"
+                  className="w-10 h-10 rounded"
+                  initial={{ y: -60, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 120, damping: 18, duration: 1.2 }}
+                />
+                {/* Show shop name only on mobile */}
+                <div className="block md:hidden">
+                  <ShopNameSubheading />
+                </div>
+                {/* Show site heading only on desktop */}
+                <motion.div
+                  className="hidden md:block text-3xl font-extrabold text-gray-800"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 180, delay: 0.2, duration: 0.7 }}
+                >
+                  HotDrop
+                </motion.div>
+              </div>
+
+              {/* Dashboard button on far right for mobile */}
+              <div className="md:hidden ml-auto">
+                <button
+                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1.5 rounded text-sm font-semibold"
+                  onClick={() => router.push("/partner/dashboard")}
+                >
+                  Dashboard
+                </button>
+              </div>
             </div>
-            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
+
+            {/* Right side: Shop name and Dashboard for desktop */}
+            <div className="hidden md:flex items-center gap-4 w-full md:w-auto md:mt-0">
               <ShopNameSubheading />
-              <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold w-full md:w-auto"
+              <button
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold"
                 onClick={() => router.push("/partner/dashboard")}
               >
                 Dashboard
               </button>
             </div>
           </nav>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mt-12 mb-4">
-            Welcome Partner!{" "}
-            <span className="text-orange-500">Now sell the best of yours</span>
+
+          {/* Heading - force line break on small screens */}
+          <h1 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-100 md:mt-8 mb-4">
+            Welcome Partner!
+            <br className="block md:hidden" />
+            <span className="text-2xl md:text-5xl text-orange-500 dark:text-orange-300"> Now sell the best of yours</span>
           </h1>
-          <div className="w-full flex flex-col items-center justify-center mb-8 md:flex-row md:justify-center md:items-center md:gap-4">
-            <button className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-black/80 transition-colors duration-300 w-full max-w-xs" onClick={() => setShowModal(true)}>
+
+          {/* Button + Bell Layout */}
+          <div className="w-full flex flex-row items-center justify-center md:gap-4 mb-8">
+            {/* Add Item Button */}
+            <button
+              className="bg-black dark:bg-gray-800 text-white dark:text-gray-100 px-6 py-2 rounded text-lg font-semibold hover:bg-black/80 dark:hover:bg-gray-700 transition-colors duration-300 w-4xl "
+              onClick={() => setShowModal(true)}
+            >
               + Add Item
             </button>
-            <div className="relative flex items-center justify-center mt-4 md:mt-0 md:ml-4">
-              <button
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-orange-200 text-2xl shadow hover:bg-orange-50 transition-colors duration-200"
+            <button
+                className="ml-8 flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-orange-200 dark:border-gray-700 text-2xl shadow hover:bg-orange-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 title="Notifications"
                 onClick={() => router.push('/partner/dashboard#notification-section')}
               >
                 <span role="img" aria-label="bell">🔔</span>
                 {notificationCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white notification-glow">{notificationCount}</span>
+                  <span className="absolute -top-1 -right-1 bg-orange-500 dark:bg-orange-700 text-white dark:text-gray-100 text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white dark:border-gray-900 notification-glow">
+                    {notificationCount}
+                  </span>
                 )}
               </button>
-            </div>
           </div>
+
           {/* Item cards */}
           {loading ? (
             <div className="flex justify-center items-center min-h-[300px] w-full">
@@ -404,15 +435,15 @@ export default function PartnerHome() {
           ) : (
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-0 gap-y-4 items-start justify-center">
               {items.map((item, idx) => (
-                <div key={idx} className="bg-gradient-to-r from-white via-red-200 to-blue-50 rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
+                <div key={idx} className="bg-gradient-to-r from-white via-red-200 to-blue-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-900 rounded shadow p-0 flex flex-col items-center w-72 h-72 mx-auto">
                   <img src={item.image.startsWith("/images/") ? `${process.env.NEXT_PUBLIC_BACKEND_API}${item.image}` : item.image} alt={item.name} className="w-full h-2/3 object-cover rounded-t" />
                   <div className="flex flex-col justify-between h-1/3 w-full p-4">
                     <div className="flex items-center justify-between w-full">
-                      <div className="font-bold text-lg text-gray-900 truncate">{item.name}</div>
+                      <div className="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">{item.name}</div>
                       <button
                         className={
-                          (item.available ? "bg-green-500" : "bg-gray-400") +
-                          " text-white px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
+                          (item.available ? "bg-green-500 dark:bg-green-700" : "bg-gray-400 dark:bg-gray-700") +
+                          " text-white dark:text-gray-100 px-3 py-1 rounded-full text-xs font-semibold ml-2 transition-colors duration-200"
                         }
                         onClick={() => toggleAvailability(idx)}
                       >
@@ -420,9 +451,9 @@ export default function PartnerHome() {
                       </button>
                     </div>
                     <div className="flex items-center justify-between w-full mt-2">
-                      <div className="text-orange-500 font-semibold text-xl">₹{item.price}</div>
+                      <div className="text-orange-500 dark:text-orange-300 font-semibold text-xl">₹{item.price}</div>
                       <button
-                        className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold border border-red-500 rounded px-3 py-1 transition-colors duration-200"
+                        className="ml-2 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-bold border border-red-500 dark:border-red-400 rounded px-3 py-1 transition-colors duration-200"
                         title="Delete"
                         onClick={() => handleDeleteItem(idx)}
                       >
@@ -524,23 +555,23 @@ function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white p-8 rounded shadow-lg w-full max-w-md flex flex-col items-center relative">
-        <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl" onClick={onClose}>&times;</button>
-        <h2 className="text-2xl font-bold mb-6">Add Item</h2>
+      <div className="bg-white dark:bg-gray-900 p-8 rounded shadow-lg w-full max-w-md flex flex-col items-center relative">
+        <button className="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-black dark:hover:text-white text-2xl" onClick={onClose}>&times;</button>
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Add Item</h2>
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit} encType="multipart/form-data">
           <input
             type="text"
             placeholder="Item Name"
             value={itemName}
             onChange={e => setItemName(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 dark:border-gray-700 p-2 rounded w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             required
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="border p-2 rounded w-full bg-white"
+            className="border border-gray-300 dark:border-gray-700 p-2 rounded w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             required
           />
           {preview && <img src={preview} alt="Preview" className="w-24 h-24 object-cover rounded mx-auto" />}
@@ -549,11 +580,11 @@ function AddItemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: {
             placeholder="Price"
             value={itemPrice}
             onChange={e => setItemPrice(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 dark:border-gray-700 p-2 rounded w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             required
           />
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-          <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-600 font-semibold" disabled={loading}>
+          {error && <div className="text-red-500 dark:text-red-300 text-sm">{error}</div>}
+          <button type="submit" className="bg-orange-500 dark:bg-orange-700 text-white dark:text-gray-100 px-4 py-2 rounded-full text-sm hover:bg-orange-600 dark:hover:bg-orange-800 font-semibold" disabled={loading}>
             {loading ? "Adding..." : "Add Item"}
           </button>
         </form>
@@ -587,15 +618,15 @@ function ShopNameSubheading() {
   return (
     <div className="relative ml-4">
       <button
-        className="text-lg md:text-xl font-bold text-black focus:outline-none"
+        className="text-lg md:text-xl font-bold text-black dark:text-gray-100 focus:outline-none"
         onClick={() => setShowDropdown((v) => !v)}
       >
         {shopname}
       </button>
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50">
           <button
-            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+            className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={handleLogout}
           >
             Logout

@@ -66,7 +66,7 @@ export default function HelpSupportPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
       <nav className="w-full max-w-6xl mx-auto flex justify-between items-center py-6 px-4">
         <Link href="/" className="flex items-center space-x-2">
@@ -77,11 +77,11 @@ export default function HelpSupportPage() {
             height={32}
             className="rounded-lg"
           />
-          <span className="text-xl font-bold text-gray-800">HotDrop</span>
+          <span className="text-xl font-bold text-gray-800 dark:text-gray-100">HotDrop</span>
         </Link>
         <Link 
           href="/" 
-          className="text-red-500 hover:text-red-600 font-medium transition-colors"
+          className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-medium transition-colors"
         >
           ← Back to Home
         </Link>
@@ -93,10 +93,10 @@ export default function HelpSupportPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-xl p-8 md:p-12"
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12"
         >
           <motion.h1 
-            className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 text-center"
+            className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
@@ -105,7 +105,7 @@ export default function HelpSupportPage() {
           </motion.h1>
           
           <motion.p 
-            className="text-center text-gray-600 text-lg mb-8"
+            className="text-center text-gray-600 dark:text-gray-300 text-lg mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -140,7 +140,7 @@ export default function HelpSupportPage() {
                 className={`px-6 py-3 rounded-full font-medium transition-all ${
                   activeTab === tab.id
                     ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800'
                 }`}
               >
                 {tab.icon} {tab.label}
@@ -161,7 +161,7 @@ export default function HelpSupportPage() {
                   placeholder="Search frequently asked questions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100"
                 />
               </div>
               
@@ -172,13 +172,13 @@ export default function HelpSupportPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: faq.id * 0.1 }}
-                    className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors"
+                  className="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   >
-                    <h3 className="font-semibold text-gray-800 mb-3 flex items-start">
+                    <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-3 flex items-start">
                       <span className="text-red-500 mr-2">Q:</span>
                       {faq.question}
                     </h3>
-                    <p className="text-gray-600 pl-6">
+                    <p className="text-gray-600 dark:text-gray-300 pl-6">
                       <span className="text-green-500 font-bold mr-2">A:</span>
                       {faq.answer}
                     </p>
@@ -197,15 +197,15 @@ export default function HelpSupportPage() {
               className="grid md:grid-cols-2 gap-8"
             >
               <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Get in Touch</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <div className="bg-blue-100 p-3 rounded-full">
                       <span className="text-blue-600 text-xl">📧</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">Email</p>
-                      <p className="text-gray-600">hotdrop.tech@gmail.com</p>
+                      <p className="font-semibold text-gray-800 dark:text-gray-100">Email</p>
+                      <p className="text-gray-600 dark:text-gray-300">hotdrop.tech@gmail.com</p>
                     </div>
                   </div>
                   
@@ -215,48 +215,48 @@ export default function HelpSupportPage() {
                       <span className="text-purple-600 text-xl">📍</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">Address</p>
-                      <p className="text-gray-600">LPU</p>
+                      <p className="font-semibold text-gray-800 dark:text-gray-100">Address</p>
+                      <p className="text-gray-600 dark:text-gray-300">LPU</p>
                     </div>
                   </div>
                 </div>
               </div>
               
               <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h3>
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Send us a Message</h3>
                 <form className="space-y-4" action="https://formsubmit.co/hotdrop.tech@gmail.com" method="POST">
                   <div>
-                    <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
+                    <label htmlFor="name" className="block text-gray-700 dark:text-gray-100 font-medium mb-2">Name</label>
                     <input
                       type="text"
                       name="name"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label htmlFor="number" className="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <label htmlFor="number" className="block text-gray-700 dark:text-gray-100 font-medium mb-2">Phone Number</label>
                     <input
                       type="text"
                       name="phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100"
                       placeholder="Your phone number"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-gray-700 font-medium mb-2">Email</label>
+                    <label className="block text-gray-700 dark:text-gray-100 font-medium mb-2">Email</label>
                     <input
                       type="email"
                       name="email"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100"
                       placeholder="Your email"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-gray-700 font-medium mb-2">Subject</label>
-                    <select name="subject" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300">
+                    <label className="block text-gray-700 dark:text-gray-100 font-medium mb-2">Subject</label>
+                    <select name="subject" className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100">
                       <option>Order Issue</option>
                       <option>Payment Problem</option>
                       <option>Delivery Issue</option>
@@ -266,11 +266,11 @@ export default function HelpSupportPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-gray-700 font-medium mb-2">Message</label>
+                    <label className="block text-gray-700 dark:text-gray-100 font-medium mb-2">Message</label>
                     <textarea
                       rows={4}
                       name="message"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 dark:bg-gray-900 dark:text-gray-100"
                       placeholder="Describe your issue or question..."
                     ></textarea>
                   </div>

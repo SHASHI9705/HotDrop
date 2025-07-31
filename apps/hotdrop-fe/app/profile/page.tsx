@@ -55,12 +55,12 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-8 px-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
       {/* Nav Bar */}
-      <div className="w-full max-w-2xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
+      <div className="w-full max-w-2xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => router.back()}
         >
@@ -70,10 +70,10 @@ export default function ProfilePage() {
           <span className="hidden md:inline">Back</span>
         </button>
         {/* Centered Profile Heading */}
-        <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap mx-auto">Profile</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-300 drop-shadow-sm whitespace-nowrap mx-auto">Profile</h1>
         {/* Edit Button (right) */}
         <button
-          className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 text-orange-600 font-semibold rounded-lg shadow transition mr-2"
+          className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
           title="Edit Profile"
           onClick={() => {
             setEditName(user?.name || '');
@@ -89,10 +89,10 @@ export default function ProfilePage() {
 
       {/* Edit Profile Popup */}
       {showEdit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white rounded-xl shadow-lg border border-orange-200 p-8 w-full max-w-md flex flex-col gap-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 dark:bg-black/60">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-orange-200 dark:border-gray-700 p-8 w-full max-w-md flex flex-col gap-6 relative">
             <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700"
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300"
               onClick={() => {
                 setShowEdit(false);
                 setEditSuccess("");
@@ -104,19 +104,19 @@ export default function ProfilePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h2 className="text-xl font-bold text-orange-500 mb-2 text-center">Edit Profile</h2>
+            <h2 className="text-xl font-bold text-orange-500 dark:text-orange-300 mb-2 text-center">Edit Profile</h2>
             <div className="flex flex-col gap-4">
-              <label className="text-sm font-semibold text-gray-700">Name</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Name</label>
               <input
                 type="text"
-                className="border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="border border-orange-200 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-900 dark:text-gray-100"
                 value={editName}
                 onChange={e => setEditName(e.target.value)}
               />
-              <label className="text-sm font-semibold text-gray-700 mt-2">Email</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Email</label>
               <input
                 type="email"
-                className="border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="border border-orange-200 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-900 dark:text-gray-100"
                 value={editEmail}
                 onChange={e => setEditEmail(e.target.value)}
               />
@@ -124,7 +124,7 @@ export default function ProfilePage() {
               {editSuccess && <div className="text-green-600 text-sm mt-2">{editSuccess}</div>}
             </div>
             <button
-              className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-lg shadow transition"
+              className="mt-4 bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow transition"
               onClick={async () => {
                 setEditLoading(true);
                 setEditError("");
@@ -166,15 +166,15 @@ export default function ProfilePage() {
       )}
 
       {/* Profile Card with stats row inside */}
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-orange-200 flex flex-col px-4 sm:px-6 py-8 gap-4 sm:gap-6">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-orange-200 dark:border-gray-700 flex flex-col px-4 sm:px-6 py-8 gap-4 sm:gap-6">
         <div className="flex flex-row items-center gap-4 sm:gap-6">
           {/* Profile Circle with Star */}
           <div className="relative flex items-center justify-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-orange-500 text-white font-bold text-3xl sm:text-4xl flex items-center justify-center shadow-lg border-4 border-white">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-orange-500 dark:bg-orange-600 text-white font-bold text-3xl sm:text-4xl flex items-center justify-center shadow-lg border-4 border-white dark:border-gray-700">
               {user?.name?.charAt(0).toUpperCase() || "U"}
               {/* Star at bottom right with thin white circle */}
               <span className="absolute -bottom-2 -right-2">
-                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center border border-white">
+                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center border border-white dark:border-gray-700">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24" stroke="#f59e42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="12 2 15 8.5 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 9 8.5 12 2" />
                   </svg>
@@ -184,25 +184,25 @@ export default function ProfilePage() {
           </div>
           {/* Name and Email (right side) */}
           <div className="flex flex-col items-start justify-center w-full ml-4 sm:ml-6">
-            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2 break-words w-full">{user?.name || "Your Name"}</div>
-            <div className="text-xs sm:text-lg md:text-xl text-gray-500 font-medium break-words w-full sm:max-w-xs sm:max-w-none">{user?.email || "your@email.com"}</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 break-words w-full">{user?.name || "Your Name"}</div>
+            <div className="text-xs sm:text-lg md:text-xl text-gray-500 dark:text-gray-300 font-medium break-words w-full sm:max-w-xs sm:max-w-none">{user?.email || "your@email.com"}</div>
           </div>
         </div>
         {/* Divider line inside card */}
-        <div className="w-full border-t border-orange-200 my-2" />
+        <div className="w-full border-t border-orange-200 dark:border-gray-700 my-2" />
         {/* Orders, Favourites, Points row inside card */}
         <div className="w-full flex flex-row justify-around items-center py-2">
           <div className="flex flex-col items-center">
-            <span className="text-lg md:text-xl font-bold text-orange-500">{orderCount}</span>
-            <span className="text-xs md:text-sm text-gray-500 mt-1">Orders</span>
+            <span className="text-lg md:text-xl font-bold text-orange-500 dark:text-orange-300">{orderCount}</span>
+            <span className="text-xs md:text-sm text-gray-500 dark:text-gray-300 mt-1">Orders</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-lg md:text-xl font-bold text-orange-500">{favouritesCount}</span>
-            <span className="text-xs md:text-sm text-gray-500 mt-1">Favourites</span>
+            <span className="text-lg md:text-xl font-bold text-orange-500 dark:text-orange-300">{favouritesCount}</span>
+            <span className="text-xs md:text-sm text-gray-500 dark:text-gray-300 mt-1">Favourites</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-lg md:text-xl font-bold text-orange-500">{orderCount * 5}</span>
-            <span className="text-xs md:text-sm text-gray-500 mt-1">Points</span>
+            <span className="text-lg md:text-xl font-bold text-orange-500 dark:text-orange-300">{orderCount * 5}</span>
+            <span className="text-xs md:text-sm text-gray-500 dark:text-gray-300 mt-1">Points</span>
           </div>
         </div>
       </div>
@@ -246,10 +246,10 @@ export default function ProfilePage() {
             return (
               <div
                 key={opt.label}
-                className="w-full max-w-2xl mx-auto bg-red-500 rounded-xl shadow border border-red-500 px-6 py-4 flex items-center justify-center"
+                className="w-full max-w-2xl mx-auto bg-gradient-to-r from-orange-500 to-red-500 rounded-xl shadow border border-red-500 px-6 py-4 flex items-center justify-center"
               >
                 <button
-                  className="flex items-center gap-2 py-1.5 px-3 bg-red-500 hover:bg-red-600 focus:bg-red-600 rounded-lg transition w-full justify-center outline-none min-h-0"
+                  className="flex items-center gap-2 py-1.5 px-3 bg-gradient-to-r from-orange-500 to-red-500 hover:bg-red-600 focus:bg-red-600 rounded-lg transition w-full justify-center outline-none min-h-0"
                   onClick={handleClick}
                 >
                   {/* Logout SVG (centered, no background, white) */}
@@ -264,17 +264,17 @@ export default function ProfilePage() {
           return (
             <button
               key={opt.label}
-              className="w-full flex items-center justify-between bg-white rounded-xl shadow border border-orange-100 px-4 py-4 transition hover:bg-orange-50"
+              className="w-full flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-100 dark:border-gray-700 px-4 py-4 transition hover:bg-orange-50 dark:hover:bg-gray-700"
               onClick={handleClick}
             >
               <span className="flex items-center">
-                <span className="w-10 h-10 flex items-center justify-center rounded-lg bg-orange-50 mr-4">
+                <span className="w-10 h-10 flex items-center justify-center rounded-lg bg-orange-50 dark:bg-gray-700 mr-4">
                   {opt.icon}
                 </span>
-                <span className="text-base md:text-lg font-semibold text-gray-700">{opt.label}</span>
+                <span className="text-base md:text-lg font-semibold text-gray-700 dark:text-gray-100">{opt.label}</span>
               </span>
               <span>
-                <svg className="w-5 h-5 text-orange-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg className="w-5 h-5 text-orange-300 dark:text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </span>
             </button>
           );
