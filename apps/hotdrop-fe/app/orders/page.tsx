@@ -22,7 +22,7 @@ interface Partner {
 
 export default function OrdersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 flex flex-col items-center pt-8 px-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-300 flex flex-col pt-8 px-4 pb-24">
       <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 rounded-xl shadow border border-orange-200">
         {/* Back Button (left) */}
         <button
@@ -112,10 +112,10 @@ function OrdersContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col ">
-      <div className="pl-0 md:pl-12">
-        <h2 className="text-3xl font-extrabold text-black/80 ml-2 mb-2 drop-shadow-sm">{itemName.toUpperCase()}</h2>
-        <p className="text-lg ml-2 text-gray-700 mb-8">{getFoodTagline(itemName)}</p>
+    <div className="min-h-screen flex flex-col items-stretch">
+      <div className="w-full">
+        <h2 className="text-3xl ml-4 font-extrabold text-black/80 mb-2 drop-shadow-sm text-left w-full">{itemName.toUpperCase()}</h2>
+        <p className="text-lg ml-4 text-gray-700 mb-8 text-left w-full">{getFoodTagline(itemName)}</p>
         {loading ? (
           <div className="flex items-center justify-center min-h-[60vh] w-full">
             <Loader />
@@ -123,14 +123,14 @@ function OrdersContent() {
         ) : foodPartners.length === 0 ? (
           <div className="flex items-center justify-center h-40 text-2xl font-bold text-orange-400 w-full">Coming soon...</div>
         ) : (
-          <div className="flex flex-col md:flex-row gap-6 mb-10 md:overflow-x-auto md:pr-12">
+          <div className="flex ml-4 flex-col md:flex-row md:flex-nowrap gap-6 mb-10 md:overflow-x-auto md:overflow-y-visible md:pr-12 md:items-start md:justify-start w-full">
             {foodPartners.map((partner, idx) => {
               const specialItem = partner.items.find((item) => normalize(item.name).includes(foodKey));
               return (
                 <a
                   key={idx}
                   href={`/orders/shopitems?shop=${encodeURIComponent(partner.name)}&food=${encodeURIComponent(itemName)}`}
-                  className="w-[80vw] md:w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden mx-auto"
+                  className="w-[80vw] md:w-64 h-64 bg-white rounded-2xl shadow-lg flex flex-col border border-orange-200 flex-shrink-0 transition-transform hover:scale-105 focus:outline-none overflow-hidden md:ml-0 text-left"
                   style={{ textDecoration: 'none' }}
                 >
                   <img

@@ -125,7 +125,7 @@ function CartContent() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 flex flex-col items-center pt-4 px-4">
+    <div className="min-h-screen  flex flex-col items-center pt-4 px-4">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8 mb-8 border border-orange-200">
         {loading ? (
           <div className="text-center text-gray-500 py-12">Loading...</div>
