@@ -176,7 +176,7 @@ function CartContent() {
               </div>
             </div>
             <button
-              className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-700 dark:to-red-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 flex items-center gap-2"
+              className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-500 dark:to-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 flex items-center gap-2"
               onClick={async () => {
                 // Get user and partner info from localStorage
                 const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");

@@ -1,7 +1,7 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { saveUserPushSubscription, getUserByEmail, updateUser, deleteUser } from "../controllers/userController.js";
 
-const router = Router();
+const router: Router = express.Router();
 
 // Add route to save user push subscription
 router.post("/push-subscription", (req, res, next) => {

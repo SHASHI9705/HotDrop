@@ -69,18 +69,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // SSR: get theme from cookie, fallback to client-side cookie if needed
-  let themeClass = "";
+  let themeClass = "dark"; // default to dark
   try {
     // SSR: Next.js app router cookies API
     const cookieStore = getCookies?.();
     //@ts-ignore
     const theme = cookieStore?.get?.("hotdrop_theme");
-    if (theme && theme.value === "dark") themeClass = "dark";
+    if (theme && theme.value === "light") themeClass = "";
   } catch {
     // Fallback: client-side cookie parsing
     if (typeof document !== "undefined") {
       const match = document.cookie.match(/hotdrop_theme=([^;]+)/);
-      if (match && match[1] === "dark") themeClass = "dark";
+      if (match && match[1] === "light") themeClass = "";
     }
   }
 
@@ -89,7 +89,9 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.png" type="image/x-icon" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ff6600" />
+        <meta name="theme-color" content="#ffcc80" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#111827" />
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 

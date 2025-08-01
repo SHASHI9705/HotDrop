@@ -22,44 +22,8 @@ function getInitialCart() {
   }
 }
 
-function ItemCard({ item }: { item: Item }) {
-  const [cart, setCart] = useState<Record<string, number>>({});
-  const [cartLoaded, setCartLoaded] = useState(false);
 
-  // Load cart from localStorage on client only
-  useEffect(() => {
-    setCart(getInitialCart());
-    setCartLoaded(true);
-  }, []);
-
-  const updateCart = (delta: number) => {
-    setCart((prev) => {
-      const newQty = Math.max(0, (prev[item.name] || 0) + delta);
-      const updated = { ...prev, [item.name]: newQty };
-      if (newQty === 0) delete updated[item.name];
-      // Save to localStorage as array
-      let arr = [];
-      try { arr = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]"); } catch {}
-      arr = arr.filter((i: any) => i.name !== item.name);
-      if (newQty > 0) {
-        arr.push({
-          id: item.name,
-          name: item.name,
-          price: item.price,
-          image: item.image,
-          quantity: newQty
-        });
-      }
-      localStorage.setItem("hotdrop_cart", JSON.stringify(arr));
-      return updated;
-    });
-  };
-
-  if (!cartLoaded) {
-    // Render nothing or a spinner until cart is loaded on client
-    return null;
-  }
-
+function ItemCard({ item, cart, updateCart }: { item: Item, cart: Record<string, number>, updateCart: (item: Item, delta: number) => void }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-0 flex flex-col border border-orange-100 dark:border-gray-700 overflow-hidden relative" style={{ minHeight: 180 }}>
       {/* Image with overlays */}
@@ -87,13 +51,13 @@ function ItemCard({ item }: { item: Item }) {
         <div className="flex items-center gap-2">
           <button
             className="bg-orange-200 dark:bg-gray-700 text-orange-700 dark:text-orange-300 rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-300 dark:hover:bg-gray-600 disabled:opacity-50"
-            onClick={() => updateCart(-1)}
+            onClick={() => updateCart(item, -1)}
             disabled={!((cart[item.name] ?? 0) > 0)}
           >-</button>
           <span className="font-semibold text-xs sm:text-base text-gray-700 dark:text-gray-100 min-w-[20px] text-center">{cart[item.name] || 0}</span>
           <button
             className="bg-orange-500 dark:bg-orange-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-base font-bold hover:bg-orange-600 dark:hover:bg-orange-700 disabled:opacity-50"
-            onClick={() => updateCart(1)}
+            onClick={() => updateCart(item, 1)}
             disabled={item.available !== true && item.available !== "true"}
           >+</button>
         </div>
@@ -108,6 +72,12 @@ export default function AllItemsContent() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [shop, setShop] = useState<{ name: string; image?: string } | null>(null);
+  const [cart, setCart] = useState<Record<string, number>>({});
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    setCart(getInitialCart());
+  }, []);
 
   useEffect(() => {
     if (!shopname) return;
@@ -125,6 +95,32 @@ export default function AllItemsContent() {
       })
       .catch(() => setLoading(false));
   }, [shopname]);
+
+  // Update cart in localStorage and state
+  const updateCart = (item: Item, delta: number) => {
+    setCart((prev) => {
+      const newQty = Math.max(0, (prev[item.name] || 0) + delta);
+      const updated = { ...prev, [item.name]: newQty };
+      if (newQty === 0) delete updated[item.name];
+      // Save to localStorage as array
+      let arr = [];
+      try { arr = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]"); } catch {}
+      arr = arr.filter((i: any) => i.name !== item.name);
+      if (newQty > 0) {
+        arr.push({
+          id: item.name,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: newQty
+        });
+      }
+      localStorage.setItem("hotdrop_cart", JSON.stringify(arr));
+      return updated;
+    });
+  };
+
+  const cartCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
@@ -165,11 +161,34 @@ export default function AllItemsContent() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center mt-8">
             {items.map((item, idx) => (
-              <ItemCard key={idx} item={item} />
+              <ItemCard key={idx} item={item} cart={cart} updateCart={updateCart} />
             ))}
           </div>
         )}
       </div>
-    </div>
+    {/* Checkout Footer Button */}
+    {cartCount > 0 && (
+      <div className="fixed bottom-0 left-0 w-full z-50">
+        <button
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500  hover:bg-orange-600 dark:hover:bg-orange-800 text-white dark:text-gray-100 font-bold text-sm sm:text-base py-3 rounded-none shadow transition-all duration-200 border-t border-orange-300 dark:border-orange-700"
+          style={{ boxShadow: '0 -1px 8px rgba(251, 146, 60, 0.10)' }}
+          onClick={() => {
+            const user = typeof window !== 'undefined' ? localStorage.getItem('hotdrop_user') : null;
+            if (!user) {
+              window.location.href = '/signin';
+            } else {
+              window.location.href = '/cart';
+            }
+          }}
+        >
+          <span role="img" aria-label="cart" className="text-lg sm:text-xl">🛒</span>
+          Checkout
+          <span className="ml-2 bg-white dark:bg-gray-900 text-orange-500 dark:text-orange-300 rounded-full px-2 py-0.5 text-xs sm:text-sm font-bold border border-orange-200 dark:border-orange-700 min-w-[20px] sm:min-w-[24px] text-center">
+            {cartCount}
+          </span>
+        </button>
+      </div>
+    )}
+  </div>
   );
 }
