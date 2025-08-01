@@ -1,7 +1,7 @@
 
 export default function Loader() {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
       <div className="relative w-16 h-16">
         {/* Main Circle */}
         <svg className="absolute top-0 left-0 w-16 h-16 animate-spin-slow" viewBox="0 0 64 64">

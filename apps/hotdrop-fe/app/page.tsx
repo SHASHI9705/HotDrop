@@ -143,7 +143,7 @@ export default function Home() {
       {/* Hero Content */}
       <div className="flex flex-col-reverse md:flex-row items-center gap-32 md:gap-48 max-w-6xl mt-20">
         {/* Left: Skip line content (on left for desktop, below for mobile) */}
-        <div className="md:w-1/2 text-center md:text-left -mt-20 md:mt-0 flex flex-col items-center md:items-start">
+        <div className="md:w-1/2 md:mr-32 text-center md:text-left -mt-20 md:mt-0 flex flex-col items-center md:items-start">
           <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-6xl font-extrabold text-gray-900 leading-tight whitespace-nowrap dark:text-white">
             Skip The <span className="text-orange-500 dark:text-orange-400">Line</span><br />
             Grab On <span className="text-orange-500 dark:text-orange-400">Time!</span>

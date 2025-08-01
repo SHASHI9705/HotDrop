@@ -134,7 +134,7 @@ export default function Nav({
               }}
             />
         <motion.div
-          className="text-4xl font-extrabold text-gray-800 hidden sm:block dark:text-orange-200"
+          className="text-4xl font-extrabold text-gray-800 hidden sm:block dark:text-white"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
@@ -189,20 +189,20 @@ export default function Nav({
             )}
           </div>
           {/* Right: Nav Options and Profile (hidden on mobile) */}
-          <div className="hidden sm:flex items-center gap-2 relative ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
+          <div className="hidden sm:flex items-center gap-2 relative md:ml-40 ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
             {user && (
-              <a href="/myorders" className="nav-underline px-4 min-w-[130px] dark:text-orange-200">My Orders</a>
+              <a href="/myorders" className="nav-underline px-4 min-w-[130px] dark:text-white">My Orders</a>
             )}
             {user ? (
               <>
-                <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-orange-200">Restaurants</a>
-                <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-orange-200">Favourites</a>
-                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-orange-200">Help</a>
+                <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-white">Restaurants</a>
+                <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-white">Favourites</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-white">Help</a>
               </>
             ) : (
               <>
-                <a href="/signin" className="nav-underline min-w-[90px] dark:text-orange-200">Login</a>
-                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-orange-200">Help</a>
+                <a href="/signin" className="nav-underline min-w-[90px] dark:text-white">Login</a>
+                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-white">Help</a>
               </>
             )}
             {user ? (
@@ -233,7 +233,7 @@ export default function Nav({
                 min-width: 0 !important;
               }
               .nav-underline.dark {
-                color: #fdba74 !important; /* orange-300 */
+                color: #fffdfbff !important; /* orange-300 */
               }
               .nav-underline::after {
                 content: '';
@@ -242,11 +242,11 @@ export default function Nav({
                 bottom: -2px;
                 width: 0%;
                 height: 2.4px;
-                background: #000000ff; /* orange-400 */
+                background: #d84848ff; /* orange-400 */
                 transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
               }
               .nav-underline.dark::after {
-                background: #fdba74 !important; /* orange-300 */
+                background: #f5f5f5ff; /* orange-300 */
               }
               .nav-underline:hover::after {
                 width: 100%;
