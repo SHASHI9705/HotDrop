@@ -59,6 +59,8 @@ function RestaurantFavButton({ shop }: { shop: any }) {
 
 export default function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     // Fetch all restaurants from backend
@@ -67,16 +69,38 @@ export default function RestaurantsPage() {
       .then(data => {
         if (Array.isArray(data)) {
           setRestaurants(data);
+          setFilteredRestaurants(data);
         } else if (data && Array.isArray(data.partners)) {
           setRestaurants(data.partners);
+          setFilteredRestaurants(data.partners);
         } else if (data && Array.isArray(data.data)) {
           setRestaurants(data.data);
+          setFilteredRestaurants(data.data);
         } else {
           setRestaurants([]);
+          setFilteredRestaurants([]);
         }
       })
       .catch(() => setRestaurants([]));
   }, []);
+
+  // Filter restaurants when category changes
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setFilteredRestaurants(restaurants);
+    } else {
+      // Filter restaurants that have at least one item with the category in its name
+      setFilteredRestaurants(
+        restaurants.filter(rest =>
+          Array.isArray(rest.items)
+            ? rest.items.some((item: any) =>
+                typeof item.name === 'string' && item.name.toLowerCase().includes(selectedCategory.toLowerCase())
+              )
+            : false
+        )
+      );
+    }
+  }, [selectedCategory, restaurants]);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-white via-orange-100 to-orange-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex flex-col items-center pt-8 px-4 pb-24">
@@ -95,7 +119,7 @@ export default function RestaurantsPage() {
           </button>
           {/* Centered logo and heading */}
           <div className="flex items-center gap-3 mx-auto">
-            <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-16 md:h-16" />
+            
             <h1 className="text-xl md:text-4xl font-bold text-orange-500 dark:text-orange-500 drop-shadow-sm whitespace-nowrap">Restaurants</h1>
           </div>
           {/* Home Button (right) */}
@@ -110,12 +134,31 @@ export default function RestaurantsPage() {
             <span className="hidden md:inline">Home</span>
           </button>
         </div>
-        <p className="text-base text-gray-700 dark:text-gray-200 mb-10 text-center max-w-2xl mx-auto">Find top local spots, pre-order your favorites, and grab your food on the go!</p>
-        {restaurants.length === 0 ? (
+        <p className="text-base text-gray-700 dark:text-gray-200 mb-10 text-center max-w-2xl mx-auto hidden sm:block">Find top local spots, pre-order your favorites, and grab your food on the go!</p>
+        {/* Category Slider under nav */}
+        <div className="w-full max-w-5xl mx-auto">
+          <div className="w-full mt-2 mb-4 relative">
+            <div className="overflow-x-auto no-scrollbar">
+              <div className="flex flex-row gap-2 py-3 min-w-full justify-start md:justify-center" style={{ position: 'relative' }}>
+                {['All', 'Burger', 'Pizza', 'Ice cream', 'Momos', 'Cake', 'Dosa', 'Noodle'].map((cat, idx) => (
+                  <button
+                    key={cat}
+                    className={`px-2 py-2 text-sm font-semibold rounded-full bg-white dark:bg-gray-900 text-orange-500 dark:text-orange-300 border border-orange-200 dark:border-orange-700 shadow hover:bg-orange-50 dark:hover:bg-gray-800 transition whitespace-nowrap ${selectedCategory === cat ? 'ring-1 ring-orange-400 dark:ring-orange-500' : ''}`}
+                    style={{ minWidth: '80px' }}
+                    onClick={() => setSelectedCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {filteredRestaurants.length === 0 ? (
           <Loader />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-            {restaurants.map((rest, idx) => (
+            {filteredRestaurants.map((rest, idx) => (
               <div key={rest.id || idx} className="relative bg-white dark:bg-gray-800 rounded-xl shadow p-0 w-11/12 max-w-xs md:max-w-md lg:max-w-2xl flex flex-col border border-orange-100 dark:border-gray-700 overflow-hidden mx-auto">
                 {/* Heart Favourite Button */}
                 <RestaurantFavButton shop={rest} />
@@ -149,7 +192,7 @@ export default function RestaurantsPage() {
                 </div>
                 {/* View Menu Button */}
                 <button
-                  className="px-0 py-3 bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-600 dark:to-red-600 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 dark:hover:bg-orange-700 transition w-full"
+                  className="px-0 py-3 bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-500 dark:to-red-600 text-white rounded-b-xl font-semibold text-sm hover:bg-orange-600 dark:hover:bg-orange-700 transition w-full"
                   style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 'auto' }}
                   onClick={() => window.location.href = `/allitems?shop=${encodeURIComponent(rest.shopname)}`}
                 >

@@ -14,6 +14,11 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 export default function SettingsPage() {
+  // Export My Data modal state
+  const [showExportForm, setShowExportForm] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
+  const [exportError, setExportError] = useState("");
+  const [exportSuccess, setExportSuccess] = useState("");
   // Notification toggles state (fix hydration)
   const [orderUpdatesEnabled, setOrderUpdatesEnabled] = useState(true);
   const [promoUpdatesEnabled, setPromoUpdatesEnabled] = useState(false);
@@ -385,8 +390,24 @@ export default function SettingsPage() {
       <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow border border-orange-200 dark:border-gray-700 px-6 py-6 flex flex-col gap-2 mb-8 transition-colors duration-300">
         <h3 className="text-base sm:text-lg font-bold text-orange-500 mb-2">Data and Privacy</h3>
         <div className="flex flex-col divide-y divide-orange-100">
-          {/* Export My Data */}
-          <button className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition">
+          {/* Export My Data (hidden form, button triggerssubmit) */}
+          <form
+            action="https://formsubmit.co/hotdrop.tech@gmail.com"
+            method="POST"
+            style={{ display: 'none' }}
+            id="exportDataForm"
+          >
+            <input type="hidden" name="message" value="I want my user data" />
+            <input type="hidden" name="name" value={user?.name || ''} />
+            <input type="hidden" name="email" value={user?.email || ''} />
+          </form>
+          <button
+            className="flex items-center gap-4 py-4 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition"
+            onClick={() => {
+              const form = document.getElementById('exportDataForm') as HTMLFormElement | null;
+              if (form) form.submit();
+            }}
+          >
             <span className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
               {/* Download SVG */}
               <svg width="22" height="22" fill="none" stroke="#fb923c" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 3v14m0 0l-4-4m4 4l4-4" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="17" width="16" height="4" rx="2" fill="#fff3"/></svg>

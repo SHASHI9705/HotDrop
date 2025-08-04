@@ -39,7 +39,7 @@ export default function FavouritesPage() {
           </button>
           {/* Centered logo and heading */}
           <div className="flex items-center gap-3 mx-auto">
-            <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-16 md:h-16" />
+            
             <h1 className="text-xl md:text-4xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">Your Favourites!</h1>
           </div>
           {/* Home Button (right) */}

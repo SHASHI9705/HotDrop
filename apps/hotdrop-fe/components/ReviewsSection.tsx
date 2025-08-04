@@ -66,7 +66,7 @@ export default function ReviewsSection() {
 		   <h2 className=" text-3xl font-bold text-black mb-8 text-left pl-2 ml-2 dark:text-white">
 				What Our <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Customers</span> Say
 			</h2>
-		   <div className="space-y-8">
+		   <div className="space-y-2">
 				{reviewGroups.map((group, i) => (
 			   <div key={i} className="overflow-hidden w-full">
 				   <motion.div
@@ -83,7 +83,7 @@ export default function ReviewsSection() {
 					   {[...group, ...group].map((review, idx) => (
 						   <div
 							   key={idx}
-							   className="bg-white mt-4 mb-4 rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200 dark:bg-gray-900 dark:border-gray-800"
+							   className="bg-white mt-2 mb-4 rounded-xl shadow-lg p-6 flex flex-col items-start border border-orange-100 min-w-[320px] max-w-xs hover:shadow-xl transition-shadow duration-200 dark:bg-gray-900 dark:border-gray-800"
 						   >
 							   <div className="flex items-center mb-2">
 								   <span className="font-bold text-gray-800 text-lg mr-2 dark:text-orange-200">
