@@ -359,7 +359,41 @@ export default function SettingsPage() {
               className={`ml-4 w-12 h-6 flex items-center rounded-full transition-colors duration-200 border ${promoUpdatesEnabled ? 'bg-gradient-to-r from-orange-500 to-red-500' : 'bg-gray-200 border-gray-300'}`}
               role="switch"
               aria-checked={promoUpdatesEnabled}
-              onClick={() => setPromoUpdatesEnabled(v => !v)}
+              onClick={async () => {
+                const newValue = !promoUpdatesEnabled;
+                setPromoUpdatesEnabled(newValue);
+                console.log('[Promotion Toggle] Clicked. New value:', newValue);
+                if (!user) {
+                  alert('User not loaded. Please sign in again.');
+                  console.warn('[Promotion Toggle] No user loaded.');
+                  return;
+                }
+                try {
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/user/update`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: user.name,
+                      email: user.email,
+                      oldEmail: user.email,
+                      promoUpdatesEnabled: newValue
+                    })
+                  });
+                  if (res.ok) {
+                    const data = await res.json();
+                    setUser(data.user);
+                    localStorage.setItem("hotdrop_user", JSON.stringify(data.user));
+                    console.log('[Promotion Toggle] Update success:', data.user);
+                  } else {
+                    const errText = await res.text();
+                    alert('Failed to update promotion preference: ' + errText);
+                    console.error('[Promotion Toggle] Update failed:', errText);
+                  }
+                } catch (e) {
+                  alert('Network error updating promotion preference.');
+                  console.error('[Promotion Toggle] Network error:', e);
+                }
+              }}
             >
               <span
                 className={`inline-block w-5 h-5 rounded-full bg-white shadow transform transition-transform duration-200 ${promoUpdatesEnabled ? 'translate-x-6' : 'translate-x-1'}`}

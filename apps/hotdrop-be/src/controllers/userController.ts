@@ -1,3 +1,49 @@
+import { sendPushToUser } from "../controllers/pushUtils.js";
+// Send promo push notification to all users with a push subscription
+export const sendPromoPushToAllUsers = async (req: Request, res: Response) => {
+  try {
+    // Find all users with at least one push subscription and promoUpdatesEnabled true
+    const users = await prismaClient.signup.findMany({
+      where: {
+        promoUpdatesEnabled: true,
+        pushSubscriptions: {
+          some: {},
+        },
+      },
+      select: { id: true },
+    });
+    if (!users.length) return res.status(200).json({ message: "No users with promo updates enabled" });
+
+    const messages = [
+      "Craving hits different when you're on the move! Pre-order on Hotdrop now!",
+      "Why wait hungry? Order now, grab on the go!",
+      "Feeling hungry? Hotdrop's got your back, order while you're on the way!",
+      "Your cravings are waiting... skip the queue, bite into flavor with Hotdrop!",
+      "No time? No problem. Pre-order your hunger fix with Hotdrop!",
+      "Traffic’s slow, but your food won’t be... pre-order on Hotdrop!",
+      "Turn red lights into snack time, order on the go!",
+      "Spice up your ride! Order now, pick up hot!",
+      "Hunger doesn't wait, neither should you. Order ahead with Hotdrop!",
+      "Your food. Your route. skip waiting. Just Hotdrop it!",
+    ];
+    
+    let sent = 0;
+    for (const user of users) {
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      const payload = {
+      title: "HotDrop",
+      body: messages[randomIndex],
+      icon: "/logo.png",
+      url: "https://hotdrop.tech"
+    };
+      await sendPushToUser(user.id, payload);
+      sent++;
+    }
+    res.status(200).json({ message: `Promo push sent to ${sent} users` });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to send promo push", details: String(err) });
+  }
+};
 import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
 
@@ -54,7 +100,7 @@ export const getUserByEmail = async (req: Request, res: Response): Promise<void>
 };
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
-  const { name, email, oldEmail } = req.body;
+  const { name, email, oldEmail, promoUpdatesEnabled } = req.body;
 
   if (!name || !email || !oldEmail) {
     res.status(400).json({ error: "Name, email, and oldEmail are required" });
@@ -72,7 +118,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
     const updated = await prismaClient.signup.update({
       where: { email: oldEmail },
-      data: { name, email },
+      data: { name, email, ...(promoUpdatesEnabled !== undefined ? { promoUpdatesEnabled } : {}) },
     });
 
     res.status(200).json({ user: updated });

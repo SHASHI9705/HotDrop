@@ -9,8 +9,10 @@ import partnerRoutes from "./routes/partnerRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-
+import cron from "node-cron";
+import fetch from "node-fetch";
 dotenv.config();
+
 
 
 const app: Express = express();
@@ -48,6 +50,27 @@ app.post("/deploy", (req, res) => {
   });
 });
 
+
+
+
+// --- Scheduled Promo Push Notification (every 12 hours) ---
+cron.schedule("0 6,9,12,15,18,21 * * *", async () => {
+  try {
+    const backendUrl = process.env.BACKEND_API_URL;
+    const res = await fetch(`${backendUrl}/user/send-promo-push`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (res.ok) {
+      console.log("[CRON] Promo push sent to eligible users.");
+    } else {
+      const text = await res.text();
+      console.error("[CRON] Failed to send promo push:", text);
+    }
+  } catch (err) {
+    console.error("[CRON] Error sending promo push:", err);
+  }
+});
 
 app.use("/auth", authRoutes);
 app.use("/partner", partnerRoutes);

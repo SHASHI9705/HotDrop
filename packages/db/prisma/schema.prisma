@@ -24,6 +24,7 @@ model Signup {
   password String
   orders Order[] // relation to orders
   pushSubscriptions PushSubscription[]
+  promoUpdatesEnabled Boolean @default(false)
 }
 
 model Partner {

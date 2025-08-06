@@ -166,7 +166,7 @@ function CartContent() {
                 <span className="text-gray-800 dark:text-gray-100 font-bold">₹{(total * 0.03).toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 dark:text-gray-100 font-semibold">Maintenance Fees</span>
+                <span className="text-gray-700 dark:text-gray-100 font-semibold">Platform Fees</span>
                 <span className="text-gray-800 dark:text-gray-100 font-bold">₹2.00</span>
               </div>
               <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t dark:border-gray-700 pt-2">
@@ -217,7 +217,7 @@ function CartContent() {
                 await loadRazorpay();
                 const options = {
                   key: `${process.env.NEXT_PUBLIC_RAZORPAY_KEY}`,
-                  amount: Math.round((total + total * 0.03 + 2) * 100), // Use total amount (subtotal + GST + maintenance fees) in paise
+                  amount: Math.round((total + total * 0.03 + 2) * 100), // Use total amount (subtotal + GST + Platform fees) in paise
                   currency: "INR",
                   name: "HotDrop",
                   description: "Order Payment",

@@ -1,7 +1,13 @@
+
 import express, { Router } from "express";
-import { saveUserPushSubscription, getUserByEmail, updateUser, deleteUser } from "../controllers/userController.js";
+import { saveUserPushSubscription, getUserByEmail, updateUser, deleteUser, sendPromoPushToAllUsers } from "../controllers/userController.js";
 
 const router: Router = express.Router();
+
+// Route to send promo push notification to all users
+router.post("/send-promo-push", (req, res, next) => {
+  Promise.resolve(sendPromoPushToAllUsers(req, res)).catch(next);
+});
 
 // Add route to save user push subscription
 router.post("/push-subscription", (req, res, next) => {
