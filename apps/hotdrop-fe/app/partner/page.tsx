@@ -414,17 +414,17 @@ export default function PartnerHome() {
               + Add Item
             </button>
             <button
-                className="ml-8 flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-orange-200 dark:border-gray-700 text-2xl shadow hover:bg-orange-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                className="ml-8 flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-orange-200 dark:border-gray-700 text-2xl shadow hover:bg-orange-50 dark:hover:bg-gray-700 transition-colors duration-200 relative"
                 title="Notifications"
                 onClick={() => router.push('/partner/dashboard#notification-section')}
               >
                 <span role="img" aria-label="bell">🔔</span>
                 {notificationCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-orange-500 dark:bg-orange-700 text-white dark:text-gray-100 text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white dark:border-gray-900 notification-glow">
+                  <span style={{position:'absolute',top:'-6px',right:'-6px',zIndex:2}} className="bg-orange-500 dark:bg-orange-700 text-white dark:text-gray-100 text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center border border-white dark:border-gray-900 notification-glow">
                     {notificationCount}
                   </span>
                 )}
-              </button>
+            </button>
           </div>
 
           {/* Item cards */}
@@ -470,23 +470,23 @@ export default function PartnerHome() {
       {/* Add glowing effect for notification badge */}
       <style jsx global>{`
         .glow-badge {
-          box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+          box-shadow: 0 0 2px 2px #fb923c, 0 0 16px 4px #fb923c66;
           animation: glow-badge-anim 1.2s ease-in-out infinite alternate;
         }
         @keyframes glow-badge-anim {
-          0% { box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66; }
-          100% { box-shadow: 0 0 16px 6px #fb923c, 0 0 32px 12px #fb923c44; }
+          0% { box-shadow: 0 0 2px 2px #fb923c, 0 0 16px 4px #fb923c66; }
+          100% { box-shadow: 0 0 6px 6px #fb923c, 0 0 32px 12px #fb923c44; }
         }
         .notification-glow {
-          box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+          box-shadow: 0 0 2px 2px #fb923c, 0 0 16px 4px #fb923c66;
           animation: notification-glow-pulse 1.5s ease-in-out infinite alternate;
         }
         @keyframes notification-glow-pulse {
           0% {
-            box-shadow: 0 0 8px 2px #fb923c, 0 0 16px 4px #fb923c66;
+            box-shadow: 0 0 2px 2px #fb923c, 0 0 16px 4px #fb923c66;
           }
           100% {
-            box-shadow: 0 0 16px 6px #fb923c, 0 0 32px 12px #fb923c44;
+            box-shadow: 0 0 6px 6px #fb923c, 0 0 32px 12px #fb923c44;
           }
         }
       `}</style>

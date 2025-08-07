@@ -293,17 +293,6 @@ export default function DashboardPage() {
         <div className="w-full flex justify-center">
           <OrderListSection />
         </div>
-        <div className="w-full flex justify-center mt-12 mb-8">
-          <button
-            className="bg-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-red-600 transition-colors duration-300"
-            onClick={() => {
-              localStorage.removeItem("hotdrop_partner");
-              router.push("/");
-            }}
-          >
-            Logout
-          </button>
-        </div>
       </div>
     </div>
   );
