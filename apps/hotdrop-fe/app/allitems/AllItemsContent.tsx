@@ -139,7 +139,7 @@ export default function AllItemsContent() {
           </button>
           {/* Centered logo and heading */}
           <div className="flex items-center gap-3 mx-auto">
-            <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
+            
             <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-500 drop-shadow-sm whitespace-nowrap">{shop?.name || "All Items"}</h1>
           </div>
           {/* Home Button (right) */}

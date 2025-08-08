@@ -53,8 +53,8 @@ export default function ShopItemsPage() {
         </button>
         {/* Centered logo and heading */}
         <div className="flex items-center gap-3 mx-auto">
-          <img src="/logo.png" alt="HotDrop Logo" className="w-10 h-10 md:w-14 md:h-14" />
-        <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-300 drop-shadow-sm whitespace-nowrap">{shopHeading}</h1>
+          
+        <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-500 drop-shadow-sm whitespace-nowrap">{shopHeading}</h1>
         </div>
         {/* Home Button (right) */}
         <button
@@ -180,7 +180,7 @@ function ShopItemsContent() {
     <div className="min-h-screen flex flex-col dark:bg-gray-900">
       {/* ...header removed, replaced by nav above... */}
       <div className="px-4 sm:pl-12 sm:pr-12 pb-28">
-        <h2 className="text-xl sm:text-2xl font-bold text-orange-500 dark:text-orange-300 mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white mb-4 sm:mb-6 mt-2 text-center sm:text-left">{getHeading(foodName)}</h2>
         {loading ? (
           <div className="flex items-center justify-center min-h-[60vh] w-full">
             <Loader />
