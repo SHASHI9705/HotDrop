@@ -189,7 +189,7 @@ export default function Nav({
             )}
           </div>
           {/* Right: Nav Options and Profile (hidden on mobile) */}
-          <div className="hidden sm:flex items-center gap-2 relative md:ml-40 ml-6 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
+          <div className="hidden sm:flex items-center gap-2 relative md:ml-40 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
             {user && (
               <a href="/myorders" className="nav-underline px-4 min-w-[130px] dark:text-white">My Orders</a>
             )}
@@ -197,7 +197,7 @@ export default function Nav({
               <>
                 <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-white">Restaurants</a>
                 <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-white">Favourites</a>
-                <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-white">Help</a>
+                <a href="/footeroptions/help" className="nav-underline px-4 min-w-[110px] dark:text-white">Help</a>
               </>
             ) : (
               <>
