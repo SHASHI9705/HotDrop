@@ -38,7 +38,7 @@ export default function OrderPointsPage() {
       <div className="w-full max-w-2xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-5 py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-5 py-2  hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => router.back()}
         >
@@ -51,7 +51,7 @@ export default function OrderPointsPage() {
         <h1 className="text-xl md:text-3xl font-bold text-orange-500 dark:text-orange-300 drop-shadow-sm whitespace-nowrap mx-auto">Order Points</h1>
         {/* Home Button (right) */}
         <button
-          className="flex items-center px-5 py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
+          className="flex items-center px-5 py-2  hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
           title="Home"
           onClick={() => router.push("/")}
         >

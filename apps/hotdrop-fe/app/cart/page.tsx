@@ -24,7 +24,7 @@ export default function CartPage() {
       <div className="w-full max-w-4xl mx-auto flex items-center justify-between mb-8 px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
         {/* Back Button (left) */}
         <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
+          className="flex items-center px-3 py-1.5 md:px-5 md:py-2  hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
           title="Back"
           onClick={() => window.history.back()}
         >
@@ -38,16 +38,7 @@ export default function CartPage() {
           <h1 className="text-xl md:text-3xl font-bold text-orange-500 drop-shadow-sm whitespace-nowrap">Your Cart</h1>
         </div>
         {/* Home Button (right) */}
-        <button
-          className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 dark:bg-gray-700 hover:bg-orange-200 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
-          title="Home"
-          onClick={() => window.location.href = '/'}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
-          </svg>
-          <span className="hidden md:inline">Home</span>
-        </button>
+        <div className="w-[65px]"></div>
       </div>
       <Suspense fallback={<div className="text-center text-gray-500 py-12">Loading...</div>}>
         <CartContent />

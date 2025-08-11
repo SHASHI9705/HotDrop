@@ -128,7 +128,7 @@ export default function AllItemsContent() {
         <div className="flex items-center justify-between mb-4 w-full px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
           {/* Back Button (left) */}
           <button
-            className="flex items-center px-3 py-1.5 md:px-5 md:py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
+            className="flex items-center px-3 py-1.5 md:px-5 md:py-2  hover:bg-orange-200  dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
             title="Back"
             onClick={() => window.history.back()}
           >

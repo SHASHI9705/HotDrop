@@ -108,7 +108,7 @@ export default function RestaurantsPage() {
         <div className="flex items-center justify-between mb-8 w-full px-0 md:px-4 py-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow border border-orange-200 dark:border-gray-700">
           {/* Back Button (left) */}
           <button
-            className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
+            className="flex items-center px-5 py-2  dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition ml-2"
             title="Back"
             onClick={() => window.history.back()}
           >
@@ -123,16 +123,7 @@ export default function RestaurantsPage() {
             <h1 className="text-xl md:text-4xl font-bold text-orange-500 dark:text-orange-500 drop-shadow-sm whitespace-nowrap">Restaurants</h1>
           </div>
           {/* Home Button (right) */}
-          <button
-            className="flex items-center px-5 py-2 bg-orange-100 hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-300 font-semibold rounded-lg shadow transition mr-2"
-            title="Home"
-            onClick={() => window.location.href = '/'}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="#fb923c" className="w-6 h-6 mr-2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
-            </svg>
-            <span className="hidden md:inline">Home</span>
-          </button>
+          <div className="w-[65px]"></div>
         </div>
         <p className="text-base text-gray-700 dark:text-gray-200 mb-10 text-center max-w-2xl mx-auto hidden sm:block">Find top local spots, pre-order your favorites, and grab your food on the go!</p>
         {/* Category Slider under nav */}
