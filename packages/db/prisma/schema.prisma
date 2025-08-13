@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -38,6 +39,7 @@ model Partner {
   verification Verification? // relation to verification
   bankAccount BankAccount?
   pushSubscriptions PushSubscription[]
+  feedbacks Feedback[]
 }
 
 model BankAccount {
@@ -78,6 +80,7 @@ model Order {
   price      Float
   dateTime   DateTime
   status     String   // e.g. 'pending', 'taken', 'cancelled', etc.
+  feedbacks  Feedback[]
 }
 
 model Verification {
@@ -91,3 +94,14 @@ model Verification {
   verified      Boolean  @default(false)
 }
 
+model Feedback {
+  id        String   @id @default(uuid())
+  name      String
+  stars     Int
+  comment   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+  partner   Partner  @relation(fields: [partnerId], references: [id])
+  partnerId String
+  createdAt DateTime @default(now())
+}

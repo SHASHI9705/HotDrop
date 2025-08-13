@@ -44,7 +44,7 @@ export default function OrderListSection() {
     fetchRef.current();
     const interval = setInterval(() => {
       fetchRef.current();
-    }, 60000); // 60 seconds
+    }, 180000); // 60 seconds
     return () => clearInterval(interval);
   }, []);
 
