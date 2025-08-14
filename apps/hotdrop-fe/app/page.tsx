@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import PhoneFooter from "../components/PhoneFooter";
 import PopularRestaurantsSection from "../components/PopularRestaurantsSection";
 import Loader from "../components/Loader";
+import OfferSection from "../components/OfferSection";
 
 
 
@@ -287,6 +288,7 @@ export default function Home() {
         </div>
       </div>
       <main className="w-full max-w-6xl mx-auto flex flex-col items-center dark:from-gray-900 dark:via-gray-950 dark:to-gray-90">
+        <OfferSection />
         <FoodSection />
         <PopularRestaurantsSection />
         <ReviewsSection />
