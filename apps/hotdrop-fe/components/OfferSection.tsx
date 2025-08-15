@@ -13,36 +13,36 @@ const cards: Card[] = [
   {
     title: "Earn More with Every Bite",
     description: "Every bite takes you closer to rewards! Earn 5 points with every order , more orders mean more points, and more points mean bigger chances to win exclusive prizes.",
-    bgColor: "bg-red-700",
-    image: "/burger.png",
-  route: "/rewards",
+    bgColor: "bg-green-900",
+    image: "/orderpoints.png",
+  route: "/orderpoints",
   },
   {
     title: "Where Every Slice is a Story",
     description: "Dive into the perfect blend of gooey cheese, rich sauce, and a crust that’s just the right kind of crispy. One bite and you’ll know why our pizzas are a legend in the making.",
-    bgColor: "bg-blue-100 dark:bg-blue-900",
-    image: "/cake.png",
-  route: "/pizza",
+    bgColor: "bg-red-700",
+    image: "/pizzaoffer.png",
+  route: "/orders?food=pizza",
   },
   {
     title: "Burgers That Mean Business",
     description: "Stacked high, packed with irresistible flavor, and grilled to perfection, our burgers don’t just satisfy hunger, they make a bold statement with every juicy, mouthwatering bite.",
-    bgColor: "bg-green-100 dark:bg-green-900",
-    image: "/pizza.png",
-  route: "/burgers",
+    bgColor: "bg-green-900",
+    image: "/burgeroffer.png",
+  route: "/orders?food=burger",
   },
   {
     title: "Skip the Wait, Savor the Crisp",
     description: "Golden, crispy, and stuffed with love, our dosas are ready to roll the moment you are. Fresh off the pan and full of flavor, why wait when a taste like this is calling your name?",
-    bgColor: "bg-yellow-100 dark:bg-yellow-900",
-    image: "/icecream.png",
-  route: "/dosa",
+    bgColor: "bg-yellow-900",
+    image: "/dosaoffer.png",
+  route: "/orders?food=dosa",
   },
   {
-    title: "5% Off ,LPU Treat Just for You",
+    title: "5% Off on one order",
     description: "Show your LPU ID and enjoy 5% off on any one order. Because great food tastes even better when it comes with a little extra love for our students.",
-    bgColor: "bg-purple-100 dark:bg-purple-900",
-    image: "/momo.png",
+    bgColor: "bg-purple-900",
+    image: "/lpuoffer.png",
   route: "/lpu-offer",
   },
 ];
@@ -71,12 +71,16 @@ export default function OfferSection() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setTransitioning(true);
-      setCurrent((prev) => prev + 1);
-    }, 9000);
+      setCurrent((prev) => {
+        if (prev >= total + 1) return 1;
+        if (prev <= 0) return total;
+        return prev + 1;
+      });
+    }, 3000);
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [current]);
+  }, [current, total]);
 
   // Mouse/touch drag/swipe handlers
   useEffect(() => {
@@ -173,12 +177,12 @@ export default function OfferSection() {
             card ? (
               <div
                 key={idx}
-                className="min-w-full flex-shrink-0 px-4"
+                className="w-full min-w-full flex-shrink-0 flex justify-center px-0 sm:px-4"
               >
-                <div className={`rounded-3xl shadow-2xl flex flex-col sm:flex-row items-stretch gap-4 sm:gap-10 pt-1 px-4 sm:px-12 pb-4 sm:pb-12 w-full h-auto sm:h-[14.4rem] ${card.bgColor}`}>
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex items-center gap-2 sm:gap-1">
-                      <span className="-ml-4 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center">
+                <div className={`rounded-xl shadow-2xl flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-10 pt-1 px-2 sm:px-12 pb-4 sm:pb-12 w-[90vw] sm:w-full h-auto h-10rem sm:h-[14.4rem] mx-auto ${card.bgColor}`}> 
+                  <div className="flex-1 flex flex-col items-center sm:items-start justify-between">
+                    <div className="flex flex-row items-center gap-2 sm:gap-1 w-full">
+                      <span className="sm:-ml-4 mt-2 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center">
                         <svg viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" className="w-full h-full text-black dark:text-white">
                           <g id="SVGRepo_bgCarrier" strokeWidth={0}></g>
                           <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -190,16 +194,16 @@ export default function OfferSection() {
                           </g>
                         </svg>
                       </span>
-                      <h3 className="text-xl sm:text-4xl font-extrabold text-black dark:text-white">{card.title}</h3>
+                      <h3 className="text-xl mt-2 sm:text-4xl sm:font-extrabold font-bold text-black dark:text-white text-center sm:text-left w-full">{card.title}</h3>
                     </div>
-                    <p className="text-base sm:text-xl text-black dark:text-white max-w-xl break-words whitespace-pre-line">{card.description}</p>
+                    <p className="hidden sm:block text-base sm:text-xl text-black dark:text-white max-w-xl break-words whitespace-pre-line">{card.description}</p>
                   </div>
                   {card.image && (
-                    <div className="flex flex-col items-center justify-center w-full sm:w-auto">
-                      <img src={card.image} alt={card.title} className="w-32 h-32 sm:w-48 sm:h-48 object-contain" />
-                        <Link href={card.route}>
-                          <span className="mt-4 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow transition block text-center cursor-pointer">View Now</span>
-                        </Link>
+                    <div className="flex flex-col items-center justify-center sm:w-auto mx-auto">
+                      <img src={card.image} alt={card.title} className="rounded w-80 h-44 object-cover sm:w-64 sm:h-36" />
+                      <Link href={card.route}>
+                      <span className="w-80 sm:w-56 mt-2 px-2 py-2 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded shadow transition block text-center text-xl cursor-pointer mx-auto">View Now</span>
+                      </Link>
                     </div>
                   )}
                 </div>
