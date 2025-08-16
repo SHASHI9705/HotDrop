@@ -10,12 +10,13 @@ type Card = {
 };
 
 const cards: Card[] = [
+
   {
-    title: "Earn More with Every Bite",
-    description: "Every bite takes you closer to rewards! Earn 5 points with every order , more orders mean more points, and more points mean bigger chances to win exclusive prizes.",
+    title: "Burgers That Mean Business",
+    description: "Stacked high, packed with irresistible flavor, and grilled to perfection, our burgers don’t just satisfy hunger, they make a bold statement with every juicy, mouthwatering bite.",
     bgColor: "bg-green-900",
-    image: "/orderpoints.png",
-  route: "/orderpoints",
+    image: "/burgeroffer.png",
+  route: "/orders?food=burger",
   },
   {
     title: "Where Every Slice is a Story",
@@ -25,12 +26,13 @@ const cards: Card[] = [
   route: "/orders?food=pizza",
   },
   {
-    title: "Burgers That Mean Business",
-    description: "Stacked high, packed with irresistible flavor, and grilled to perfection, our burgers don’t just satisfy hunger, they make a bold statement with every juicy, mouthwatering bite.",
+    title: "Earn More with Every Bite",
+    description: "Every bite takes you closer to rewards! Earn 5 points with every order , more orders mean more points, and more points mean bigger chances to win exclusive prizes.",
     bgColor: "bg-green-900",
-    image: "/burgeroffer.png",
-  route: "/orders?food=burger",
+    image: "/orderpoints.png",
+  route: "/orderpoints",
   },
+  
   {
     title: "Skip the Wait, Savor the Crisp",
     description: "Golden, crispy, and stuffed with love, our dosas are ready to roll the moment you are. Fresh off the pan and full of flavor, why wait when a taste like this is calling your name?",

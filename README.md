@@ -1,18 +1,8 @@
-# Turborepo starter
 
-This Turborepo starter is maintained by the Turborepo core team.
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
+## License
+This project is proprietary and All Rights Reserved.  
+You may not use, copy, modify, or distribute this code without explicit permission.
 
 ### Apps and Packages
 

@@ -105,3 +105,10 @@ model Feedback {
   partnerId String
   createdAt DateTime @default(now())
 }
+
+model Coupon {
+  id           String  @id @default(uuid())
+  coupon       String
+  used         Boolean @default(false)
+  offerPercent Float
+}

@@ -1,5 +1,6 @@
 "use client";
 import { RefObject, useState } from "react";
+import { usePWAInstall } from "./PWAInstallContext";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -31,6 +32,14 @@ export default function Nav({
   router,
 }: NavProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Use global PWA install prompt
+  const { deferredPrompt } = usePWAInstall();
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+    }
+  };
   const [search, setSearch] = useState("");
   const routerNav = useRouter();
 
@@ -102,6 +111,15 @@ export default function Nav({
                   <svg width="24" height="24" fill="none" stroke="#ef4444" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
                 </span>
                 Logout
+              </button>
+              <button className="text-lg font-semibold text-orange-600 text-left bg-white/80 rounded-xl px-5 py-3 shadow hover:bg-orange-100 transition flex items-center gap-3 dark:bg-gray-900/80 dark:text-orange-300 dark:hover:bg-orange-950 mt-2"
+                onClick={handleInstallClick}
+                disabled={!deferredPrompt}
+                style={{ opacity: deferredPrompt ? 1 : 0.5, cursor: deferredPrompt ? 'pointer' : 'not-allowed' }}>
+                <span className="flex-shrink-0">
+                  <svg width="24" height="24" fill="none" stroke="#f59e42" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4m-10 7h12"/></svg>
+                </span>
+                Download Now
               </button>
             </div>
           </div>

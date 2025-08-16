@@ -10,6 +10,7 @@ import itemRoutes from "./routes/itemRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
+import couponRoutes from "./routes/couponRoutes.js";
 import cron from "node-cron";
 import fetch from "node-fetch";
 dotenv.config();
@@ -79,6 +80,7 @@ app.use(itemRoutes); // Mount at root for /partners-with-items
 app.use("/orders", orderRoutes);
 app.use("/user", userRoutes);
 app.use("/feedbacks", feedbackRoutes);
+app.use("/coupons", couponRoutes);
 
 
 export default app;

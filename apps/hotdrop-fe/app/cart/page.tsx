@@ -114,6 +114,42 @@ function CartContent() {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  // Coupon logic
+  const [couponInput, setCouponInput] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const [discountPercent, setDiscountPercent] = useState<number | null>(null);
+  // Popup state for order status
+  const [orderPopup, setOrderPopup] = useState<{ message: string; success: boolean } | null>(null);
+
+  const handleApplyCoupon = async () => {
+    setCouponError("");
+    setCouponApplied(false);
+    setDiscountPercent(null);
+    if (!couponInput.trim()) return;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/coupons/${couponInput.trim()}`);
+      if (!res.ok) {
+        setCouponError("Coupon not found or invalid.");
+        return;
+      }
+      const data = await res.json();
+      if (data.used) {
+        setCouponError("Coupon already used.");
+        return;
+      }
+      setCouponApplied(true);
+      setDiscountPercent(data.offerPercent);
+    } catch {
+      setCouponError("Error applying coupon.");
+    }
+  };
+
+  // Calculate discounted total
+  const discountedTotal = discountPercent
+    ? total + total * 0.03 - ((total + total * 0.03) * (discountPercent / 100))
+    : total + total * 0.03;
+
   return (
     <div className="min-h-screen flex flex-col items-center pt-4 px-4">
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8 border border-orange-200 dark:border-gray-700">
@@ -156,31 +192,63 @@ function CartContent() {
                 <span className="text-gray-700 dark:text-gray-100 font-semibold">GST (3%)</span>
                 <span className="text-gray-800 dark:text-gray-100 font-bold">₹{(total * 0.03).toFixed(2)}</span>
               </div>
-              <div className="flex items-center justify-between w-full md:w-72">
-                <span className="text-gray-700 dark:text-gray-100 font-semibold">Platform Fees</span>
-                <span className="text-gray-800 dark:text-gray-100 font-bold">₹2.00</span>
+              {/* Coupon input row */}
+              <div className="flex flex-col items-center w-full md:w-72 mt-2">
+                <div className="flex items-center w-full">
+                  <input
+                    type="text"
+                    value={couponInput}
+                    onChange={e => setCouponInput(e.target.value)}
+                    placeholder="Apply coupon"
+                    className="flex-1 px-3 py-2 rounded-l-lg border border-orange-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-900 dark:text-white"
+                    style={{ minWidth: '0' }}
+                  />
+                  <button
+                    className="px-4 py-2 bg-orange-500 text-white rounded-r-lg font-semibold hover:bg-orange-600 transition-colors duration-200"
+                    style={{ marginLeft: '-1px' }}
+                    onClick={handleApplyCoupon}
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponApplied && (
+                  <div className="text-green-600 font-semibold mt-2">Applied successfully!</div>
+                )}
+                {couponError && (
+                  <div className="text-red-500 font-semibold mt-2">{couponError}</div>
+                )}
               </div>
               <div className="flex items-center justify-between w-full md:w-72 mt-2 border-t dark:border-gray-700 pt-2">
                 <span className="text-xl font-bold text-gray-800 dark:text-gray-100">Total</span>
-                <span className="text-xl font-bold text-orange-500 dark:text-orange-300">₹{(total + total * 0.03 + 2).toFixed(2)}</span>
+                <div className="flex items-center gap-3">
+                  {discountPercent && (
+                    <span className="text-lg text-gray-500 line-through">
+                      ₹{(total + total * 0.03).toFixed(2)}
+                    </span>
+                  )}
+                  <span className="text-xl font-bold text-orange-500 dark:text-orange-300">
+                    ₹{discountedTotal.toFixed(2)}
+                  </span>
+                </div>
               </div>
             </div>
             <button
-              className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-500 dark:to-red-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 flex items-center gap-2"
+              className="bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-500 dark:to-red-500 text-white px-8 py-3 rounded text-lg font-bold shadow hover:bg-orange-600 dark:hover:bg-orange-800 transition-colors duration-300 flex items-center gap-2"
               onClick={async () => {
                 // Get user and partner info from localStorage
                 const user = JSON.parse(localStorage.getItem("hotdrop_user") || "null");
                 let partner = JSON.parse(localStorage.getItem("hotdrop_selected_shop") || "null");
-                console.log(user)
                 if (!partner || !partner.id) {
                   partner = JSON.parse(localStorage.getItem("hotdrop_partner") || "null");
                 }
                 if (!user || !user.id) {
-                  alert("User ID missing. Please log in again to place an order.");
+                  setOrderPopup({ message: "User ID missing. Please log in again to place an order.", success: false });
+                  setTimeout(() => setOrderPopup(null), 1000);
                   return;
                 }
                 if (!partner || !partner.id) {
-                  alert("No partner selected for this order. Please go to a shop and add items again.");
+                  setOrderPopup({ message: "No partner selected for this order. Please go to a shop and add items again.", success: false });
+                  setTimeout(() => setOrderPopup(null), 1000);
                   return;
                 }
                 // Prepare order data
@@ -189,7 +257,7 @@ function CartContent() {
                   partnerId: sanitizeString(partner.id),
                   items: sanitizeString(cart.map(item => `${sanitizeString(item.name)} x${item.quantity}`).join(", ")),
                   shopName: sanitizeString(partner.name || partner.shopname || ""),
-                  price: sanitizeString((total + total * 0.03 + 2).toFixed(2))
+                  price: sanitizeString(discountedTotal.toFixed(2))
                 };
                 // Razorpay integration
                 const loadRazorpay = () => {
@@ -208,7 +276,7 @@ function CartContent() {
                 await loadRazorpay();
                 const options = {
                   key: `${process.env.NEXT_PUBLIC_RAZORPAY_KEY}`,
-                  amount: Math.round((total + total * 0.03 + 2) * 100), // Use total amount (subtotal + GST + Platform fees) in paise
+                  amount: Math.round(discountedTotal * 100), // Use discounted total amount in paise
                   currency: "INR",
                   name: "HotDrop",
                   description: "Order Payment",
@@ -230,16 +298,26 @@ function CartContent() {
                         body: JSON.stringify({
                           orderId: order.id || order.orderId || "", // adapt to your backend response
                           partnerId: orderData.partnerId,
-                          amount: Math.round((total + total * 0.03 + 2) * 100) // in paise
+                          amount: Math.round(discountedTotal * 100) // in paise
                         })
                       });
+                      // If coupon applied, mark as used
+                      if (couponApplied && couponInput.trim()) {
+                        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/coupons/${couponInput.trim()}/use`, {
+                          method: "POST",
+                        });
+                      }
                       localStorage.removeItem("hotdrop_cart");
                       setCart([]);
-                      alert("Order placed successfully!");
-                      router.push("/myorders");
+                      setOrderPopup({ message: "Order placed successfully!", success: true });
+                      setTimeout(() => {
+                        setOrderPopup(null);
+                        router.push("/myorders");
+                      }, 1000);
                     } else {
                       const data = await res.json();
-                      alert(data.error || "Failed to place order");
+                      setOrderPopup({ message: data.error || "Failed to place order", success: false });
+                      setTimeout(() => setOrderPopup(null), 1000);
                     }
                   },
                   prefill: {
@@ -253,13 +331,31 @@ function CartContent() {
                 rzp.open();
               }}
             >
-              <span role="img" aria-label="rocket">🚀</span> Pay Now
+               Pay Now
             </button>
           </div>
         )}
         <div className="mt-8 flex justify-center">
           <button className="bg-orange-100 dark:bg-gray-700 text-orange-500 dark:text-orange-300 px-6 py-2 rounded-full font-semibold hover:bg-orange-200 dark:hover:bg-gray-600 transition-colors duration-200" onClick={() => router.push("/")}>Continue Shopping</button>
         </div>
+        {/* Order status popup */}
+        {orderPopup && (
+          <div
+            className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 transition-opacity duration-300`}
+          >
+            <div
+              className={`px-8 py-6 rounded-xl shadow-lg text-center font-bold text-lg ${orderPopup.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+              style={{ minWidth: 280 }}
+            >
+              {orderPopup.success ? (
+                <svg className="mx-auto mb-2" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+              ) : (
+                <svg className="mx-auto mb-2" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+              )}
+              {orderPopup.message}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

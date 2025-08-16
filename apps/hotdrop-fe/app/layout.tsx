@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cookies as getCookies } from "next/headers";
+import { PWAInstallProvider } from "../components/PWAInstallContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -95,7 +96,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
-        {children}
+        <PWAInstallProvider>
+          {children}
+        </PWAInstallProvider>
       </body>
     </html>
   );

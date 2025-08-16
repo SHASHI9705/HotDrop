@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { usePWAInstall } from "./PWAInstallContext";
 
 export default function Footer() {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -8,27 +9,12 @@ export default function Footer() {
   const [showTeam, setShowTeam] = useState(false);
   const [showCorporate, setShowCorporate] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
-  // PWA install prompt logic
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstall, setShowInstall] = useState(false);
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstall(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
+  // Use global PWA install prompt
+  const { deferredPrompt } = usePWAInstall();
   const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setShowInstall(false);
-      }
+      await deferredPrompt.userChoice;
     }
   };
 
@@ -38,20 +24,19 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           {/* Brand and tagline */}
           <div className="flex-1 mb-8 md:mb-0">
-            {showInstall && (
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-orange-700 font-medium text-base dark:text-orange-300">Get the app <span aria-label="arrow" role="img">→</span></span>
-                <button
-                  onClick={handleInstallClick}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded shadow transition flex items-center gap-2 dark:bg-orange-700 dark:hover:bg-orange-800 dark:text-orange-100"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4m-10 7h12" />
-                  </svg>
-                  Download Now
-                </button>
-              </div>
-            )}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-orange-700 font-medium text-base dark:text-orange-300">Get the app </span>
+              <button
+                onClick={handleInstallClick}
+                disabled={!deferredPrompt}
+                className={`bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded shadow transition flex items-center gap-2 dark:bg-orange-700 dark:hover:bg-orange-800 dark:text-orange-100 ${!deferredPrompt ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4m-10 7h12" />
+                </svg>
+                Download Now
+              </button>
+            </div>
             <div className="text-2xl font-extrabold text-orange-600 mb-2 dark:text-orange-400">
               HotDrop
             </div>
