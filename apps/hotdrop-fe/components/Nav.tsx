@@ -164,7 +164,7 @@ export default function Nav({
             >
               HotDrop
             </motion.div>
-            <div className="relative ml-2 flex-1 max-w-xs hidden sm:block">
+            <div className="relative ml-4 flex-1 -mb-3 max-w-xs hidden sm:block">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 pointer-events-none cursor-pointer" onClick={handleSearch}>
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
@@ -207,7 +207,7 @@ export default function Nav({
             )}
           </div>
           {/* Right: Nav Options and Profile (hidden on mobile) */}
-          <div className="hidden sm:flex items-center gap-2 relative md:ml-40 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
+          <div className="hidden sm:flex items-center gap-2 relative md:ml-9 text-lg font-semibold whitespace-nowrap overflow-hidden dark:text-orange-200" style={{height: '64px'}}>
             {user && (
               <a href="/myorders" className="nav-underline px-4 min-w-[130px] dark:text-white">My Orders</a>
             )}
@@ -215,11 +215,12 @@ export default function Nav({
               <>
                 <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-white">Restaurants</a>
                 <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-white">Favourites</a>
+                <a href="/cart" className="nav-underline px-4 min-w-[120px] dark:text-white">Cart</a>
                 <a href="/footeroptions/help" className="nav-underline px-4 min-w-[110px] dark:text-white">Help</a>
               </>
             ) : (
               <>
-                <a href="/signin" className="nav-underline min-w-[90px] dark:text-white">Login</a>
+                <a href="/signin" className="nav-underline px-4 min-w-[90px] dark:text-white">Login</a>
                 <a href="/footeroptions/help" className="nav-underline min-w-[110px] dark:text-white">Help</a>
               </>
             )}

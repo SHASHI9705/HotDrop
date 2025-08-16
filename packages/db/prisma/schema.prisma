@@ -26,6 +26,7 @@ model Signup {
   orders Order[] // relation to orders
   pushSubscriptions PushSubscription[]
   promoUpdatesEnabled Boolean @default(false)
+  couponUsages CouponUsage[]
 }
 
 model Partner {
@@ -111,4 +112,18 @@ model Coupon {
   coupon       String
   used         Boolean @default(false)
   offerPercent Float
+  couponUsages CouponUsage[]
+}
+
+model CouponUsage {
+  id         String   @id @default(uuid())
+  userId     String
+  couponId   String
+  used       Boolean  @default(false)
+  usedAt     DateTime?
+
+  user       Signup   @relation(fields: [userId], references: [id])
+  coupon     Coupon   @relation(fields: [couponId], references: [id])
+
+  @@unique([userId, couponId]) // Each user can use a coupon only once
 }

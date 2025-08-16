@@ -102,7 +102,7 @@ export default function AllItemsContent() {
       const newQty = Math.max(0, (prev[item.name] || 0) + delta);
       const updated = { ...prev, [item.name]: newQty };
       if (newQty === 0) delete updated[item.name];
-      // Save to localStorage as array
+      // Save to localStorage as array, including shop details
       let arr = [];
       try { arr = JSON.parse(localStorage.getItem("hotdrop_cart") || "[]"); } catch {}
       arr = arr.filter((i: any) => i.name !== item.name);
@@ -112,7 +112,10 @@ export default function AllItemsContent() {
           name: item.name,
           price: item.price,
           image: item.image,
-          quantity: newQty
+          quantity: newQty,
+          shopId: shop?.name || shopname || "",
+          shopName: shop?.name || shopname || "",
+          shopImage: shop?.image || ""
         });
       }
       localStorage.setItem("hotdrop_cart", JSON.stringify(arr));
