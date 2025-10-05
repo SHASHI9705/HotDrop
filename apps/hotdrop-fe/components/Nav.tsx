@@ -214,6 +214,7 @@ export default function Nav({
             {user ? (
               <>
                 <a href="/restaurants" className="nav-underline px-4 min-w-[130px] dark:text-white">Restaurants</a>
+                
                 <a href="/favourites" className="nav-underline px-4 min-w-[120px] dark:text-white">Favourites</a>
                 <a href="/cart" className="nav-underline px-4 min-w-[120px] dark:text-white">Cart</a>
                 <a href="/footeroptions/help" className="nav-underline px-4 min-w-[110px] dark:text-white">Help</a>
