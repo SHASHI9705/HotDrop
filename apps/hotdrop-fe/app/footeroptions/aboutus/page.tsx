@@ -5,23 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function AboutPage() {
-  const teamMembers = [
-
-    {
-      name: "Shashiranjan Singh",
-      role: "CEO",
-      image: "/ceo.png",
-      bio: "Passionate about connecting people with Tecnology and Food.",
-      social: { twitter: "#", linkedin: "#", email: "sarah@hotdrop.com" }
-    },
-    {
-      name: "Nikhil Singh",
-      role: "CTO",
-      image: "/cto.jpg",
-      bio: "Tech enthusiast building scalable solutions.",
-      social: { twitter: "#", linkedin: "#", email: "alex@hotdrop.com" }
-    }
-  ];
+  
 
   const stats = [
     { number: "5K+", label: "Happy Customers", icon: "👥" },
@@ -220,62 +204,7 @@ export default function AboutPage() {
           </p>
         </motion.div>
 
-        {/* Team Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8 }}
-          className="mb-20"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 text-center mb-12">
-            Meet Our Team
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.0 + index * 0.1 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-2"
-              >
-                <div className="relative mb-4">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    width={150}
-                    height={150}
-                    className="rounded-full mx-auto border-4 border-red-100 dark:border-red-400"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{member.name}</h3>
-                  <p className="text-red-500 dark:text-red-400 font-medium mb-3">{member.role}</p>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">{member.bio}</p>
-                  <div className="flex justify-center space-x-3">
-                    <a href={member.social.twitter} className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
-                      </svg>
-                    </a>
-                    <a href={member.social.linkedin} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
-                        <circle cx="4" cy="4" r="2"/>
-                      </svg>
-                    </a>
-                    <a href={`mailto:${member.social.email}`} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+
 
         
 

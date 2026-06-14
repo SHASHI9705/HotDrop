@@ -127,3 +127,8 @@ model CouponUsage {
 
   @@unique([userId, couponId]) // Each user can use a coupon only once
 }
+
+model CookTr {
+  id         String   @id @default(uuid())
+  namebhai String
+}
